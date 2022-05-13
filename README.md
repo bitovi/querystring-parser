@@ -74,3 +74,7 @@ const { fields } = querystringParser('fields[articles]=title,body&fields[people]
 console.log(fields.articles) // --> [ 'title', 'body' ]
 console.log(fields.people) // --> [ 'name' ]
 ```
+
+## Development / Contributing
+See [CONTRIBUTING.md](CONTRIBUTING.md)
+
