@@ -1,10 +1,7 @@
 // const { parse } = require('../lib/parse')
 
 describe('parse', function () {
-  it('should run', function () {})
-  // const testCases = []
-
-  // test.concurrent.each(testCases)('$title', ({ queryString, expCompObjs }) => {
-  //   expect(parse(queryString)).toEqual(expCompObjs)
-  // })
+  it('should run', function () {
+    expect('TODO: implement tests').toBeDefined()
+  })
 })

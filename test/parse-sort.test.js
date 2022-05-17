@@ -58,11 +58,6 @@ describe('parseSort', () => {
   test.concurrent.each(testCases)('$title', ({ queryString, expectedResults, expectedErrors }) => {
     const { results, errors } = parseSort(queryString)
     expect(results).toEqual(expectedResults)
-
-    if (expectedErrors) {
-      expect(errors).toEqual(expectedErrors)
-    } else {
-      expect(errors).toEqual([])
-    }
+    expect(errors).toEqual(expectedErrors || [])
   })
 })
