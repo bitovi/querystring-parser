@@ -1,5 +1,8 @@
 # querystring-parser
 
+## Status
+![Tests Workflow Status](https://github.com/bitovi/querystring-parser/actions/workflows/tests.yml/badge.svg?branch=main)
+
 ## Purpose / Usecase
 Consider the following situation:
 
