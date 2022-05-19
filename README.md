@@ -1,7 +1,8 @@
 # querystring-parser
+Transforms CRUD-related querystrings into structured data
 
-## Status
 ![Tests Workflow Status](https://github.com/bitovi/querystring-parser/actions/workflows/tests.yml/badge.svg?branch=main)
+[![Join our Slack](https://img.shields.io/badge/slack-join%20chat-611f69.svg)](https://www.bitovi.com/community/slack?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
 ## Purpose / Usecase
 Consider the following situation:
