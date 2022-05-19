@@ -27,7 +27,7 @@
     "url": "https://github.com/bitovi/querystring-parser/issues"
   },
   "homepage": "https://www.bitovi.com/nodejs",
-  "license": "SEE LICENSE IN /LICENSE",
+  "license": "MIT",
   "dependencies": {
     "qs": "^6.10.3"
   },
