@@ -26,15 +26,14 @@
   "bugs": {
     "url": "https://github.com/bitovi/querystring-parser/issues"
   },
-  "homepage": "https://github.com/bitovi/querystring-parser",
+  "homepage": "https://www.bitovi.com/nodejs",
+  "license": "MIT",
   "dependencies": {
     "qs": "^6.10.3"
   },
   "devDependencies": {
     "@bitovi/eslint-config": "^1.0.0",
     "eslint": "^8.15.0",
-    "eslint-plugin-jest": "^26.2.2",
-    "eslint-plugin-testing-library": "^5.5.0",
     "jest": "^28.1.0"
   }
 }
