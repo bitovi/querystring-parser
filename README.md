@@ -16,6 +16,10 @@ Consider the following situation:
 
 ## Usage
 ### Installation
+```sh
+npm install @bitovi/querystring-parser --save
+```
+
 ```js
 const querystringParser = require('@bitovi/querystring-parser')
 
