@@ -219,8 +219,6 @@ describe('parseMongoFilter() tests', () => {
     ])
   })
 
-  // TODO: cover old tests in case I missed something
-  // TODO: check for duplicate values in array value?
   describe('$in mongo operator', () => {
     testEachCase([
       {
