@@ -197,6 +197,16 @@ describe('parseMongoDBFilter() tests', () => {
         expectedResults: { 'LIKE': ['name', '%michael%'] }
       },
       {
+        title: 'the "ilike" mongo operator should not allow number values',
+        queryString: 'filter[age][ilike]=25',
+        expectedErrors: [new Error('"ilike" operator should not be used with number values')]
+      },
+      {
+        title: 'the "ilike" mongo operator should not allow date values',
+        queryString: 'filter[born][ilike]=2020-01-01',
+        expectedErrors: [new Error('"ilike" operator should not be used with date values')]
+      },
+      {
         title: 'the "ilike" mongo operator should not allow null values',
         queryString: 'filter[name][ilike]=null',
         expectedErrors: [new Error('"ilike" operator should not be used with null value')]
@@ -209,32 +219,45 @@ describe('parseMongoDBFilter() tests', () => {
     ])
   })
 
-  // TODO: edge case where single value is prided with $in operator
   // TODO: edge case where array values are of different types
-  // TODO: edge cases for all data types that are not allowed with operators (finished: null, array, pu@string)
   // TODO: cover old tests in case I missed something
   // TODO: check for duplicate values in array value?
   describe('$in mongo operator', () => {
     testEachCase([
       {
-        title: 'the "$in" mongo operator should map to the "IN" sql operator for string values',
+        title: 'the "$in" mongo operator should map to the "IN" sql operator for multiple string value',
         queryString: 'filter[name][$in]=michael,brad',
         expectedResults: { 'IN': ['name', ['michael', 'brad']] }
       },
       {
-        title: 'the "$in" mongo operator should map to the "IN" sql operator for number values',
+        title: 'the "$in" mongo operator should map to the "IN" sql operator for singular string values (auto-wrapping)',
+        queryString: 'filter[name][$in]=michael',
+        expectedResults: { 'IN': ['name', ['michael']] }
+      },
+      {
+        title: 'the "$in" mongo operator should map to the "IN" sql operator for multiple number values',
         queryString: 'filter[age][$in]=24,25',
         expectedResults: { 'IN': ['age', [24, 25]] }
       },
       {
-        title: 'the "$in" mongo operator should map to the "IN" sql operator for date values',
+        title: 'the "$in" mongo operator should map to the "IN" sql operator for singular number values (auto-wrapping)',
+        queryString: 'filter[age][$in]=25',
+        expectedResults: { 'IN': ['age', [25]] }
+      },
+      {
+        title: 'the "$in" mongo operator should map to the "IN" sql operator for multiple date value',
         queryString: 'filter[born][$in]=2020-01-01,2021-01-01',
         expectedResults: { 'IN': ['born', ['2020-01-01', '2021-01-01']] }
       },
-      { // TODO: not the best language, top level maybe?
-        title: 'the "$in" mongo operator should not allow null values',
+      {
+        title: 'the "$in" mongo operator should map to the "IN" sql operator for singular date values (auto-wrapping)',
+        queryString: 'filter[born][$in]=2020-01-01',
+        expectedResults: { 'IN': ['born', ['2020-01-01']] }
+      },
+      {
+        title: 'the "$in" mongo operator should map to the "IN" sql operator for singular null value (auto-wrapping)',
         queryString: 'filter[age][$in]=null',
-        expectedErrors: [new Error('"$in" operator should not be used with null value')]
+        expectedResults: { 'IN': ['age', [null]] }
       },
     ])
   })
@@ -242,24 +265,39 @@ describe('parseMongoDBFilter() tests', () => {
   describe('$nin mongo operator', () => {
     testEachCase([
       {
-        title: 'the "$nin" mongo operator should map to the "NOT IN" sql operator for string values',
+        title: 'the "$nin" mongo operator should map to the "NOT IN" sql operator for multiple string values',
         queryString: 'filter[name][$nin]=michael,brad',
         expectedResults: { 'NOT IN': ['name', ['michael', 'brad']] }
       },
       {
-        title: 'the "$nin" mongo operator should map to the "NOT IN" sql operator for number values',
+        title: 'the "$nin" mongo operator should map to the "NOT IN" sql operator for singular string value (auto-wrapping)',
+        queryString: 'filter[name][$nin]=michael',
+        expectedResults: { 'NOT IN': ['name', ['michael']] }
+      },
+      {
+        title: 'the "$nin" mongo operator should map to the "NOT IN" sql operator for multiple number values',
         queryString: 'filter[age][$nin]=24,25',
         expectedResults: { 'NOT IN': ['age', [24, 25]] }
       },
       {
-        title: 'the "$nin" mongo operator should map to the "NOT IN" sql operator for date values',
+        title: 'the "$nin" mongo operator should map to the "NOT IN" sql operator for singular number value (auto-wrapping)',
+        queryString: 'filter[age][$nin]=25',
+        expectedResults: { 'NOT IN': ['age', [25]] }
+      },
+      {
+        title: 'the "$nin" mongo operator should map to the "NOT IN" sql operator for multiple date values',
         queryString: 'filter[born][$nin]=2020-01-01,2021-01-01',
         expectedResults: { 'NOT IN': ['born', ['2020-01-01', '2021-01-01']] }
       },
-      { // TODO: not the best language, top level maybe?
-        title: 'the "$nin" mongo operator should not allow null values',
+      {
+        title: 'the "$nin" mongo operator should map to the "NOT IN" sql operator for singular date value (auto-wrapping)',
+        queryString: 'filter[born][$nin]=2020-01-01',
+        expectedResults: { 'NOT IN': ['born', ['2020-01-01']] }
+      },
+      {
+        title: 'the "$nin" mongo operator should map to the "NOT IN" sql operator for singular null value (auto-wrapping)',
         queryString: 'filter[age][$nin]=null',
-        expectedErrors: [new Error('"$nin" operator should not be used with null value')]
+        expectedResults: { 'NOT IN': ['age', [null]] }
       },
     ])
   })
@@ -294,14 +332,54 @@ describe('parseMongoDBFilter() tests', () => {
         expectedResults: { 'IN': ['name', ['michael', 'brad']] }
       },
       {
+        title: 'the "IN" sql operator should be the default for string[] (string array) values (null included)',
+        queryString: 'filter[name]=michael,null',
+        expectedResults: { 'IN': ['name', ['michael', null]] }
+      },
+      {
         title: 'the "IN" sql operator should be the default for number[] (number array) values',
         queryString: 'filter[age]=24,25',
         expectedResults: { 'IN': ['age', [24, 25]] }
       },
       {
+        title: 'the "IN" sql operator should be the default for number[] (number array) values (null included)',
+        queryString: 'filter[age]=24,null',
+        expectedResults: { 'IN': ['age', [24, null]] }
+      },
+      {
         title: 'the "IN" sql operator should be the default for date[] (date array) values',
         queryString: 'filter[born]=2020-01-01,2021-01-01',
         expectedResults: { 'IN': ['born', ['2020-01-01', '2021-01-01']] }
+      },
+      {
+        title: 'the "IN" sql operator should be the default for date[] (date array) values (null included)',
+        queryString: 'filter[born]=2020-01-01,null',
+        expectedResults: { 'IN': ['born', ['2020-01-01', null]] }
+      },
+    ])
+  })
+
+  describe('compound filters', () => {
+    testEachCase([
+      {
+        title: 'multiple filters should be join together in an AND fashion (ex: 2)',
+        queryString: 'filter[name]=michael&filter[age]=25',
+        expectedResults: { 'AND': [{ 'LIKE': ['name', '%michael%'] }, { '=': ['age', 25] }]}
+      },
+      {
+        title: 'multiple filters should be join together in an AND fashion (ex: 3)',
+        queryString: 'filter[name]=michael&filter[age]=25&filter[born]=2020-01-01',
+        expectedResults: { 'AND': [{ 'AND': [{ 'LIKE': ['name', '%michael%'] }, { '=': ['age', 25] }]}, { '=': ['born', '2020-01-01'] }]}
+      },
+    ])
+  })
+
+  describe('other errors', () => {
+    testEachCase([
+      {
+        title: 'array values should not permit multiple types (except null)',
+        queryString: 'filter[name][$in]=michael,25,2020-01-01',
+        expectedErrors: [new Error('arrays should not mix multiple value types')]
       },
     ])
   })
