@@ -1,4 +1,4 @@
-const isMongoNull = require('../../lib/helpers/is-mongo-null')
+const isMongoNull = require('../../lib/mongo-filter/is-mongo-null')
 
 describe('isMongoDate', () => {
     test('should check if a value from a mongodb-style querystring represents "null"', () => {

@@ -1,4 +1,4 @@
-const isMongoNumber = require('../../lib/helpers/is-mongo-number')
+const isMongoNumber = require('../../lib/mongo-filter/is-mongo-number')
 
 describe('isMongoNumber', () => {
     test('should check if a value from a mongodb-style querystring is a number', () => {

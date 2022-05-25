@@ -1,4 +1,4 @@
-const isMongoDate = require('../../lib/helpers/is-mongo-date')
+const isMongoDate = require('../../lib/mongo-filter/is-mongo-date')
 
 describe('isMongoDate', () => {
     test('should check if a value from a mongodb-style querystring is a date', () => {
