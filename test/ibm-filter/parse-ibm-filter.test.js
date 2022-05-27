@@ -1,5 +1,4 @@
-const { parseIbmFilter, parseExpressionRec, tokenizeExpression } = require('../../lib/ibm-filter/parse-ibm-filter')
-const util = require('util')
+const { parseIbmFilter } = require('../../lib/ibm-filter/parse-ibm-filter')
 
 function testEachCase(testCases) {
   test.concurrent.each(testCases)('$title', ({ queryString, expectedResults, expectedErrors }) => {
@@ -9,72 +8,475 @@ function testEachCase(testCases) {
   })
 }
 
-// TODO: in the parsed output - how to distinguish column names/paths from string values?
-// ex: filter=equals(displayName,lastName) => { '=' ['#displayName', '#lastName']}
+// TODO: uncomment the error tests
 
 describe('parseIbmFilter() tests', () => {
-  describe('equals() ibm operator', () => {
+  describe('equals ibm operator', () => {
     testEachCase([
       {
         title: 'the "equals" ibm operator should map to the "=" sql operator for string values',
         queryString: "filter=equals(name,'michael')",
-        expectedResults: { '=': ['name', 'michael'] }
+        expectedResults: { '=': ['#name', 'michael'] }
+      },
+      {
+        title: 'the "equals" ibm operator should map to the "=" sql operator for number values',
+        queryString: "filter=equals(age,'25')",
+        expectedResults: { '=': ['#age', 25] }
+      },
+      {
+        title: 'the "equals" ibm operator should map to the "=" sql operator for date values',
+        queryString: "filter=equals(born,'2020-01-01')",
+        expectedResults: { '=': ['#born', '2020-01-01'] }
+      },
+      {
+        title: 'the "equals" ibm operator should map to the "=" sql operator for attribute references',
+        queryString: "filter=equals(wins,losses)",
+        expectedResults: { '=': ['#wins', '#losses'] }
+      },
+      {
+        title: 'the "equals" ibm operator should map to the "IS NULL" sql operator for null values',
+        queryString: "filter=equals(age,null)",
+        expectedResults: { 'IS NULL': ['#age', null] }
       },
     ])
   })
 
-  // eslint-disable-next-line jest/expect-expect
-  test.only('parseExpressionRec', () => {
-    const result = parseExpressionRec("and(any(age,'21','22','23'),not(equals(name,'brad')))")
-    const expected = {'AND': [{'IN': ['#age', 21, 22, 23]},{'NOT': {'=': ['#name', 'brad']}}]}
-    expect(result)
-      .toEqual(expected)
-
-  })
-
-  test.skip('asdf', () => {
-    expect(tokenizeExpression("equals(name,'michael')"))
-      .toEqual(['equals', 'name', "'michael'"])
-    
-    expect(tokenizeExpression("and(any(age,'21','22','23'),not(equals(name,'brad')))"))
-      .toEqual(['and', 'any', 'age', "'21'", "'22'", "'23'", 'not', 'equals', 'name', "'brad'"])
-  })
-
-  // TODO: make better
-  describe.skip('other errors', () => {
+  describe('greaterThan ibm operator', () => {
     testEachCase([
       {
-        title: 'uneven parenthesis 1',
-        queryString: "filter=equals(name,'michael'",
-        expectedErrors: [new Error('uneven parenthesis found')]
+        title: 'the "greaterThan" ibm operator should map to the ">" sql operator for string values',
+        queryString: "filter=greaterThan(name,'michael')",
+        expectedResults: { '>': ['#name', 'michael'] }
       },
       {
-        title: 'uneven parenthesis 2',
-        queryString: "filter=equalsname,'michael')",
-        expectedErrors: [new Error('uneven parenthesis found')]
+        title: 'the "greaterThan" ibm operator should map to the ">" sql operator for number values',
+        queryString: "filter=greaterThan(age,'25')",
+        expectedResults: { '>': ['#age', 25] }
+      },
+      {
+        title: 'the "greaterThan" ibm operator should map to the ">" sql operator for date values',
+        queryString: "filter=greaterThan(born,'2020-01-01')",
+        expectedResults: { '>': ['#born', '2020-01-01'] }
+      },
+      {
+        title: 'the "greaterThan" ibm operator should map to the ">" sql operator for attribute references',
+        queryString: "filter=greaterThan(wins,losses)",
+        expectedResults: { '>': ['#wins', '#losses'] }
       },
       // {
-      //   title: 'uneven parenthesis 3',
-      //   queryString: "filter=equalsname,'michael'",
-      //   expectedErrors: [new Error('uneven parenthesis found')]
+      //   title: 'the "greaterThan" ibm operator should not allow null values',
+      //   queryString: "filter=greaterThan(age,null)",
+      //   expectedErrors: [new Error('"greaterThan" operator should not be used with null value')]
       // },
+    ])
+  })
+
+  describe('greaterOrEqual ibm operator', () => {
+    testEachCase([
       {
-        title: 'uneven parenthesis 4',
-        queryString: "filter=andequals(name,'michael'),has(x))",
-        expectedErrors: [new Error('uneven parenthesis found')]
+        title: 'the "greaterOrEqual" ibm operator should map to the ">=" sql operator for string values',
+        queryString: "filter=greaterOrEqual(name,'michael')",
+        expectedResults: { '>=': ['#name', 'michael'] }
       },
       {
-        title: 'uneven parenthesis 5',
-        queryString: "filter=and(equalsname,'michael'),has(x))",
-        expectedErrors: [new Error('uneven parenthesis found')]
+        title: 'the "greaterOrEqual" ibm operator should map to the ">=" sql operator for number values',
+        queryString: "filter=greaterOrEqual(age,'25')",
+        expectedResults: { '>=': ['#age', 25] }
       },
       {
-        title: 'uneven parenthesis 6',
-        queryString: "filter=and(equals(name,'michael'),has(x)",
-        expectedErrors: [new Error('uneven parenthesis found')]
+        title: 'the "greaterOrEqual" ibm operator should map to the ">=" sql operator for date values',
+        queryString: "filter=greaterOrEqual(born,'2020-01-01')",
+        expectedResults: { '>=': ['#born', '2020-01-01'] }
+      },
+      {
+        title: 'the "greaterOrEqual" ibm operator should map to the ">=" sql operator for attribute references',
+        queryString: "filter=greaterOrEqual(wins,losses)",
+        expectedResults: { '>=': ['#wins', '#losses'] }
+      },
+      // {
+      //   title: 'the "greaterOrEqual" ibm operator should not allow null values',
+      //   queryString: "filter=greaterOrEqual(age,null)",
+      //   expectedErrors: [new Error('"greaterOrEqual" operator should not be used with null value')]
+      // },
+    ])
+  })
+
+  describe('lessThan ibm operator', () => {
+    testEachCase([
+      {
+        title: 'the "lessThan" ibm operator should map to the "<" sql operator for string values',
+        queryString: "filter=lessThan(name,'michael')",
+        expectedResults: { '<': ['#name', 'michael'] }
+      },
+      {
+        title: 'the "lessThan" ibm operator should map to the "<" sql operator for number values',
+        queryString: "filter=lessThan(age,'25')",
+        expectedResults: { '<': ['#age', 25] }
+      },
+      {
+        title: 'the "lessThan" ibm operator should map to the "<" sql operator for date values',
+        queryString: "filter=lessThan(born,'2020-01-01')",
+        expectedResults: { '<': ['#born', '2020-01-01'] }
+      },
+      {
+        title: 'the "lessThan" ibm operator should map to the "<" sql operator for attribute references',
+        queryString: "filter=lessThan(wins,losses)",
+        expectedResults: { '<': ['#wins', '#losses'] }
+      },
+      // {
+      //   title: 'the "lessThan" ibm operator should not allow null values',
+      //   queryString: "filter=lessThan(age,null)",
+      //   expectedErrors: [new Error('"lessThan" operator should not be used with null value')]
+      // },
+    ])
+  })
+
+  describe('lessOrEqual ibm operator', () => {
+    testEachCase([
+      {
+        title: 'the "lessOrEqual" ibm operator should map to the "<=" sql operator for string values',
+        queryString: "filter=lessOrEqual(name,'michael')",
+        expectedResults: { '<=': ['#name', 'michael'] }
+      },
+      {
+        title: 'the "lessOrEqual" ibm operator should map to the "<=" sql operator for number values',
+        queryString: "filter=lessOrEqual(age,'25')",
+        expectedResults: { '<=': ['#age', 25] }
+      },
+      {
+        title: 'the "lessOrEqual" ibm operator should map to the "<=" sql operator for date values',
+        queryString: "filter=lessOrEqual(born,'2020-01-01')",
+        expectedResults: { '<=': ['#born', '2020-01-01'] }
+      },
+      {
+        title: 'the "lessOrEqual" ibm operator should map to the "<=" sql operator for attribute references',
+        queryString: "filter=lessOrEqual(wins,losses)",
+        expectedResults: { '<=': ['#wins', '#losses'] }
+      },
+      // {
+      //   title: 'the "lessOrEqual" ibm operator should not allow null values',
+      //   queryString: "filter=lessOrEqual(age,null)",
+      //   expectedErrors: [new Error('"lessOrEqual" operator should not be used with null value')]
+      // },
+    ])
+  })
+
+  describe('contains ibm operator', () => {
+    testEachCase([
+      {
+        title: 'the "contains" ibm operator should map to the "LIKE" sql operator for string values',
+        queryString: "filter=contains(name,'ch')",
+        expectedResults: { 'LIKE': ['#name', '%ch%'] }
+      },
+      // {
+      //   title: 'the "contains" ibm operator should not allow number values',
+      //   queryString: "filter=contains(age,'25')",
+      //   expectedErrors: [new Error('"contains" operator should not be used with number value')]
+      // },
+      // {
+      //   title: 'the "contains" ibm operator should not allow date values',
+      //   queryString: "filter=contains(born,'2020-01-01')",
+      //   expectedErrors: [new Error('"contains" operator should not be used with date value')]
+      // },
+      // {
+      //   title: 'the "contains" ibm operator should not allow attribute references',
+      //   queryString: "filter=contains(wins,losses)",
+      //   expectedErrors: [new Error('"contains" operator should not be used with attribute references')]
+      // },
+      // {
+      //   title: 'the "contains" ibm operator should not allow null values',
+      //   queryString: "filter=contains(age,null)",
+      //   expectedErrors: [new Error('"contains" operator should not be used with null value')]
+      // },
+    ])
+  })
+
+  describe('startsWith ibm operator', () => {
+    testEachCase([
+      {
+        title: 'the "startsWith" ibm operator should map to the "LIKE" sql operator for string values',
+        queryString: "filter=startsWith(name,'mi')",
+        expectedResults: { 'LIKE': ['#name', 'mi%'] }
+      },
+      // {
+      //   title: 'the "startsWith" ibm operator should not allow number values',
+      //   queryString: "filter=startsWith(age,'25')",
+      //   expectedErrors: [new Error('"startsWith" operator should not be used with number value')]
+      // },
+      // {
+      //   title: 'the "startsWith" ibm operator should not allow date values',
+      //   queryString: "filter=startsWith(born,'2020-01-01')",
+      //   expectedErrors: [new Error('"startsWith" operator should not be used with date value')]
+      // },
+      // {
+      //   title: 'the "startsWith" ibm operator should not allow attribute references',
+      //   queryString: "filter=startsWith(wins,losses)",
+      //   expectedErrors: [new Error('"startsWith" operator should not be used with attribute references')]
+      // },
+      // {
+      //   title: 'the "startsWith" ibm operator should not allow null values',
+      //   queryString: "filter=startsWith(age,null)",
+      //   expectedErrors: [new Error('"startsWith" operator should not be used with null value')]
+      // },
+    ])
+  })
+
+  describe('endsWith ibm operator', () => {
+    testEachCase([
+      {
+        title: 'the "endsWith" ibm operator should map to the "LIKE" sql operator for string values',
+        queryString: "filter=endsWith(name,'el')",
+        expectedResults: { 'LIKE': ['#name', '%el'] }
+      },
+      // {
+      //   title: 'the "endsWith" ibm operator should not allow number values',
+      //   queryString: "filter=endsWith(age,'25')",
+      //   expectedErrors: [new Error('"endsWith" operator should not be used with number value')]
+      // },
+      // {
+      //   title: 'the "endsWith" ibm operator should not allow date values',
+      //   queryString: "filter=endsWith(born,'2020-01-01')",
+      //   expectedErrors: [new Error('"endsWith" operator should not be used with date value')]
+      // },
+      // {
+      //   title: 'the "endsWith" ibm operator should not allow attribute references',
+      //   queryString: "filter=endsWith(wins,losses)",
+      //   expectedErrors: [new Error('"endsWith" operator should not be used with attribute references')]
+      // },
+      // {
+      //   title: 'the "endsWith" ibm operator should not allow null values',
+      //   queryString: "filter=endsWith(age,null)",
+      //   expectedErrors: [new Error('"endsWith" operator should not be used with null value')]
+      // },
+    ])
+  })
+
+  describe('any ibm operator', () => {
+    testEachCase([
+      {
+        title: 'the "any" ibm operator should map to the "IN" sql operator for string values (also null)',
+        queryString: "filter=any(name,'michael','brad',null)",
+        expectedResults: { 'IN': ['#name', 'michael', 'brad', null] }
+      },
+      {
+        title: 'the "any" ibm operator should map to the "IN" sql operator for number values (also null)',
+        queryString: "filter=any(age,'24','25',null)",
+        expectedResults: { 'IN': ['#age', 24, 25, null] }
+      },
+      {
+        title: 'the "any" ibm operator should map to the "IN" sql operator for date values (also null)',
+        queryString: "filter=any(born,'2020-01-01','2021-01-01',null)",
+        expectedResults: { 'IN': ['#born', '2020-01-01', '2021-01-01', null] }
+      },
+      // {
+      //   title: 'the "any" ibm operator should not allow attribute references',
+      //   queryString: "filter=any(wins,losses,age)",
+      //   expectedErrors: [new Error('"any" operator should not be used with attribute references')]
+      // },
+      // {
+      //   title: 'the "any" ibm operator should not allow null values',
+      //   queryString: "filter=any(age,null)",
+      //   expectedErrors: [new Error('"any" operator should not be used with null value')]
+      // },
+    ])
+  })
+
+  /**
+   * Higher Order Operators
+   */
+
+  describe('not ibm operator', () => {
+    testEachCase([
+      {
+        title: 'the "not" ibm operator should map to the "NOT" sql operator for "equals" sub-expressions',
+        queryString: "filter=not(equals(age,'25'))",
+        expectedResults: {'NOT': { '=': ['#age', 25] } }
+      },
+      {
+        title: 'the "not" ibm operator should map to the "NOT" sql operator for "greaterThan" sub-expressions',
+        queryString: "filter=not(greaterThan(age,'25'))",
+        expectedResults: {'NOT': { '>': ['#age', 25] } }
+      },
+      {
+        title: 'the "not" ibm operator should map to the "NOT" sql operator for "greaterOrEqual" sub-expressions',
+        queryString: "filter=not(greaterOrEqual(age,'25'))",
+        expectedResults: {'NOT': { '>=': ['#age', 25] } }
+      },
+      {
+        title: 'the "not" ibm operator should map to the "NOT" sql operator for "lessThan" sub-expressions',
+        queryString: "filter=not(lessThan(age,'25'))",
+        expectedResults: {'NOT': { '<': ['#age', 25] } }
+      },
+      {
+        title: 'the "not" ibm operator should map to the "NOT" sql operator for "lessOrEqual" sub-expressions',
+        queryString: "filter=not(lessOrEqual(age,'25'))",
+        expectedResults: {'NOT': { '<=': ['#age', 25] } }
+      },
+      {
+        title: 'the "not" ibm operator should map to the "NOT" sql operator for "contains" sub-expressions',
+        queryString: "filter=not(contains(name,'ch'))",
+        expectedResults: {'NOT': { 'LIKE': ['#name', '%ch%'] } }
+      },
+      {
+        title: 'the "not" ibm operator should map to the "NOT" sql operator for "startsWith" sub-expressions',
+        queryString: "filter=not(startsWith(name,'mi'))",
+        expectedResults: {'NOT': { 'LIKE': ['#name', 'mi%'] } }
+      },
+      {
+        title: 'the "not" ibm operator should map to the "NOT" sql operator for "endsWith" sub-expressions',
+        queryString: "filter=not(endsWith(name,'el'))",
+        expectedResults: {'NOT': { 'LIKE': ['#name', '%el'] } }
+      },
+      {
+        title: 'the "not" ibm operator should map to the "NOT" sql operator for "any" sub-expressions',
+        queryString: "filter=not(any(age,'23','24','25'))",
+        expectedResults: {'NOT': { 'IN': ['#age', 23, 24, 25] } }
+      },
+      {
+        title: 'the "not" ibm operator should map to the "NOT" sql operator for "not" sub-expressions',
+        queryString: "filter=not(not(equals(age,'25'))",
+        expectedResults: {'NOT': {'NOT': { '=': ['#age', 25] } } }
+      },
+      {
+        title: 'the "not" ibm operator should map to the "NOT" sql operator for "and" sub-expressions',
+        queryString: "filter=not(and(lessThan(age,'25'),greaterThan(age,'20')))",
+        expectedResults: {'NOT': {'AND': [{'<': ['#age', 25]},{'>': ['#age', 20]}]} }
+      },
+      {
+        title: 'the "not" ibm operator should map to the "NOT" sql operator for "or" sub-expressions',
+        queryString: "filter=not(or(lessThan(age,'25'),greaterThan(age,'20')))",
+        expectedResults: {'NOT': {'OR': [{'<': ['#age', 25]},{'>': ['#age', 20]}]} }
       },
     ])
   })
 
-  
+  describe('and ibm operator', () => {
+    testEachCase([
+      {
+        title: 'the "and" ibm operator should map to the "AND" sql operator for "equals" sub-expressions',
+        queryString: "filter=and(equals(age,'25'),equals(name,'michael'))",
+        expectedResults: {'AND': [{ '=': ['#age', 25] }, { '=': ['#name', 'michael'] }] }
+      },
+      {
+        title: 'the "and" ibm operator should map to the "AND" sql operator for "greaterThan" sub-expressions',
+        queryString: "filter=and(greaterThan(age,'25'),equals(age,'25'))",
+        expectedResults: {'AND': [{ '>': ['#age', 25] },{ '=': ['#age', 25] } ] }
+      },
+      {
+        title: 'the "and" ibm operator should map to the "AND" sql operator for "greaterOrEqual" sub-expressions',
+        queryString: "filter=and(greaterOrEqual(age,'25'),equals(age,'25'))",
+        expectedResults: {'AND': [{ '>=': ['#age', 25] }, { '=': ['#age', 25] }] }
+      },
+      {
+        title: 'the "and" ibm operator should map to the "AND" sql operator for "lessThan" sub-expressions',
+        queryString: "filter=and(lessThan(age,'25'),equals(age,'25'))",
+        expectedResults: {'AND': [{ '<': ['#age', 25] }, { '=': ['#age', 25] }] }
+      },
+      {
+        title: 'the "and" ibm operator should map to the "AND" sql operator for "lessOrEqual" sub-expressions',
+        queryString: "filter=and(lessOrEqual(age,'25'),equals(age,'25'))",
+        expectedResults: {'AND': [{ '<=': ['#age', 25] }, { '=': ['#age', 25] }] }
+      },
+      {
+        title: 'the "and" ibm operator should map to the "AND" sql operator for "contains" sub-expressions',
+        queryString: "filter=and(contains(name,'ch'),equals(age,'25'))",
+        expectedResults: {'AND': [{ 'LIKE': ['#name', '%ch%'] }, { '=': ['#age', 25] }] }
+      },
+      {
+        title: 'the "and" ibm operator should map to the "AND" sql operator for "startsWith" sub-expressions',
+        queryString: "filter=and(startsWith(name,'mi'),equals(age,'25'))",
+        expectedResults: {'AND': [{ 'LIKE': ['#name', 'mi%'] }, { '=': ['#age', 25] }] }
+      },
+      {
+        title: 'the "and" ibm operator should map to the "AND" sql operator for "endsWith" sub-expressions',
+        queryString: "filter=and(endsWith(name,'el'),equals(age,'25'))",
+        expectedResults: {'AND': [{ 'LIKE': ['#name', '%el'] }, { '=': ['#age', 25] }] }
+      },
+      {
+        title: 'the "and" ibm operator should map to the "AND" sql operator for "any" sub-expressions',
+        queryString: "filter=and(any(age,'23','24','25'),equals(age,'25'))",
+        expectedResults: {'AND': [{ 'IN': ['#age', 23, 24, 25] }, { '=': ['#age', 25] }] }
+      },
+      {
+        title: 'the "and" ibm operator should map to the "AND" sql operator for "not" sub-expressions',
+        queryString: "filter=and(not(equals(age,'25'),equals(age,'25'))",
+        expectedResults: {'AND': [{'NOT': { '=': ['#age', 25] } }, { '=': ['#age', 25] }] }
+      },
+      {
+        title: 'the "and" ibm operator should map to the "AND" sql operator for "and" sub-expressions',
+        queryString: "filter=and(and(lessThan(age,'25'),greaterThan(age,'20')),equals(age,'25'))",
+        expectedResults: {'AND': [{'AND': [{'<': ['#age', 25]},{'>': ['#age', 20]}]}, { '=': ['#age', 25] }] }
+      },
+      {
+        title: 'the "and" ibm operator should map to the "AND" sql operator for "or" sub-expressions',
+        queryString: "filter=and(or(lessThan(age,'25'),greaterThan(age,'20')),equals(age,'25'))",
+        expectedResults: {'AND': [{'OR': [{'<': ['#age', 25]},{'>': ['#age', 20]}]}, { '=': ['#age', 25] }] }
+      },
+    ])
+  })
+
+  describe('or ibm operator', () => {
+    testEachCase([
+      {
+        title: 'the "or" ibm operator should map to the "OR" sql operator for "equals" sub-expressions',
+        queryString: "filter=or(equals(age,'25'),equals(name,'michael'))",
+        expectedResults: {'OR': [{ '=': ['#age', 25] }, { '=': ['#name', 'michael'] }] }
+      },
+      {
+        title: 'the "or" ibm operator should map to the "OR" sql operator for "greaterThan" sub-expressions',
+        queryString: "filter=or(greaterThan(age,'25'),equals(age,'25'))",
+        expectedResults: {'OR': [{ '>': ['#age', 25] },{ '=': ['#age', 25] } ] }
+      },
+      {
+        title: 'the "or" ibm operator should map to the "OR" sql operator for "greaterOrEqual" sub-expressions',
+        queryString: "filter=or(greaterOrEqual(age,'25'),equals(age,'25'))",
+        expectedResults: {'OR': [{ '>=': ['#age', 25] }, { '=': ['#age', 25] }] }
+      },
+      {
+        title: 'the "or" ibm operator should map to the "OR" sql operator for "lessThan" sub-expressions',
+        queryString: "filter=or(lessThan(age,'25'),equals(age,'25'))",
+        expectedResults: {'OR': [{ '<': ['#age', 25] }, { '=': ['#age', 25] }] }
+      },
+      {
+        title: 'the "or" ibm operator should map to the "OR" sql operator for "lessOrEqual" sub-expressions',
+        queryString: "filter=or(lessOrEqual(age,'25'),equals(age,'25'))",
+        expectedResults: {'OR': [{ '<=': ['#age', 25] }, { '=': ['#age', 25] }] }
+      },
+      {
+        title: 'the "or" ibm operator should map to the "OR" sql operator for "contains" sub-expressions',
+        queryString: "filter=or(contains(name,'ch'),equals(age,'25'))",
+        expectedResults: {'OR': [{ 'LIKE': ['#name', '%ch%'] }, { '=': ['#age', 25] }] }
+      },
+      {
+        title: 'the "or" ibm operator should map to the "OR" sql operator for "startsWith" sub-expressions',
+        queryString: "filter=or(startsWith(name,'mi'),equals(age,'25'))",
+        expectedResults: {'OR': [{ 'LIKE': ['#name', 'mi%'] }, { '=': ['#age', 25] }] }
+      },
+      {
+        title: 'the "or" ibm operator should map to the "OR" sql operator for "endsWith" sub-expressions',
+        queryString: "filter=or(endsWith(name,'el'),equals(age,'25'))",
+        expectedResults: {'OR': [{ 'LIKE': ['#name', '%el'] }, { '=': ['#age', 25] }] }
+      },
+      {
+        title: 'the "or" ibm operator should map to the "OR" sql operator for "any" sub-expressions',
+        queryString: "filter=or(any(age,'23','24','25'),equals(age,'25'))",
+        expectedResults: {'OR': [{ 'IN': ['#age', 23, 24, 25] }, { '=': ['#age', 25] }] }
+      },
+      {
+        title: 'the "or" ibm operator should map to the "OR" sql operator for "not" sub-expressions',
+        queryString: "filter=or(not(equals(age,'25'),equals(age,'25'))",
+        expectedResults: {'OR': [{'NOT': { '=': ['#age', 25] } }, { '=': ['#age', 25] }] }
+      },
+      {
+        title: 'the "or" ibm operator should map to the "OR" sql operator for "and" sub-expressions',
+        queryString: "filter=or(and(lessThan(age,'25'),greaterThan(age,'20')),equals(age,'25'))",
+        expectedResults: {'OR': [{'AND': [{'<': ['#age', 25]},{'>': ['#age', 20]}]}, { '=': ['#age', 25] }] }
+      },
+      {
+        title: 'the "or" ibm operator should map to the "OR" sql operator for "or" sub-expressions',
+        queryString: "filter=or(or(lessThan(age,'25'),greaterThan(age,'20')),equals(age,'25'))",
+        expectedResults: {'OR': [{'OR': [{'<': ['#age', 25]},{'>': ['#age', 20]}]}, { '=': ['#age', 25] }] }
+      },
+    ])
+  })
 })
