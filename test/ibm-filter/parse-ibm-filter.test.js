@@ -8,8 +8,6 @@ function testEachCase(testCases) {
   })
 }
 
-// TODO: uncomment the error tests
-
 describe('parseIbmFilter() tests', () => {
   describe('equals ibm operator', () => {
     testEachCase([
@@ -63,11 +61,11 @@ describe('parseIbmFilter() tests', () => {
         queryString: "filter=greaterThan(wins,losses)",
         expectedResults: { '>': ['#wins', '#losses'] }
       },
-      // {
-      //   title: 'the "greaterThan" ibm operator should not allow null values',
-      //   queryString: "filter=greaterThan(age,null)",
-      //   expectedErrors: [new Error('"greaterThan" operator should not be used with null value')]
-      // },
+      {
+        title: 'the "greaterThan" ibm operator should not allow null values',
+        queryString: "filter=greaterThan(age,null)",
+        expectedErrors: [new Error('"greaterThan" operator should not be used with NULL value')]
+      },
     ])
   })
 
@@ -93,11 +91,11 @@ describe('parseIbmFilter() tests', () => {
         queryString: "filter=greaterOrEqual(wins,losses)",
         expectedResults: { '>=': ['#wins', '#losses'] }
       },
-      // {
-      //   title: 'the "greaterOrEqual" ibm operator should not allow null values',
-      //   queryString: "filter=greaterOrEqual(age,null)",
-      //   expectedErrors: [new Error('"greaterOrEqual" operator should not be used with null value')]
-      // },
+      {
+        title: 'the "greaterOrEqual" ibm operator should not allow null values',
+        queryString: "filter=greaterOrEqual(age,null)",
+        expectedErrors: [new Error('"greaterOrEqual" operator should not be used with NULL value')]
+      },
     ])
   })
 
@@ -123,11 +121,11 @@ describe('parseIbmFilter() tests', () => {
         queryString: "filter=lessThan(wins,losses)",
         expectedResults: { '<': ['#wins', '#losses'] }
       },
-      // {
-      //   title: 'the "lessThan" ibm operator should not allow null values',
-      //   queryString: "filter=lessThan(age,null)",
-      //   expectedErrors: [new Error('"lessThan" operator should not be used with null value')]
-      // },
+      {
+        title: 'the "lessThan" ibm operator should not allow null values',
+        queryString: "filter=lessThan(age,null)",
+        expectedErrors: [new Error('"lessThan" operator should not be used with NULL value')]
+      },
     ])
   })
 
@@ -153,11 +151,11 @@ describe('parseIbmFilter() tests', () => {
         queryString: "filter=lessOrEqual(wins,losses)",
         expectedResults: { '<=': ['#wins', '#losses'] }
       },
-      // {
-      //   title: 'the "lessOrEqual" ibm operator should not allow null values',
-      //   queryString: "filter=lessOrEqual(age,null)",
-      //   expectedErrors: [new Error('"lessOrEqual" operator should not be used with null value')]
-      // },
+      {
+        title: 'the "lessOrEqual" ibm operator should not allow null values',
+        queryString: "filter=lessOrEqual(age,null)",
+        expectedErrors: [new Error('"lessOrEqual" operator should not be used with NULL value')]
+      },
     ])
   })
 
@@ -168,26 +166,26 @@ describe('parseIbmFilter() tests', () => {
         queryString: "filter=contains(name,'ch')",
         expectedResults: { 'LIKE': ['#name', '%ch%'] }
       },
-      // {
-      //   title: 'the "contains" ibm operator should not allow number values',
-      //   queryString: "filter=contains(age,'25')",
-      //   expectedErrors: [new Error('"contains" operator should not be used with number value')]
-      // },
-      // {
-      //   title: 'the "contains" ibm operator should not allow date values',
-      //   queryString: "filter=contains(born,'2020-01-01')",
-      //   expectedErrors: [new Error('"contains" operator should not be used with date value')]
-      // },
-      // {
-      //   title: 'the "contains" ibm operator should not allow attribute references',
-      //   queryString: "filter=contains(wins,losses)",
-      //   expectedErrors: [new Error('"contains" operator should not be used with attribute references')]
-      // },
-      // {
-      //   title: 'the "contains" ibm operator should not allow null values',
-      //   queryString: "filter=contains(age,null)",
-      //   expectedErrors: [new Error('"contains" operator should not be used with null value')]
-      // },
+      {
+        title: 'the "contains" ibm operator should not allow number values',
+        queryString: "filter=contains(age,'25')",
+        expectedErrors: [new Error('"contains" operator should not be used with NUMBER value')]
+      },
+      {
+        title: 'the "contains" ibm operator should not allow date values',
+        queryString: "filter=contains(born,'2020-01-01')",
+        expectedErrors: [new Error('"contains" operator should not be used with DATE value')]
+      },
+      {
+        title: 'the "contains" ibm operator should not allow attribute references',
+        queryString: "filter=contains(wins,losses)",
+        expectedErrors: [new Error('"contains" operator should not be used with ATTRIBUTE_REF value')]
+      },
+      {
+        title: 'the "contains" ibm operator should not allow null values',
+        queryString: "filter=contains(age,null)",
+        expectedErrors: [new Error('"contains" operator should not be used with NULL value')]
+      },
     ])
   })
 
@@ -198,26 +196,26 @@ describe('parseIbmFilter() tests', () => {
         queryString: "filter=startsWith(name,'mi')",
         expectedResults: { 'LIKE': ['#name', 'mi%'] }
       },
-      // {
-      //   title: 'the "startsWith" ibm operator should not allow number values',
-      //   queryString: "filter=startsWith(age,'25')",
-      //   expectedErrors: [new Error('"startsWith" operator should not be used with number value')]
-      // },
-      // {
-      //   title: 'the "startsWith" ibm operator should not allow date values',
-      //   queryString: "filter=startsWith(born,'2020-01-01')",
-      //   expectedErrors: [new Error('"startsWith" operator should not be used with date value')]
-      // },
-      // {
-      //   title: 'the "startsWith" ibm operator should not allow attribute references',
-      //   queryString: "filter=startsWith(wins,losses)",
-      //   expectedErrors: [new Error('"startsWith" operator should not be used with attribute references')]
-      // },
-      // {
-      //   title: 'the "startsWith" ibm operator should not allow null values',
-      //   queryString: "filter=startsWith(age,null)",
-      //   expectedErrors: [new Error('"startsWith" operator should not be used with null value')]
-      // },
+      {
+        title: 'the "startsWith" ibm operator should not allow number values',
+        queryString: "filter=startsWith(age,'25')",
+        expectedErrors: [new Error('"startsWith" operator should not be used with NUMBER value')]
+      },
+      {
+        title: 'the "startsWith" ibm operator should not allow date values',
+        queryString: "filter=startsWith(born,'2020-01-01')",
+        expectedErrors: [new Error('"startsWith" operator should not be used with DATE value')]
+      },
+      {
+        title: 'the "startsWith" ibm operator should not allow attribute references',
+        queryString: "filter=startsWith(wins,losses)",
+        expectedErrors: [new Error('"startsWith" operator should not be used with ATTRIBUTE_REF value')]
+      },
+      {
+        title: 'the "startsWith" ibm operator should not allow null values',
+        queryString: "filter=startsWith(age,null)",
+        expectedErrors: [new Error('"startsWith" operator should not be used with NULL value')]
+      },
     ])
   })
 
@@ -228,26 +226,26 @@ describe('parseIbmFilter() tests', () => {
         queryString: "filter=endsWith(name,'el')",
         expectedResults: { 'LIKE': ['#name', '%el'] }
       },
-      // {
-      //   title: 'the "endsWith" ibm operator should not allow number values',
-      //   queryString: "filter=endsWith(age,'25')",
-      //   expectedErrors: [new Error('"endsWith" operator should not be used with number value')]
-      // },
-      // {
-      //   title: 'the "endsWith" ibm operator should not allow date values',
-      //   queryString: "filter=endsWith(born,'2020-01-01')",
-      //   expectedErrors: [new Error('"endsWith" operator should not be used with date value')]
-      // },
-      // {
-      //   title: 'the "endsWith" ibm operator should not allow attribute references',
-      //   queryString: "filter=endsWith(wins,losses)",
-      //   expectedErrors: [new Error('"endsWith" operator should not be used with attribute references')]
-      // },
-      // {
-      //   title: 'the "endsWith" ibm operator should not allow null values',
-      //   queryString: "filter=endsWith(age,null)",
-      //   expectedErrors: [new Error('"endsWith" operator should not be used with null value')]
-      // },
+      {
+        title: 'the "endsWith" ibm operator should not allow number values',
+        queryString: "filter=endsWith(age,'25')",
+        expectedErrors: [new Error('"endsWith" operator should not be used with NUMBER value')]
+      },
+      {
+        title: 'the "endsWith" ibm operator should not allow date values',
+        queryString: "filter=endsWith(born,'2020-01-01')",
+        expectedErrors: [new Error('"endsWith" operator should not be used with DATE value')]
+      },
+      {
+        title: 'the "endsWith" ibm operator should not allow attribute references',
+        queryString: "filter=endsWith(wins,losses)",
+        expectedErrors: [new Error('"endsWith" operator should not be used with ATTRIBUTE_REF value')]
+      },
+      {
+        title: 'the "endsWith" ibm operator should not allow null values',
+        queryString: "filter=endsWith(age,null)",
+        expectedErrors: [new Error('"endsWith" operator should not be used with NULL value')]
+      },
     ])
   })
 
@@ -268,16 +266,11 @@ describe('parseIbmFilter() tests', () => {
         queryString: "filter=any(born,'2020-01-01','2021-01-01',null)",
         expectedResults: { 'IN': ['#born', '2020-01-01', '2021-01-01', null] }
       },
-      // {
-      //   title: 'the "any" ibm operator should not allow attribute references',
-      //   queryString: "filter=any(wins,losses,age)",
-      //   expectedErrors: [new Error('"any" operator should not be used with attribute references')]
-      // },
-      // {
-      //   title: 'the "any" ibm operator should not allow null values',
-      //   queryString: "filter=any(age,null)",
-      //   expectedErrors: [new Error('"any" operator should not be used with null value')]
-      // },
+      {
+        title: 'the "any" ibm operator should not allow attribute references',
+        queryString: "filter=any(wins,losses,age)",
+        expectedErrors: [new Error('"any" operator should not be used with ATTRIBUTE_REF value')]
+      },
     ])
   })
 
