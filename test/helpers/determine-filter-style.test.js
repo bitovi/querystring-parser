@@ -1,5 +1,5 @@
 /* eslint-disable jest/expect-expect */
-const { determineFilterStyle } = require('../../lib/helpers/determine-filter-style')
+const determineFilterStyle = require('../../lib/helpers/determine-filter-style')
 const FilterStyle = require('../../lib/enums/filter-style')
 
 describe('determineFilterStyle', () => {
