@@ -34,7 +34,7 @@ describe('parseIbmFilter() tests', () => {
       {
         title: 'the "equals" ibm operator should map to the "IS NULL" sql operator for null values',
         queryString: "filter=equals(age,null)",
-        expectedResults: { 'IS NULL': ['#age', null] }
+        expectedResults: { 'IS NULL': '#age' }
       },
     ])
   })
@@ -469,6 +469,21 @@ describe('parseIbmFilter() tests', () => {
         title: 'the "or" ibm operator should map to the "OR" sql operator for "or" sub-expressions',
         queryString: "filter=or(or(lessThan(age,'25'),greaterThan(age,'20')),equals(age,'25'))",
         expectedResults: {'OR': [{'OR': [{'<': ['#age', 25]},{'>': ['#age', 20]}]}, { '=': ['#age', 25] }] }
+      },
+    ])
+  })
+
+  describe('multiple filters', () => {
+    testEachCase([
+      {
+        title: 'multiple filters should be join together in an OR fashion (ex: 2)',
+        queryString: "filter=equals(name,'michael')&filter=equals(age,'25')",
+        expectedResults: { 'OR': [{ '=': ['#name', 'michael'] }, { '=': ['#age', 25] }]}
+      },
+      {
+        title: 'multiple filters should be join together in an OR fashion (ex: 3)',
+        queryString: "filter=equals(name,'michael')&filter=equals(age,'25')&filter=lessThan(born,'2020-01-01')",
+        expectedResults: {'OR': [{ 'OR': [{ '=': ['#name', 'michael'] }, { '=': ['#age', 25] }]}, { '<': ['#born', '2020-01-01']}]}
       },
     ])
   })

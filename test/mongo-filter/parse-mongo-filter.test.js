@@ -224,37 +224,37 @@ describe('parseMongoFilter() tests', () => {
       {
         title: 'the "$in" mongo operator should map to the "IN" sql operator for multiple string value',
         queryString: 'filter[name][$in]=michael,brad',
-        expectedResults: { 'IN': ['#name', ['michael', 'brad']] }
+        expectedResults: { 'IN': ['#name', 'michael', 'brad'] }
       },
       {
         title: 'the "$in" mongo operator should map to the "IN" sql operator for singular string values (auto-wrapping)',
         queryString: 'filter[name][$in]=michael',
-        expectedResults: { 'IN': ['#name', ['michael']] }
+        expectedResults: { 'IN': ['#name', 'michael'] }
       },
       {
         title: 'the "$in" mongo operator should map to the "IN" sql operator for multiple number values',
         queryString: 'filter[age][$in]=24,25',
-        expectedResults: { 'IN': ['#age', [24, 25]] }
+        expectedResults: { 'IN': ['#age', 24, 25] }
       },
       {
         title: 'the "$in" mongo operator should map to the "IN" sql operator for singular number values (auto-wrapping)',
         queryString: 'filter[age][$in]=25',
-        expectedResults: { 'IN': ['#age', [25]] }
+        expectedResults: { 'IN': ['#age', 25] }
       },
       {
         title: 'the "$in" mongo operator should map to the "IN" sql operator for multiple date value',
         queryString: 'filter[born][$in]=2020-01-01,2021-01-01',
-        expectedResults: { 'IN': ['#born', ['2020-01-01', '2021-01-01']] }
+        expectedResults: { 'IN': ['#born', '2020-01-01', '2021-01-01'] }
       },
       {
         title: 'the "$in" mongo operator should map to the "IN" sql operator for singular date values (auto-wrapping)',
         queryString: 'filter[born][$in]=2020-01-01',
-        expectedResults: { 'IN': ['#born', ['2020-01-01']] }
+        expectedResults: { 'IN': ['#born', '2020-01-01'] }
       },
       {
         title: 'the "$in" mongo operator should map to the "IN" sql operator for singular null value (auto-wrapping)',
         queryString: 'filter[age][$in]=null',
-        expectedResults: { 'IN': ['#age', [null]] }
+        expectedResults: { 'IN': ['#age', null] }
       },
     ])
   })
@@ -264,37 +264,37 @@ describe('parseMongoFilter() tests', () => {
       {
         title: 'the "$nin" mongo operator should map to the "NOT IN" sql operator for multiple string values',
         queryString: 'filter[name][$nin]=michael,brad',
-        expectedResults: { 'NOT IN': ['#name', ['michael', 'brad']] }
+        expectedResults: { 'NOT IN': ['#name', 'michael', 'brad'] }
       },
       {
         title: 'the "$nin" mongo operator should map to the "NOT IN" sql operator for singular string value (auto-wrapping)',
         queryString: 'filter[name][$nin]=michael',
-        expectedResults: { 'NOT IN': ['#name', ['michael']] }
+        expectedResults: { 'NOT IN': ['#name', 'michael'] }
       },
       {
         title: 'the "$nin" mongo operator should map to the "NOT IN" sql operator for multiple number values',
         queryString: 'filter[age][$nin]=24,25',
-        expectedResults: { 'NOT IN': ['#age', [24, 25]] }
+        expectedResults: { 'NOT IN': ['#age', 24, 25] }
       },
       {
         title: 'the "$nin" mongo operator should map to the "NOT IN" sql operator for singular number value (auto-wrapping)',
         queryString: 'filter[age][$nin]=25',
-        expectedResults: { 'NOT IN': ['#age', [25]] }
+        expectedResults: { 'NOT IN': ['#age', 25] }
       },
       {
         title: 'the "$nin" mongo operator should map to the "NOT IN" sql operator for multiple date values',
         queryString: 'filter[born][$nin]=2020-01-01,2021-01-01',
-        expectedResults: { 'NOT IN': ['#born', ['2020-01-01', '2021-01-01']] }
+        expectedResults: { 'NOT IN': ['#born', '2020-01-01', '2021-01-01'] }
       },
       {
         title: 'the "$nin" mongo operator should map to the "NOT IN" sql operator for singular date value (auto-wrapping)',
         queryString: 'filter[born][$nin]=2020-01-01',
-        expectedResults: { 'NOT IN': ['#born', ['2020-01-01']] }
+        expectedResults: { 'NOT IN': ['#born', '2020-01-01'] }
       },
       {
         title: 'the "$nin" mongo operator should map to the "NOT IN" sql operator for singular null value (auto-wrapping)',
         queryString: 'filter[age][$nin]=null',
-        expectedResults: { 'NOT IN': ['#age', [null]] }
+        expectedResults: { 'NOT IN': ['#age', null] }
       },
     ])
   })
@@ -326,37 +326,37 @@ describe('parseMongoFilter() tests', () => {
       {
         title: 'the "IN" sql operator should be the default for string[] (string array) values',
         queryString: 'filter[name]=michael,brad',
-        expectedResults: { 'IN': ['#name', ['michael', 'brad']] }
+        expectedResults: { 'IN': ['#name', 'michael', 'brad'] }
       },
       {
         title: 'the "IN" sql operator should be the default for string[] (string array) values (null included)',
         queryString: 'filter[name]=michael,null',
-        expectedResults: { 'IN': ['#name', ['michael', null]] }
+        expectedResults: { 'IN': ['#name', 'michael', null] }
       },
       {
         title: 'the "IN" sql operator should be the default for number[] (number array) values',
         queryString: 'filter[age]=24,25',
-        expectedResults: { 'IN': ['#age', [24, 25]] }
+        expectedResults: { 'IN': ['#age', 24, 25] }
       },
       {
         title: 'the "IN" sql operator should be the default for number[] (number array) values (null included)',
         queryString: 'filter[age]=24,null',
-        expectedResults: { 'IN': ['#age', [24, null]] }
+        expectedResults: { 'IN': ['#age', 24, null] }
       },
       {
         title: 'the "IN" sql operator should be the default for date[] (date array) values',
         queryString: 'filter[born]=2020-01-01,2021-01-01',
-        expectedResults: { 'IN': ['#born', ['2020-01-01', '2021-01-01']] }
+        expectedResults: { 'IN': ['#born', '2020-01-01', '2021-01-01'] }
       },
       {
         title: 'the "IN" sql operator should be the default for date[] (date array) values (null included)',
         queryString: 'filter[born]=2020-01-01,null',
-        expectedResults: { 'IN': ['#born', ['2020-01-01', null]] }
+        expectedResults: { 'IN': ['#born', '2020-01-01', null] }
       },
     ])
   })
 
-  describe('compound filters', () => {
+  describe('multiple filters', () => {
     testEachCase([
       {
         title: 'multiple filters should be join together in an AND fashion (ex: 2)',
