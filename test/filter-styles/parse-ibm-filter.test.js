@@ -1,4 +1,4 @@
-const { parseIbmFilter } = require('../../lib/filter-styles/parse-ibm-filter')
+const parseIbmFilter = require('../../lib/filter-styles/parse-ibm-filter')
 
 function testEachCase(testCases) {
   test.concurrent.each(testCases)('$title', ({ queryString, expectedResults, expectedErrors }) => {

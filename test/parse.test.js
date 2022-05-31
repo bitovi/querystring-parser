@@ -1,4 +1,4 @@
-// const { parse } = require('../lib/parse')
+// const parse = require('../lib/parse')
 
 describe('parse', function () {
   it('should run', function () {

@@ -1,4 +1,4 @@
-const { parseInclude } = require('../lib/parse-include')
+const parseInclude = require('../lib/parse-include')
 
 describe('parseInclude', () => {
   const testCases = [

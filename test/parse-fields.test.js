@@ -1,4 +1,4 @@
-const { parseFields } = require('../lib/parse-fields')
+const parseFields = require('../lib/parse-fields')
 
 describe('parseFields', () => {
   const testCases = [

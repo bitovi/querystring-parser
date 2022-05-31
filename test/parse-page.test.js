@@ -1,4 +1,4 @@
-const { parsePage } = require('../lib/parse-page')
+const parsePage = require('../lib/parse-page')
 
 describe('parsePage', () => {
   const testCases = [

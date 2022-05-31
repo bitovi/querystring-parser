@@ -1,5 +1,5 @@
-const { parseMongoFilter } = require('../../lib/filter-styles/parse-mongo-filter')
-const { parseIbmFilter } = require('../../lib/filter-styles/parse-ibm-filter')
+const parseMongoFilter = require('../../lib/filter-styles/parse-mongo-filter')
+const parseIbmFilter = require('../../lib/filter-styles/parse-ibm-filter')
 
 function testEachCase(testCases) {
   test.concurrent.each(testCases)('$title', ({ mongoQueryString, ibmQueryString}) => {

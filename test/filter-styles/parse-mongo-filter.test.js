@@ -1,4 +1,4 @@
-const { parseMongoFilter } = require('../../lib/filter-styles/parse-mongo-filter')
+const parseMongoFilter = require('../../lib/filter-styles/parse-mongo-filter')
 
 function testEachCase(testCases) {
   test.concurrent.each(testCases)('$title', ({ queryString, expectedResults, expectedErrors }) => {

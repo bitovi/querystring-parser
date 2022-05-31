@@ -1,4 +1,4 @@
-const { parseSort } = require('../lib/parse-sort')
+const parseSort = require('../lib/parse-sort')
 
 describe('parseSort', () => {
   const testCases = [
