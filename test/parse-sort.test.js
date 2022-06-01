@@ -1,20 +1,20 @@
-const parseSort = require('../lib/parse-sort')
+const parseSort = require("../lib/parse-sort");
 
-describe('parseSort', () => {
+describe("parseSort", () => {
   const testCases = [
     {
-      title: 'should return an array of sort fields',
-      queryString: 'sort=-date,name',
+      title: "should return an array of sort fields",
+      querystring: "sort=-date,name",
       expectedResults: [
         {
-          field: 'date',
-          direction: 'DESC'
+          field: "date",
+          direction: "DESC",
         },
         {
-          field: 'name',
-          direction: 'ASC'
-        }
-      ]
+          field: "name",
+          direction: "ASC",
+        },
+      ],
     },
 
     /**
@@ -27,37 +27,40 @@ describe('parseSort', () => {
      * Query String Missing
      */
     {
-      title: 'should return empty array when querystring is empty string',
-      queryString: '',
-      expectedResults: []
+      title: "should return empty array when querystring is empty string",
+      querystring: "",
+      expectedResults: [],
     },
     {
-      title: 'should return empty array when querystring is null',
-      queryString: null,
-      expectedResults: []
+      title: "should return empty array when querystring is null",
+      querystring: null,
+      expectedResults: [],
     },
     {
-      title: 'should return empty array when querystring is undefined',
-      queryString: undefined,
-      expectedResults: []
-    }
+      title: "should return empty array when querystring is undefined",
+      querystring: undefined,
+      expectedResults: [],
+    },
 
     /**
      * Errors
      */
     // {
     //   title: 'should return error if number was provided but size was not',
-    //   queryString: 'page[number]=1',
+    //   querystring: 'page[number]=1',
     //   expectedResults: {},
     //   expectedErrors: [
     //     new Error('Page number was provided but page size was not in querystring: \'page[number]=1\'')
     //   ]
     // },
-  ]
+  ];
 
-  test.concurrent.each(testCases)('$title', ({ queryString, expectedResults, expectedErrors }) => {
-    const { results, errors } = parseSort(queryString)
-    expect(results).toEqual(expectedResults)
-    expect(errors).toEqual(expectedErrors || [])
-  })
-})
+  test.concurrent.each(testCases)(
+    "$title",
+    ({ querystring, expectedResults, expectedErrors }) => {
+      const { results, errors } = parseSort(querystring);
+      expect(results).toEqual(expectedResults);
+      expect(errors).toEqual(expectedErrors || []);
+    }
+  );
+});

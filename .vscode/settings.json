@@ -1,7 +1,10 @@
 {
-    // dbaeumer.vscode-eslint extension configuration
-    "eslint.format.enable": true,
-    "editor.codeActionsOnSave": {
-        "source.fixAll.eslint": true
-    }
+  // dbaeumer.vscode-eslint extension configuration
+  "eslint.format.enable": true,
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": true
+  },
+  // esbenp.prettier-vscode extension configuration
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "editor.formatOnSave": true
 }

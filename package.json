@@ -7,7 +7,9 @@
     "test": "jest",
     "test:watch": "jest --watch",
     "lint": "eslint .",
-    "lint:fix": "eslint . --fix",
+    "lint:fix": "eslint --fix .",
+    "pretty": "prettier --check .",
+    "pretty:fix": "prettier --write .",
     "preversion": "npm run lint && npm test",
     "version": "git commit -am \"Update version number\" && git checkout -b release",
     "postpublish": "git push --tags && git checkout main && git branch -D release && git push",
@@ -35,6 +37,8 @@
     "@bitovi/eslint-config": "^1.0.0",
     "@types/jest": "^27.5.1",
     "eslint": "^8.15.0",
-    "jest": "^28.1.0"
+    "eslint-config-prettier": "^8.5.0",
+    "jest": "^28.1.0",
+    "prettier": "2.6.2"
   }
 }
