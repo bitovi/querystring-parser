@@ -6,5 +6,6 @@
   },
   // esbenp.prettier-vscode extension configuration
   "editor.defaultFormatter": "esbenp.prettier-vscode",
-  "editor.formatOnSave": true
+  "editor.formatOnSave": true,
+  "editor.tabSize": 2
 }
