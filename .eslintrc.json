@@ -1,16 +1,16 @@
 {
-    "env": {
-        "browser": true,
-        "commonjs": true,
-        "es2021": true
-    },
-    "extends": [
-        "@bitovi/eslint-config/rules/base",
-        "@bitovi/eslint-config/rules/jest"
-    ],
-    "parserOptions": {
-        "ecmaVersion": "latest"
-    },
-    "rules": {
-    }
+  "env": {
+    "browser": true,
+    "commonjs": true,
+    "es2022": true
+  },
+  "extends": [
+    "@bitovi/eslint-config/rules/base",
+    "@bitovi/eslint-config/rules/jest",
+    "prettier"
+  ],
+  "parserOptions": {
+    "ecmaVersion": "latest"
+  },
+  "rules": {}
 }
