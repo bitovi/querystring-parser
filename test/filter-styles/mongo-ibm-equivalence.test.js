@@ -7,13 +7,7 @@ function testEachCase(testCases) {
     ({ mongoQueryString, ibmQueryString }) => {
       const { results: mongoResults } = parseMongoFilter(mongoQueryString);
       const { results: ibmResults } = parseIbmFilter(ibmQueryString);
-      try {
-        expect(mongoResults).toEqual(ibmResults);
-      } catch (e) {
-        console.log("mongoResults: ", mongoResults);
-        console.log("ibmResults: ", ibmResults);
-        throw e;
-      }
+      expect(mongoResults).toEqual(ibmResults);
     }
   );
 }

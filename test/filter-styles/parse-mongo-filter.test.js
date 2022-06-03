@@ -1,4 +1,6 @@
 const parseMongoFilter = require("../../lib/filter-styles/parse-mongo-filter");
+const QuerystringParsingError = require("../../lib/errors/querystring-parsing-error");
+const expectErrorsToMatch = require("../test-utils/expect-errors-to-match");
 
 function testEachCase(testCases) {
   test.concurrent.each(testCases)(
@@ -6,7 +8,7 @@ function testEachCase(testCases) {
     ({ querystring, expectedResults, expectedErrors }) => {
       const { results, errors } = parseMongoFilter(querystring);
       expect(results).toEqual(expectedResults || undefined);
-      expect(errors).toEqual(expectedErrors || []);
+      expectErrorsToMatch(errors, expectedErrors || []);
     }
   );
 }
@@ -42,7 +44,12 @@ describe("parseMongoFilter() tests", () => {
         title: 'the "$eq" mongo operator should not allow array values',
         querystring: "filter[age][$eq]=24,25",
         expectedErrors: [
-          new Error('"$eq" operator should not be used with array value'),
+          new QuerystringParsingError({
+            message: '"$eq" operator should not be used with array value',
+            querystring: "filter[age][$eq]=24,25",
+            paramKey: "filter[age][$eq]",
+            paramValue: ["24", "25"],
+          }),
         ],
       },
     ]);
@@ -78,7 +85,12 @@ describe("parseMongoFilter() tests", () => {
         title: 'the "$ne" mongo operator should not allow array values',
         querystring: "filter[age][$ne]=24,25",
         expectedErrors: [
-          new Error('"$ne" operator should not be used with array value'),
+          new QuerystringParsingError({
+            message: '"$ne" operator should not be used with array value',
+            querystring: "filter[age][$ne]=24,25",
+            paramKey: "filter[age][$ne]",
+            paramValue: ["24", "25"],
+          }),
         ],
       },
     ]);
@@ -108,14 +120,24 @@ describe("parseMongoFilter() tests", () => {
         title: 'the "$gt" mongo operator should not allow null values',
         querystring: "filter[age][$gt]=null",
         expectedErrors: [
-          new Error('"$gt" operator should not be used with null value'),
+          new QuerystringParsingError({
+            message: '"$gt" operator should not be used with null value',
+            querystring: "filter[age][$gt]=null",
+            paramKey: "filter[age][$gt]",
+            paramValue: "null",
+          }),
         ],
       },
       {
         title: 'the "$gt" mongo operator should not allow array values',
         querystring: "filter[age][$gt]=24,25",
         expectedErrors: [
-          new Error('"$gt" operator should not be used with array value'),
+          new QuerystringParsingError({
+            message: '"$gt" operator should not be used with array value',
+            querystring: "filter[age][$gt]=24,25",
+            paramKey: "filter[age][$gt]",
+            paramValue: ["24", "25"],
+          }),
         ],
       },
     ]);
@@ -145,14 +167,24 @@ describe("parseMongoFilter() tests", () => {
         title: 'the "$gte" mongo operator should not allow null values',
         querystring: "filter[age][$gte]=null",
         expectedErrors: [
-          new Error('"$gte" operator should not be used with null value'),
+          new QuerystringParsingError({
+            message: '"$gte" operator should not be used with null value',
+            querystring: "filter[age][$gte]=null",
+            paramKey: "filter[age][$gte]",
+            paramValue: "null",
+          }),
         ],
       },
       {
         title: 'the "$gte" mongo operator should not allow array values',
         querystring: "filter[age][$gte]=24,25",
         expectedErrors: [
-          new Error('"$gte" operator should not be used with array value'),
+          new QuerystringParsingError({
+            message: '"$gte" operator should not be used with array value',
+            querystring: "filter[age][$gte]=24,25",
+            paramKey: "filter[age][$gte]",
+            paramValue: ["24", "25"],
+          }),
         ],
       },
     ]);
@@ -182,14 +214,24 @@ describe("parseMongoFilter() tests", () => {
         title: 'the "$lt" mongo operator should not allow null values',
         querystring: "filter[age][$lt]=null",
         expectedErrors: [
-          new Error('"$lt" operator should not be used with null value'),
+          new QuerystringParsingError({
+            message: '"$lt" operator should not be used with null value',
+            querystring: "filter[age][$lt]=null",
+            paramKey: "filter[age][$lt]",
+            paramValue: "null",
+          }),
         ],
       },
       {
         title: 'the "$lt" mongo operator should not allow array values',
         querystring: "filter[age][$lt]=24,25",
         expectedErrors: [
-          new Error('"$lt" operator should not be used with array value'),
+          new QuerystringParsingError({
+            message: '"$lt" operator should not be used with array value',
+            querystring: "filter[age][$lt]=24,25",
+            paramKey: "filter[age][$lt]",
+            paramValue: ["24", "25"],
+          }),
         ],
       },
     ]);
@@ -219,14 +261,24 @@ describe("parseMongoFilter() tests", () => {
         title: 'the "$lte" mongo operator should not allow null values',
         querystring: "filter[age][$lte]=null",
         expectedErrors: [
-          new Error('"$lte" operator should not be used with null value'),
+          new QuerystringParsingError({
+            message: '"$lte" operator should not be used with null value',
+            querystring: "filter[age][$lte]=null",
+            paramKey: "filter[age][$lte]",
+            paramValue: "null",
+          }),
         ],
       },
       {
         title: 'the "$lte" mongo operator should not allow array values',
         querystring: "filter[age][$lte]=24,25",
         expectedErrors: [
-          new Error('"$lte" operator should not be used with array value'),
+          new QuerystringParsingError({
+            message: '"$lte" operator should not be used with array value',
+            querystring: "filter[age][$lte]=24,25",
+            paramKey: "filter[age][$lte]",
+            paramValue: ["24", "25"],
+          }),
         ],
       },
     ]);
@@ -244,28 +296,48 @@ describe("parseMongoFilter() tests", () => {
         title: 'the "ilike" mongo operator should not allow number values',
         querystring: "filter[age][ilike]=25",
         expectedErrors: [
-          new Error('"ilike" operator should not be used with number values'),
+          new QuerystringParsingError({
+            message: '"ilike" operator should not be used with number values',
+            querystring: "filter[age][ilike]=25",
+            paramKey: "filter[age][ilike]",
+            paramValue: "25",
+          }),
         ],
       },
       {
         title: 'the "ilike" mongo operator should not allow date values',
         querystring: "filter[born][ilike]=2020-01-01",
         expectedErrors: [
-          new Error('"ilike" operator should not be used with date values'),
+          new QuerystringParsingError({
+            message: '"ilike" operator should not be used with date values',
+            querystring: "filter[born][ilike]=2020-01-01",
+            paramKey: "filter[born][ilike]",
+            paramValue: "2020-01-01",
+          }),
         ],
       },
       {
         title: 'the "ilike" mongo operator should not allow null values',
         querystring: "filter[name][ilike]=null",
         expectedErrors: [
-          new Error('"ilike" operator should not be used with null value'),
+          new QuerystringParsingError({
+            message: '"ilike" operator should not be used with null value',
+            querystring: "filter[name][ilike]=null",
+            paramKey: "filter[name][ilike]",
+            paramValue: "null",
+          }),
         ],
       },
       {
         title: 'the "ilike" mongo operator should not allow array values',
         querystring: "filter[age][ilike]=24,25",
         expectedErrors: [
-          new Error('"ilike" operator should not be used with array value'),
+          new QuerystringParsingError({
+            message: '"ilike" operator should not be used with array value',
+            querystring: "filter[age][ilike]=24,25",
+            paramKey: "filter[age][ilike]",
+            paramValue: ["24", "25"],
+          }),
         ],
       },
     ]);
@@ -461,7 +533,12 @@ describe("parseMongoFilter() tests", () => {
         title: "array values should not permit multiple types (except null)",
         querystring: "filter[name][$in]=michael,25,2020-01-01",
         expectedErrors: [
-          new Error("arrays should not mix multiple value types"),
+          new QuerystringParsingError({
+            message: "arrays should not mix multiple value types",
+            querystring: "filter[name][$in]=michael,25,2020-01-01",
+            paramKey: "filter[name][$in]",
+            paramValue: ["michael", "25", "2020-01-01"],
+          }),
         ],
       },
     ]);
