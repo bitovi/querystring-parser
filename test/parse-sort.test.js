@@ -30,6 +30,11 @@ describe("parseSort", () => {
         ],
       },
       {
+        title: "should remove empty strings from results",
+        querystring: "sort=,,,",
+        expectedResults: [],
+      },
+      {
         title: "should return empty array when querystring is empty string",
         querystring: "",
         expectedResults: [],
