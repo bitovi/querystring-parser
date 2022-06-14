@@ -183,17 +183,17 @@ The IBM-Style is based off of the [jsonapi.net filtering specification](https://
 
 #### Quick Examples
 
-| Querystring Filter                                 | Parsed Output                                                       |
-| -------------------------------------------------- | ------------------------------------------------------------------- |
-| filter=contains(name,'brad')                       | `{ LIKE: [ '#name', '%brad%' ] }`                                   |
-| filter=equals(name,'mike')                         | `{ '=': [ '#name', 'mike' ] }`                                      |
-| filter=greaterThan(age,'25')                       | `{ '>': [ '#age', 25 ] }`                                           |
-| filter=lessOrEqual(born,'2020-01-01')              | `{ '<=': [ '#born', '2020-01-01' ] }`                               |
-| filter=any(name,'brad','mike')                     | `{ IN: [ '#name', 'brad', 'mike' ] }`                               |
-| filter=equals(score,null)                          | `{ 'IS NULL': '#score' }`                                           |
-| filter=not(equals(age,'25'))                       | `{ NOT: { "=": ["#age", 25] } }`                                    |
-| filter=and(any(age,'10','20'),equals(name,'mike')) | `{ AND: [{ "IN": ["#age", 10, 20] }, { "=": ["#name", "mike"] }] }` |
-| filter=or(any(age,'10','20'),equals(name,'mike'))  | `{ OR: [{ "IN": ["#age", 10, 20] }, { "=": ["#name", "mike"] }] }`  |
+| Querystring Filter                                 | Parsed Output                                                     |
+| -------------------------------------------------- | ----------------------------------------------------------------- |
+| filter=contains(name,'brad')                       | `{ LIKE: [ '#name', '%brad%' ] }`                                 |
+| filter=equals(name,'mike')                         | `{ '=': [ '#name', 'mike' ] }`                                    |
+| filter=greaterThan(age,'25')                       | `{ '>': [ '#age', 25 ] }`                                         |
+| filter=lessOrEqual(born,'2020-01-01')              | `{ '<=': [ '#born', '2020-01-01' ] }`                             |
+| filter=any(name,'brad','mike')                     | `{ IN: [ '#name', 'brad', 'mike' ] }`                             |
+| filter=equals(score,null)                          | `{ 'IS NULL': '#score' }`                                         |
+| filter=not(equals(age,'25'))                       | `{ NOT: { "=": ["#age", 25] } }`                                  |
+| filter=and(any(age,'10','20'),equals(name,'mike')) | `{ AND: [{ IN: ["#age", 10, 20] }, { "=": ["#name", "mike"] }] }` |
+| filter=or(any(age,'10','20'),equals(name,'mike'))  | `{ OR: [{ IN: ["#age", 10, 20] }, { "=": ["#name", "mike"] }] }`  |
 
 #### IBM-Style Operators
 
