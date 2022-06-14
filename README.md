@@ -214,6 +214,19 @@ Below is the full list of IBM-Style operators and their compatible value types.
 | and            |   ❌    |   ❌    |  ❌   |       ❌       |  ❌   |        ✅        |
 | or             |   ❌    |   ❌    |  ❌   |       ❌       |  ❌   |        ✅        |
 
+#### Attribute References
+
+Some of the IBM-Style operators can directly compare 2 different attributes (or "columns").
+In this example below, `wins` and `losses` are attribute references (as opposed to constant values like `'emily'` or `'22'`).
+
+By convention, attribute references are prefixed with a '#' in the parsed output to distinguish them from constant values.
+
+```js
+// example attribute references
+const { filter } = querystringParser.parse("filter=greaterThan(wins,losses)");
+expect(filter).toEqual({ ">": ["#wins", "#losses"] });
+```
+
 #### Compound Filters
 
 IBM-Style filters directly support higher-order operators (`AND` / `OR` / `NOT`). On top of that, if multiple filters are present in the query string then they will be joined together in an `OR` fashion.
