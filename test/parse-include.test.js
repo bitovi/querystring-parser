@@ -27,6 +27,11 @@ describe("parseInclude", () => {
         ],
       },
       {
+        title: "should remove empty strings from results",
+        querystring: "include=,,pets",
+        expectedResults: ["pets"],
+      },
+      {
         title: "should return empty array when querystring is empty string",
         querystring: "",
         expectedResults: [],

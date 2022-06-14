@@ -524,6 +524,21 @@ describe("parseMongoFilter() tests", () => {
           ],
         },
       },
+      {
+        title: "should be able to use multiple filters on the same attribute",
+        querystring: "filter[age][$gt]=0&filter[age][$lt]=5",
+        expectedResults: {
+          AND: [{ ">": ["#age", 0] }, { "<": ["#age", 5] }],
+        },
+      },
+      {
+        title:
+          "should be able to use multiple filters on the same attribute (implicit + explicit operators)",
+        querystring: "filter[name]=ad&filter[name][$eq]=brad",
+        expectedResults: {
+          AND: [{ LIKE: ["#name", "%ad%"] }, { "=": ["#name", "brad"] }],
+        },
+      },
     ]);
   });
 

@@ -433,6 +433,34 @@ describe("parseIbmFilter() tests", () => {
           }),
         ],
       },
+      {
+        title:
+          'the "any" ibm operator should not allow multiple value types (string and number)',
+        querystring: "filter=any(name,'brad','25')",
+        expectedErrors: [
+          new QuerystringParsingError({
+            message:
+              '"any" operator should not be used with multiple value types',
+            querystring: "filter=any(name,'brad','25')",
+            paramKey: "filter",
+            paramValue: "any(name,'brad','25')",
+          }),
+        ],
+      },
+      {
+        title:
+          'the "any" ibm operator should not allow multiple value types (string and date)',
+        querystring: "filter=any(name,'brad','2020-01-01')",
+        expectedErrors: [
+          new QuerystringParsingError({
+            message:
+              '"any" operator should not be used with multiple value types',
+            querystring: "filter=any(name,'brad','2020-01-01')",
+            paramKey: "filter",
+            paramValue: "any(name,'brad','2020-01-01')",
+          }),
+        ],
+      },
     ]);
   });
 
