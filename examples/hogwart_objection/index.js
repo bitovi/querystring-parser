@@ -1,5 +1,6 @@
 const express = require("express");
 const dotenv = require("dotenv");
+const url = require("url");
 const cors = require("cors");
 const { Hogwarts } = require("./model");
 const { parseQueries } = require("./query-parser");
@@ -14,7 +15,8 @@ app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
-const fetchAllExamples = async (query) => {
+//code required to make query work..
+const fetchQuery = async (query) => {
   const orm = parseQueries(query);
   const hogwart = Hogwarts.query();
   for (let q of orm) {
@@ -26,9 +28,9 @@ const fetchAllExamples = async (query) => {
 
 app.get("/students", async (req, res) => {
   try {
-    const students = await fetchAllExamples(
-      "filter=or(equals('userType','Staff'),equals('name','Harry Potter'))"
-    );
+    //turn query to a raw string
+    const query = url.parse(req.url).query;
+    const students = await fetchQuery(query);
     res.status(200).json({
       data: students,
     });
