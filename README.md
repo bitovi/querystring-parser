@@ -127,7 +127,7 @@ Below is the full list of MongoDB-Style operators and their compatible value typ
 | Operator | strings | numbers | dates | nulls | arrays |
 | -------- | :-----: | :-----: | :---: | :---: | :----: |
 | $eq      |   ✅    |   ✅    |  ✅   |  ✅   |   ❌   |
-| $neq     |   ✅    |   ✅    |  ✅   |  ✅   |   ❌   |
+| $ne      |   ✅    |   ✅    |  ✅   |  ✅   |   ❌   |
 | $gt      |   ✅    |   ✅    |  ✅   |  ❌   |   ❌   |
 | $gte     |   ✅    |   ✅    |  ✅   |  ❌   |   ❌   |
 | $lt      |   ✅    |   ✅    |  ✅   |  ❌   |   ❌   |
