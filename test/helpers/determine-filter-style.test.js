@@ -28,6 +28,12 @@ describe("determineFilterStyle", () => {
     );
   });
 
+  test("should handle still-encoded querystrings just fine", () => {
+    const querystring =
+      "filter%5Bproject_id%5D%5B%24eq%5D=b730e204-1218-4e9d-aa15-773c892baefb";
+    expect(determineFilterStyle(querystring)).toBe(FilterStyle.MONGO_DB);
+  });
+
   test("should throw error if multiple styles are detected", () => {
     expect(() => {
       determineFilterStyle(
