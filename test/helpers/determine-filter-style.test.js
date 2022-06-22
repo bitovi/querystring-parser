@@ -28,6 +28,10 @@ describe("determineFilterStyle", () => {
     );
   });
 
+  test("should not return IBM", () => {
+    expect(determineFilterStyle("filter=abc")).toBe(undefined);
+  });
+
   test("should handle still-encoded querystrings just fine", () => {
     const querystring =
       "filter%5Bproject_id%5D%5B%24eq%5D=b730e204-1218-4e9d-aa15-773c892baefb";
