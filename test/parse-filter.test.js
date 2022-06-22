@@ -15,8 +15,24 @@ function testEachCase(testCases) {
 
 describe("parseFilter", () => {
   describe("parseFilter happy paths", () => {
-    // could use some sanity tests
-    // testEachCase([]);
+    testEachCase([
+      {
+        title:
+          "should return undefined if querystring does not have filter param",
+        querystring: "sort=name",
+        expectedResults: undefined,
+      },
+      {
+        title: "should return undefined if querystring is empty string",
+        querystring: "",
+        expectedResults: undefined,
+      },
+      {
+        title: "should return undefined if querystring is not a string",
+        querystring: null,
+        expectedResults: undefined,
+      },
+    ]);
   });
 
   describe("parseFilter error paths", () => {
