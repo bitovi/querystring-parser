@@ -1,0 +1,27 @@
+{
+  "name": "@bitovi/querystring-parser-objection",
+  "version": "0.1.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "lint": "eslint .",
+    "lint:fix": "eslint --fix .",
+    "pretty": "prettier --check .",
+    "pretty:fix": "prettier --write .",
+    "preversion": "npm run lint && npm test",
+    "version": "git commit -am \"Update version number\" && git checkout -b release",
+    "postpublish": "git push --tags && git checkout main && git branch -D release && git push",
+    "release:patch": "npm version patch && npm publish --access=public",
+    "release:minor": "npm version minor && npm publish --access=public",
+    "release:major": "npm version major && npm publish --access=public"
+  },
+  "keywords": [
+    "querystring",
+    "parse",
+    "objection"
+  ],
+  "author": "",
+  "license": "ISC"
+}
