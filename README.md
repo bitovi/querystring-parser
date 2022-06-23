@@ -139,13 +139,14 @@ Below is the full list of MongoDB-Style operators and their compatible value typ
 #### Omitted Operators
 
 MongoDB-Style filters do not require explicit operators. In many cases, the value type is enough for the parser to infer which operator to use. The examples below demonstrate operator inference for each value type.
-| Value Type | Example | Output |
+
+| Value Type | Example                 | Output                                |
 | ---------- | ----------------------- | ------------------------------------- |
-| string | filter[name]=lisa | `{ LIKE: [ '#name', '%lisa%' ] }` |
-| number | filter[age]=25 | `{ '=': [ '#age', 25 ] }` |
-| date | filter[born]=2020-01-01 | `{ '=': [ '#born', '2020-01-01' ] }` |
-| null | filter[score]=null | `{ 'IS NULL': '#score' }` |
-| array | filter[name]=mike,brad | `{ IN: [ '#name', 'mike', 'brad' ] }` |
+| string     | filter[name]=lisa       | `{ LIKE: [ '#name', '%lisa%' ] }`     |
+| number     | filter[age]=25          | `{ '=': [ '#age', 25 ] }`             |
+| date       | filter[born]=2020-01-01 | `{ '=': [ '#born', '2020-01-01' ] }`  |
+| null       | filter[score]=null      | `{ 'IS NULL': '#score' }`             |
+| array      | filter[name]=mike,brad  | `{ IN: [ '#name', 'mike', 'brad' ] }` |
 
 #### Arrays
 
