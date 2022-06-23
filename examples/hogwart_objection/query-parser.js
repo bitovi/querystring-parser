@@ -90,12 +90,7 @@ function parseSort(sort) {
   return parsedArray;
 }
 
-function checkModel(model, orm) {
-  console.log(orm);
-  console.log(model);
-}
-
-function parseQueries(query, model) {
+function parseQueries(query) {
   let orm = [];
   const parsedQuery = lib.parse(query);
   const { include, filter, sort, page } = parsedQuery;
@@ -106,7 +101,6 @@ function parseQueries(query, model) {
     ...parseSort(sort),
     ...parsePagination(page),
   ];
-  checkModel(model);
   return orm;
 }
 
