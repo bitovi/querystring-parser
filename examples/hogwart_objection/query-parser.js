@@ -1,8 +1,6 @@
 const lib = require("../../index");
 
 function parseParametersForObjection(operator, value) {
-  //all parameters are ('age','<',20)
-  //i.e ('field','operator','value') format
   return Array.isArray(value)
     ? value.length > 2
       ? [value[0], operator, value.slice(1)]
@@ -34,6 +32,7 @@ function sortArrayFilters(filters, isOr = false) {
 
 function parseFilters(filters, isOr = false) {
   let parsedArray = [];
+  if (!filters) return parsedArray;
   const keys = Object.keys(filters);
   if (keys.length > 0) {
     for (let key of keys) {
@@ -58,16 +57,17 @@ function parseFilters(filters, isOr = false) {
 
 function parsePagination(page) {
   const parsedArray = [];
-  if (page.size) {
+  if (page.number) {
+    const offset = (page.number - 1) * page.size;
     parsedArray.push({
       fx: "offset",
-      parameters: page.size,
+      parameters: [offset],
     });
   }
-  if (page.number) {
+  if (page.size) {
     parsedArray.push({
       fx: "limit",
-      parameters: page.number,
+      parameters: [page.size],
     });
   }
   return parsedArray;
@@ -84,17 +84,20 @@ function parseSort(sort) {
     });
     parsedArray.push({
       fx: "orderBy",
-      parameters: newSortFields,
+      parameters: [newSortFields],
     });
   }
   return parsedArray;
 }
 
-function parseQueries(query) {
+function checkModel(model, orm) {
+  console.log(orm);
+  console.log(model);
+}
+
+function parseQueries(query, model) {
   let orm = [];
-  console.log(query);
   const parsedQuery = lib.parse(query);
-  console.log(parsedQuery);
   const { include, filter, sort, page } = parsedQuery;
   orm = [
     ...orm,
@@ -103,6 +106,7 @@ function parseQueries(query) {
     ...parseSort(sort),
     ...parsePagination(page),
   ];
+  checkModel(model);
   return orm;
 }
 
