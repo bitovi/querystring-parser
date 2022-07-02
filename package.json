@@ -31,7 +31,8 @@
   "homepage": "https://www.bitovi.com/nodejs",
   "license": "MIT",
   "dependencies": {
-    "qs": "^6.10.3"
+    "qs": "^6.10.3",
+    "sequelize": "^6.21.2"
   },
   "devDependencies": {
     "@bitovi/eslint-config": "^1.0.0",
