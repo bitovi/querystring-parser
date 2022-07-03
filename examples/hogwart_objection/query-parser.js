@@ -37,12 +37,9 @@ function parseFilters(filters, isOr = false) {
   if (keys.length > 0) {
     for (let key of keys) {
       if (key === "AND") {
-        parsedArray = [...parsedArray, ...sortArrayFilters(filters["AND"])];
+        parsedArray = [...parsedArray, ...sortArrayFilters(filters[key])];
       } else if (key === "OR") {
-        parsedArray = [
-          ...parsedArray,
-          ...sortArrayFilters(filters["OR"], true),
-        ];
+        parsedArray = [...parsedArray, ...sortArrayFilters(filters[key], true)];
       } else {
         const parameters = parseParametersForObjection(key, filters[key]);
         parsedArray.push({

@@ -19,10 +19,9 @@ app.use(express.urlencoded({ extended: false }));
 const fetchQuery = async (query) => {
   const hogwart = Hogwarts.query();
   if (query) {
-    const orm = parseQueries(query, hogwart);
+    const orm = parseQueries(query);
     for (let q of orm) {
       hogwart[q.fx](...q.parameters);
-      //hogwart.where('house','in',['','']).orWhere()
     }
   }
   const queryData = await hogwart;
