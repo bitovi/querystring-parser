@@ -1,18 +1,35 @@
-function parseSort(sort) {
+const {
+  isAnArray,
+  containsNoErrorFromParser,
+} = require("../helpers/validation");
+
+function parseSort(sort, sortErrors) {
   const parsedArray = [];
-  if (sort.length > 0) {
-    const newSortFields = sort.map((field) => {
-      return {
-        column: field.field,
-        order: field.direction,
-      };
-    });
-    parsedArray.push({
-      fx: "orderBy",
-      parameters: [newSortFields],
-    });
+  let errors = [];
+  if (containsNoErrorFromParser(sortErrors, "sort")) {
+    if (!isAnArray(sort)) {
+      errors.push("Sort field should be an array");
+    } else {
+      if (sort.length > 0) {
+        const newSortFields = sort.map((field) => {
+          return {
+            column: field.field,
+            order: field.direction,
+          };
+        });
+        parsedArray.push({
+          fx: "orderBy",
+          parameters: [newSortFields],
+        });
+      }
+    }
+  } else {
+    errors = [...sortErrors];
   }
-  return parsedArray;
+  return {
+    results: parsedArray,
+    errors,
+  };
 }
 
 module.exports = parseSort;

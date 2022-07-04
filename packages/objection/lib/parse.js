@@ -5,23 +5,20 @@ const parsePagination = require("./parse-page");
 const parseSort = require("./parse-sort");
 
 function parseQueries(query) {
-  let orm = [];
   const parsedQuery = lib.parse(query);
   const { include, filter, sort, page } = parsedQuery;
-  orm = [
-    ...orm,
+  let parsedData = [
     ...parseInclude(include),
     ...parseFilters(filter),
     ...parseSort(sort),
     ...parsePagination(page),
   ];
-  return orm;
+  return {
+    orm: "objection",
+    data: parsedData,
+    errors: parsedQuery.errors,
+  };
 }
-//final format 
-// {
-// key: 'where',
-// properties : 
-// }
 
 module.exports = {
   parseQueries,

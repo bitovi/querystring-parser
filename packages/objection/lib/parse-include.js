@@ -1,15 +1,28 @@
-//if it returns empty array when the include is empty
-//fail if it isn't an array, so write a validation for array
+const {
+  isAnArray,
+  containsNoErrorFromParser,
+} = require("../helpers/validation");
 
-function parseInclude(include) {
+function parseInclude(include, includeErrors) {
   const parsedArray = [];
-  if (include.length > 0) {
-    parsedArray.push({
-      fx: "select",
-      parameters: include,
-    });
+  let errors = [];
+  if (containsNoErrorFromParser(includeErrors, "include")) {
+    if (!isAnArray(include)) {
+      errors.push("Inlcude field should be an array");
+    }
+    if (include.length > 0) {
+      parsedArray.push({
+        fx: "select",
+        parameters: include,
+      });
+    }
+  } else {
+    errors = [...includeErrors];
   }
-  return parsedArray;
+  return {
+    results: parsedArray,
+    errors,
+  };
 }
 
 module.exports = parseInclude;

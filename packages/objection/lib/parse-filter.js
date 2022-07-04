@@ -1,3 +1,9 @@
+const {
+  isAnArray,
+  containsNoErrorFromParser,
+} = require("../helpers/validation");
+
+//To reconstruct the parameters to objections format
 function parseParametersForObjection(operator, value) {
   return Array.isArray(value)
     ? value.length > 2
@@ -6,40 +12,58 @@ function parseParametersForObjection(operator, value) {
     : [value, operator];
 }
 
+//To handle "OR" AND "AND" recursively
 function sortArrayFilters(filters, isOr = false) {
   let i = 0;
   let parsedArray = [];
+  let errors = [];
   for (let filter of filters) {
+    //use the orWhere only on from the second iteration.
     let useOr = isOr && i > 0;
-    parsedArray = [...parsedArray, ...parseFilters(filter, useOr)];
+    const parseFilterResponse = parseFilters(filter, [], useOr);
+    parsedArray = [...parsedArray, ...parseFilterResponse.results];
+    errors = [...errors, ...parseFilterResponse.errors];
     i++;
   }
   return parsedArray;
 }
 
-function parseFilters(filters, isOr = false) {
+function parseFilters(filters, filterErrors, isOr = false) {
   let parsedArray = [];
+  let errors = [];
   if (!filters) return parsedArray;
-  const keys = Object.keys(filters);
-  if (keys.length > 0) {
-    for (let key of keys) {
-      if (key === "AND") {
-        parsedArray = [...parsedArray, ...sortArrayFilters(filters["AND"])];
-      } else if (key === "OR") {
-        parsedArray = [
-          ...parsedArray,
-          ...sortArrayFilters(filters["OR"], true),
-        ];
-      } else {
-        const parameters = parseParametersForObjection(key, filters[key]);
-        parsedArray.push({
-          fx: isOr ? "orWhere" : "where",
-          parameters,
-        });
+  //return an empty array, if
+  if (containsNoErrorFromParser(filterErrors, "sort")) {
+    if (isAnArray(filters)) {
+      const keys = Object.keys(filters);
+      if (keys.length > 0) {
+        for (let key of keys) {
+          if (key === "AND" || key === "OR") {
+            if (isAnArray(filters[key])) {
+              parsedArray = [
+                ...parsedArray,
+                ...sortArrayFilters(filters[key], key === "OR"),
+              ];
+            } else {
+              errors.push(`${filters[key]} should be an array`);
+            }
+          } else {
+            const parameters = parseParametersForObjection(key, filters[key]);
+            parsedArray.push({
+              fx: isOr ? "orWhere" : "where",
+              parameters,
+            });
+          }
+        }
       }
+    } else {
+      errors.push(`filters field should be an array`);
     }
   }
-  return parsedArray;
+  return {
+    results: parsedArray,
+    errors,
+  };
 }
 
 module.exports = parseFilters;
