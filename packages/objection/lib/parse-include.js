@@ -6,7 +6,7 @@ const {
 function parseInclude(include, includeErrors) {
   const parsedArray = [];
   let errors = [];
-  if (containsNoErrorFromParser(includeErrors, "include")) {
+  if (containsNoErrorFromParser(includeErrors)) {
     if (!isAnArray(include)) {
       errors.push("Inlcude field should be an array");
     }

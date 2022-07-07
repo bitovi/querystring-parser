@@ -33,7 +33,7 @@ function parseFilters(filters, filterErrors, isOr = false) {
   let errors = [];
   if (!filters) return parsedArray;
   //return an empty array, if
-  if (containsNoErrorFromParser(filterErrors, "sort")) {
+  if (containsNoErrorFromParser(filterErrors)) {
     if (isAnArray(filters)) {
       const keys = Object.keys(filters);
       if (keys.length > 0) {

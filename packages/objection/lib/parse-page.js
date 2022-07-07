@@ -6,7 +6,7 @@ const {
 function parsePagination(page, pageErrors) {
   const parsedArray = [];
   let errors = [];
-  if (containsNoErrorFromParser(pageErrors, "sort")) {
+  if (containsNoErrorFromParser(pageErrors)) {
     let { number, size } = page;
     if (number) {
       //default size to 10 if undefined

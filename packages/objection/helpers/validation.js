@@ -6,8 +6,8 @@ function isAnArray(item) {
   return Array.isArray(item);
 }
 
-function containsNoErrorFromParser(error, item) {
-  return error[item]?.length === 0;
+function containsNoErrorFromParser(error) {
+  return error.length === 0;
 }
 
 module.exports = {

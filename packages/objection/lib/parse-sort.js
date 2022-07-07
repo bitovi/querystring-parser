@@ -6,7 +6,7 @@ const {
 function parseSort(sort, sortErrors) {
   const parsedArray = [];
   let errors = [];
-  if (containsNoErrorFromParser(sortErrors, "sort")) {
+  if (containsNoErrorFromParser(sortErrors)) {
     if (!isAnArray(sort)) {
       errors.push("Sort field should be an array");
     } else {
