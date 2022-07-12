@@ -3,7 +3,8 @@ const parseSort = require("../lib/parse-sort");
 describe("parseSort", () => {
   const testCases = [
     {
-      title: "should return an empty results array for an empty sort array",
+      title:
+        "should return empty results and no errors when both parameters are empty",
       parameters: [[], []],
       expectedResults: {
         results: [],
@@ -12,7 +13,8 @@ describe("parseSort", () => {
     },
 
     {
-      title: "should return an empty results array for an empty sort array",
+      title:
+        "should return an empty result and send back the error when an empty object and an error is passed",
       parameters: [[], ["FAILURE!"]],
       expectedResults: {
         results: [],
@@ -21,7 +23,8 @@ describe("parseSort", () => {
     },
 
     {
-      title: "should return an empty results array for an empty sort array",
+      title:
+        "should return an empty result and send back the error when a valid object with an error is passed",
       parameters: [[{ field: "test", direction: "ASC" }], ["FAILURE!"]],
       expectedResults: {
         results: [],
@@ -30,7 +33,8 @@ describe("parseSort", () => {
     },
 
     {
-      title: "should return an empty results array for an empty sort array",
+      title:
+        "should return an error when an invalid type is passed as the first parameter",
       parameters: ["Hello world", []],
       expectedResults: {
         results: [],
@@ -39,57 +43,25 @@ describe("parseSort", () => {
     },
 
     {
-      title: "should return an empty results array for an empty sort array",
+      title: "should return valid results for valid parameters",
       parameters: [[{ field: "test", direction: "ASC" }], []],
       expectedResults: {
         results: [
           {
             fx: "orderBy",
-            parameters: [{ column: "test", order: "ASC" }],
+            parameters: [[{ column: "test", order: "ASC" }]],
           },
         ],
         errors: [],
       },
     },
-
-    /**
-     * Alternate querystring formats
-     */
-    // {
-    //   title: "should return empty array when querystring is empty string",
-    //   parameters: "",
-    //   expectedResults: [],
-    // },
-    // {
-    //   title: "should return empty array when querystring is null",
-    //   parameters: null,
-    //   expectedResults: [],
-    // },
-    // {
-    //   title: "should return empty array when querystring is undefined",
-    //   parameters: undefined,
-    //   expectedResults: [],
-    // },
-
-    /**
-     * Errors
-     */
-    // {
-    //   title: 'should return error if number was provided but size was not',
-    //   parameters: 'page[number]=1',
-    //   expectedResults: {},
-    //   expectedErrors: [
-    //     new Error('Page number was provided but page size was not in parameters: \'page[number]=1\'')
-    //   ]
-    // },
   ];
 
   test.concurrent.each(testCases)(
     "$title",
-    ({ querystring, expectedResults, expectedErrors }) => {
-      const { results, errors } = parseSort(querystring);
+    ({ parameters, expectedResults }) => {
+      const results = parseSort(...parameters);
       expect(results).toEqual(expectedResults);
-      expect(errors).toEqual(expectedErrors || []);
     }
   );
 });

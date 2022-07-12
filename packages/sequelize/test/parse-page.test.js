@@ -7,7 +7,7 @@ describe("parsePage", () => {
         "should return empty results and no errors when both parameters are empty",
       parameters: [{}, []],
       expectedResults: {
-        results: [],
+        results: {},
         errors: [],
       },
     },
@@ -17,7 +17,7 @@ describe("parsePage", () => {
         "should return an empty result and send back the error when an empty object and an error is passed",
       parameters: [{}, ["FAILURE!"]],
       expectedResults: {
-        results: [],
+        results: {},
         errors: ["FAILURE!"],
       },
     },
@@ -27,7 +27,7 @@ describe("parsePage", () => {
         "should return an empty result and send back the error when a valid object with an error is passed",
       parameters: [{ number: 10, size: 20 }, ["FAILURE!"]],
       expectedResults: {
-        results: [],
+        results: {},
         errors: ["FAILURE!"],
       },
     },
@@ -37,7 +37,7 @@ describe("parsePage", () => {
         "should return an error if a non object is passed as the first parameter",
       parameters: ["Hello world", []],
       expectedResults: {
-        results: [],
+        results: {},
         errors: ["Page field should be an Object"],
       },
     },
@@ -47,7 +47,7 @@ describe("parsePage", () => {
         "should return an error if an invalid string is passed as the page number",
       parameters: [{ number: "notANumber" }, []],
       expectedResults: {
-        results: [],
+        results: {},
         errors: ["page[number] and page[size] should be integers"],
       },
     },
@@ -57,7 +57,7 @@ describe("parsePage", () => {
         "should return an error if an invalid string is passed as the page size",
       parameters: [{ number: 10, size: "notANumber" }, []],
       expectedResults: {
-        results: [],
+        results: {},
         errors: ["page[number] and page[size] should be integers"],
       },
     },
@@ -66,16 +66,10 @@ describe("parsePage", () => {
       title: "should return valid results for valid parameters",
       parameters: [{ number: 3, size: 5 }, []],
       expectedResults: {
-        results: [
-          {
-            fx: "offset",
-            parameters: [10],
-          },
-          {
-            fx: "limit",
-            parameters: [5],
-          },
-        ],
+        results: {
+          offset: 10,
+          size: 5,
+        },
         errors: [],
       },
     },
@@ -85,16 +79,10 @@ describe("parsePage", () => {
         "should return valid result and set a default of 10 if page size is not set",
       parameters: [{ number: 2 }, []],
       expectedResults: {
-        results: [
-          {
-            fx: "offset",
-            parameters: [10],
-          },
-          {
-            fx: "limit",
-            parameters: [10],
-          },
-        ],
+        results: {
+          offset: 10,
+          size: 10,
+        },
         errors: [],
       },
     },
@@ -104,6 +92,8 @@ describe("parsePage", () => {
     "$title",
     ({ parameters, expectedResults }) => {
       const results = parsePage(...parameters);
+      console.log(results);
+      console.log(expectedResults);
       expect(results).toEqual(expectedResults);
     }
   );

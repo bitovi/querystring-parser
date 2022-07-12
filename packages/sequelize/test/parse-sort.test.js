@@ -1,13 +1,13 @@
-const parseInclude = require("../lib/parse-include");
+const parseSort = require("../lib/parse-sort");
 
-describe("parseInclude", () => {
+describe("parseSort", () => {
   const testCases = [
     {
       title:
         "should return empty results and no errors when both parameters are empty",
       parameters: [[], []],
       expectedResults: {
-        results: [],
+        results: {},
         errors: [],
       },
     },
@@ -17,7 +17,7 @@ describe("parseInclude", () => {
         "should return an empty result and send back the error when an empty object and an error is passed",
       parameters: [[], ["FAILURE!"]],
       expectedResults: {
-        results: [],
+        results: {},
         errors: ["FAILURE!"],
       },
     },
@@ -25,33 +25,30 @@ describe("parseInclude", () => {
     {
       title:
         "should return an empty result and send back the error when a valid object with an error is passed",
-      parameters: [["field1", "field2"], ["FAILURE!"]],
+      parameters: [[{ field: "test", direction: "ASC" }], ["FAILURE!"]],
       expectedResults: {
-        results: [],
+        results: {},
         errors: ["FAILURE!"],
       },
     },
 
     {
       title:
-        "should return an error if a non object is passed as the first parameter",
+        "should return an error when an invalid type is passed as the first parameter",
       parameters: ["Hello world", []],
       expectedResults: {
-        results: [],
-        errors: ["Include field should be an array"],
+        results: {},
+        errors: ["Sort field should be an array"],
       },
     },
 
     {
       title: "should return valid results for valid parameters",
-      parameters: [["field1", "field2"], []],
+      parameters: [[{ field: "test", direction: "ASC" }], []],
       expectedResults: {
-        results: [
-          {
-            fx: "select",
-            parameters: ["field1", "field2"],
-          },
-        ],
+        results: {
+          order: [["test", "ASC"]],
+        },
         errors: [],
       },
     },
@@ -60,7 +57,7 @@ describe("parseInclude", () => {
   test.concurrent.each(testCases)(
     "$title",
     ({ parameters, expectedResults }) => {
-      const results = parseInclude(...parameters);
+      const results = parseSort(...parameters);
       expect(results).toEqual(expectedResults);
     }
   );

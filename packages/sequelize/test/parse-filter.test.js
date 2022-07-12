@@ -1,3 +1,4 @@
+const { Op } = require("sequelize");
 const parseFilter = require("../lib/parse-filter");
 
 describe("parseFilter", () => {
@@ -7,7 +8,7 @@ describe("parseFilter", () => {
         "should return empty results and no errors when both parameters are empty",
       parameters: [{}, []],
       expectedResults: {
-        results: [],
+        results: {},
         errors: [],
       },
     },
@@ -17,7 +18,7 @@ describe("parseFilter", () => {
         "should return an empty result and send back the error when an empty object and an error is passed",
       parameters: [{}, ["FAILURE!"]],
       expectedResults: {
-        results: [],
+        results: {},
         errors: ["FAILURE!"],
       },
     },
@@ -27,7 +28,7 @@ describe("parseFilter", () => {
         "should return an empty result and send back the error when a valid object with an error is passed",
       parameters: [{ "=": ["#name", "mike"] }, ["FAILURE!"]],
       expectedResults: {
-        results: [],
+        results: {},
         errors: ["FAILURE!"],
       },
     },
@@ -37,7 +38,7 @@ describe("parseFilter", () => {
         "should return an error when an invalid type is passed as the first parameter",
       parameters: ["Hello world", []],
       expectedResults: {
-        results: [],
+        results: {},
         errors: ["Filter field must be an object"],
       },
     },
@@ -47,12 +48,13 @@ describe("parseFilter", () => {
         "should return valid results for valid parameters for the '=' operator",
       parameters: [{ "=": ["#name", "michael"] }, []],
       expectedResults: {
-        results: [
-          {
-            fx: "where",
-            parameters: ["#name", "=", "michael"],
+        results: {
+          where: {
+            "#name": {
+              [Op.eq]: "michael",
+            },
           },
-        ],
+        },
         errors: [],
       },
     },
@@ -64,16 +66,22 @@ describe("parseFilter", () => {
         [],
       ],
       expectedResults: {
-        results: [
-          {
-            fx: "where",
-            parameters: ["#age", "IN", [10, 20]],
+        results: {
+          where: {
+            [Op.or]: [
+              {
+                "#age": {
+                  [Op.in]: [10, 20],
+                },
+              },
+              {
+                "#name": {
+                  [Op.eq]: "mike",
+                },
+              },
+            ],
           },
-          {
-            fx: "orWhere",
-            parameters: ["#name", "=", "mike"],
-          },
-        ],
+        },
         errors: [],
       },
     },
@@ -85,16 +93,22 @@ describe("parseFilter", () => {
         [],
       ],
       expectedResults: {
-        results: [
-          {
-            fx: "where",
-            parameters: ["#age", "IN", [10, 20]],
+        results: {
+          where: {
+            [Op.and]: [
+              {
+                "#age": {
+                  [Op.in]: [10, 20],
+                },
+              },
+              {
+                "#name": {
+                  [Op.eq]: "mike",
+                },
+              },
+            ],
           },
-          {
-            fx: "where",
-            parameters: ["#name", "=", "mike"],
-          },
-        ],
+        },
         errors: [],
       },
     },

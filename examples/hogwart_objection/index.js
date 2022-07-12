@@ -3,7 +3,7 @@ const dotenv = require("dotenv");
 const url = require("url");
 const cors = require("cors");
 const { Hogwarts } = require("./model");
-const { parseQueries } = require("./query-parser");
+const lib = require("../../packages/objection/index");
 
 //configurations
 dotenv.config();
@@ -19,9 +19,12 @@ app.use(express.urlencoded({ extended: false }));
 const fetchQuery = async (query) => {
   const hogwart = Hogwarts.query();
   if (query) {
-    const orm = parseQueries(query);
-    for (let q of orm) {
-      hogwart[q.fx](...q.parameters);
+    const { data, errors } = lib.parse(query);
+    if (errors.length > 0) {
+      throw new Error(errors[0]);
+    }
+    for (let d of data) {
+      hogwart[d.fx](...d.parameters);
     }
   }
   const queryData = await hogwart;
@@ -38,7 +41,6 @@ app.get("/students", async (req, res) => {
     });
   } catch (error) {
     //ensure to use a proper error handler
-    //this is to handle error for just one endpoint
     res.status(500).json({
       errors: error.message,
     });

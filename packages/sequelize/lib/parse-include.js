@@ -4,18 +4,15 @@ const {
 } = require("../helpers/validation");
 
 function parseInclude(include, includeErrors) {
-  const parsedArray = [];
+  const parsedArray = {};
   let errors = [];
   if (containsNoErrorFromParser(includeErrors)) {
-    if (!isAnArray(include)) {
-      errors.push("Include field should be an array");
-    } else {
+    if (isAnArray(include)) {
       if (include.length > 0) {
-        parsedArray.push({
-          fx: "select",
-          parameters: include,
-        });
+        parsedArray.attributes = include;
       }
+    } else {
+      errors.push("Include field should be an array");
     }
   } else {
     errors = includeErrors;

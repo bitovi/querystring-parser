@@ -1,11 +1,11 @@
 const {
-  containsNoErrorFromParser,
   isNotValidInteger,
+  containsNoErrorFromParser,
   isObject,
 } = require("../helpers/validation");
 
 function parsePagination(page, pageErrors) {
-  const parsedArray = [];
+  const parsedResult = {};
   let errors = [];
   if (containsNoErrorFromParser(pageErrors)) {
     if (isObject(page)) {
@@ -13,19 +13,12 @@ function parsePagination(page, pageErrors) {
       if (number) {
         //default size to 10 if undefined
         size = size ?? 10;
-        console.log(number);
         if (isNotValidInteger(number) || isNotValidInteger(size)) {
           errors.push("page[number] and page[size] should be integers");
         } else {
           const offset = getOffsetByPageNumber(number, size);
-          parsedArray.push({
-            fx: "offset",
-            parameters: [offset],
-          });
-          parsedArray.push({
-            fx: "limit",
-            parameters: [size],
-          });
+          parsedResult.offset = offset;
+          parsedResult.limit = size;
         }
       }
     } else {
@@ -35,7 +28,7 @@ function parsePagination(page, pageErrors) {
     errors = pageErrors;
   }
   return {
-    results: parsedArray,
+    results: parsedResult,
     errors,
   };
 }

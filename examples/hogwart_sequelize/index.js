@@ -3,7 +3,7 @@ const dotenv = require("dotenv");
 const url = require("url");
 const cors = require("cors");
 const { Hogwarts } = require("./model");
-const { parseQueries } = require("./query-parser");
+const lib = require("../../packages/sequelize/index");
 
 //configurations
 dotenv.config();
@@ -19,7 +19,11 @@ app.use(express.urlencoded({ extended: false }));
 const fetchQuery = async (query) => {
   let orm = {};
   if (query) {
-    orm = parseQueries(query);
+    const { data, errors } = lib.parse(query);
+    if (errors.length > 0) {
+      throw new Error(errors[0]);
+    }
+    orm = data;
   }
   const hogwart = await Hogwarts.findAll(orm);
   return hogwart;

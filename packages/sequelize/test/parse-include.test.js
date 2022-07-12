@@ -7,7 +7,7 @@ describe("parseInclude", () => {
         "should return empty results and no errors when both parameters are empty",
       parameters: [[], []],
       expectedResults: {
-        results: [],
+        results: {},
         errors: [],
       },
     },
@@ -17,7 +17,7 @@ describe("parseInclude", () => {
         "should return an empty result and send back the error when an empty object and an error is passed",
       parameters: [[], ["FAILURE!"]],
       expectedResults: {
-        results: [],
+        results: {},
         errors: ["FAILURE!"],
       },
     },
@@ -27,7 +27,7 @@ describe("parseInclude", () => {
         "should return an empty result and send back the error when a valid object with an error is passed",
       parameters: [["field1", "field2"], ["FAILURE!"]],
       expectedResults: {
-        results: [],
+        results: {},
         errors: ["FAILURE!"],
       },
     },
@@ -37,7 +37,7 @@ describe("parseInclude", () => {
         "should return an error if a non object is passed as the first parameter",
       parameters: ["Hello world", []],
       expectedResults: {
-        results: [],
+        results: {},
         errors: ["Include field should be an array"],
       },
     },
@@ -46,12 +46,9 @@ describe("parseInclude", () => {
       title: "should return valid results for valid parameters",
       parameters: [["field1", "field2"], []],
       expectedResults: {
-        results: [
-          {
-            fx: "select",
-            parameters: ["field1", "field2"],
-          },
-        ],
+        results: {
+          attributes: ["field1", "field2"],
+        },
         errors: [],
       },
     },

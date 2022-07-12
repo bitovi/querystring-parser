@@ -24,7 +24,7 @@ function parseSort(sort, sortErrors) {
       }
     }
   } else {
-    errors = [...sortErrors];
+    errors = sortErrors;
   }
   return {
     results: parsedArray,

@@ -1,6 +1,7 @@
 const {
   isAnArray,
   containsNoErrorFromParser,
+  isObject,
 } = require("../helpers/validation");
 
 //To reconstruct the parameters to objections format
@@ -31,10 +32,8 @@ function sortArrayFilters(filters, isOr = false) {
 function parseFilters(filters, filterErrors, isOr = false) {
   let parsedArray = [];
   let errors = [];
-  if (!filters) return parsedArray;
-  //return an empty array, if
   if (containsNoErrorFromParser(filterErrors)) {
-    if (isAnArray(filters)) {
+    if (isObject(filters)) {
       const keys = Object.keys(filters);
       if (keys.length > 0) {
         for (let key of keys) {
@@ -57,8 +56,10 @@ function parseFilters(filters, filterErrors, isOr = false) {
         }
       }
     } else {
-      errors.push(`filters field should be an array`);
+      errors.push("Filter field must be an object");
     }
+  } else {
+    errors = filterErrors;
   }
   return {
     results: parsedArray,

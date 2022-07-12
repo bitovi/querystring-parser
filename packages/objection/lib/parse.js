@@ -1,10 +1,10 @@
-const lib = require("../../index");
+const lib = require("../../../index");
 const parseFilters = require("./parse-filter");
 const parseInclude = require("./parse-include");
 const parsePagination = require("./parse-page");
 const parseSort = require("./parse-sort");
 
-function parseQueries(query) {
+function parse(query) {
   const parsedQuery = lib.parse(query);
   const { include, filter, sort, page, errors: queryErrors } = parsedQuery;
 
@@ -34,6 +34,4 @@ function parseQueries(query) {
   };
 }
 
-module.exports = {
-  parseQueries,
-};
+module.exports = parse;
