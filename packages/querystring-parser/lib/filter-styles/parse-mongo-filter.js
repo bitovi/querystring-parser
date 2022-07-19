@@ -4,6 +4,7 @@ const isNullString = require("../helpers/is-null-string");
 const MongoOperator = require("../enums/mongo-operator");
 const SqlOperator = require("../enums/sql-operator");
 const MongoValueType = require("../enums/mongo-value-type");
+const QuerystringParsingError = require("../../lib/errors/querystring-parsing-error");
 
 /** Parses "MongoDB-style" filters from of a querystring. */
 function parseMongoFilter(querystring) {
@@ -11,31 +12,35 @@ function parseMongoFilter(querystring) {
   let results;
 
   // perform initial parse with qs lib
-  const { filter: qsFilter } = qs.parse(querystring, { comma: true });
+  const qsParams = qs.parse(querystring, { depth: 0, comma: true });
+  const filterParams = Object.entries(qsParams).filter(([key]) =>
+    key.startsWith("filter")
+  );
 
   const fieldResults = [];
-  for (const [field, opVal] of Object.entries(qsFilter)) {
+  for (let [param, providedValue] of filterParams) {
     /************************************************************************
      * 1. Identify field, operator, and value(s) represented as plain strings
      ************************************************************************/
-    let providedOperator; // the operator - as qs lib parsed it
-    let providedValue; // the value - as qs lib parsed it
-
-    if (typeof opVal !== "object") {
-      // ex: filter[age]=25
-      providedValue = opVal;
-    } else {
-      if (Array.isArray(opVal)) {
-        // ex: filter[age]=24,25
-        providedValue = opVal;
-      } else {
-        // ex: filter[age][$in]=24,25
-        [providedOperator, providedValue] = Object.entries(opVal)[0];
-      }
-    }
+    let [, field, providedOperator = undefined] = param
+      .replace(/\[/g, "]") // String.prototype.replaceAll() not supported until node v15.0.0
+      .split("]")
+      .filter((s) => s.length);
 
     const operatorWasOmitted = providedOperator === undefined;
     const providedValueWasAnArray = Array.isArray(providedValue);
+
+    // helper: error constructor with pre-configured data for this field
+    const createError = (message) => {
+      return new QuerystringParsingError({
+        message,
+        querystring,
+        paramKey: `filter[${field}]${
+          operatorWasOmitted ? "" : "[" + providedOperator + "]"
+        }`,
+        paramValue: providedValue,
+      });
+    };
 
     /************************************************************************
      * 2. Apply defaults and type coersion
@@ -47,7 +52,7 @@ function parseMongoFilter(querystring) {
     // verify all values are the same type (or null)
     const valueType = areMongoTypesTheSame(values);
     if (!valueType) {
-      errors.push(new Error("arrays should not mix multiple value types"));
+      errors.push(createError("arrays should not mix multiple value types"));
       return { results, errors }; // short circuit
     }
 
@@ -92,7 +97,9 @@ function parseMongoFilter(querystring) {
       ![MongoOperator.IN, MongoOperator.NOT_IN].includes(operator)
     ) {
       errors.push(
-        new Error(`"${operator}" operator should not be used with array value`)
+        createError(
+          `"${operator}" operator should not be used with array value`
+        )
       );
       return { results, errors }; // short circuit
     }
@@ -109,7 +116,7 @@ function parseMongoFilter(querystring) {
       ].includes(operator)
     ) {
       errors.push(
-        new Error(`"${operator}" operator should not be used with null value`)
+        createError(`"${operator}" operator should not be used with null value`)
       );
       return { results, errors }; // short circuit
     }
@@ -120,7 +127,7 @@ function parseMongoFilter(querystring) {
       operator === MongoOperator.ILIKE
     ) {
       errors.push(
-        new Error(
+        createError(
           `"${operator}" operator should not be used with number values`
         )
       );
@@ -130,7 +137,9 @@ function parseMongoFilter(querystring) {
     // date compatability check
     if (valueType === MongoValueType.DATE && operator === MongoOperator.ILIKE) {
       errors.push(
-        new Error(`"${operator}" operator should not be used with date values`)
+        createError(
+          `"${operator}" operator should not be used with date values`
+        )
       );
       return { results, errors }; // short circuit
     }

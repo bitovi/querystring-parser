@@ -1,4 +1,5 @@
 const qs = require("qs");
+const isNonEmptyString = require("./helpers/is-non-empty-string");
 
 /**
  * JSON:API specifies a list of "relationship paths"
@@ -10,9 +11,8 @@ function parseInclude(querystring) {
   const results = [];
   const errors = [];
 
-  // TODO: maybe need to check if this is a nonempty string (for all of them)
   if (qsInclude) {
-    results.push(...qsInclude.split(","));
+    results.push(...qsInclude.split(",").filter(isNonEmptyString));
   }
 
   return {

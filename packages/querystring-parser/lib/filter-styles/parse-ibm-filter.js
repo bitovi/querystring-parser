@@ -6,6 +6,7 @@ const isNumberString = require("../helpers/is-number-string");
 const isDateString = require("../helpers/is-date-string");
 const isString = require("../helpers/is-string");
 const IbmValueType = require("../enums/ibm-value-type");
+const QuerystringParsingError = require("../../lib/errors/querystring-parsing-error");
 
 /** Parses "IBM-style" filter expression from of a querystring. */
 function parseIbmFilter(querystring) {
@@ -22,7 +23,14 @@ function parseIbmFilter(querystring) {
     try {
       subResults.push(parseExpression(expression));
     } catch (e) {
-      errors.push(e);
+      errors.push(
+        new QuerystringParsingError({
+          message: e.message,
+          querystring,
+          paramKey: "filter",
+          paramValue: expression,
+        })
+      );
       // break? all or nothing results?
     }
   }
@@ -96,7 +104,6 @@ function parseExpression(expression) {
 }
 
 function tokenizeExpression(expression) {
-  // TODO: what about string values with (),\' chars inside?
   let tokens = [expression];
   const delimiters = ["(", ")", ","];
   delimiters.forEach((delim) => {
@@ -163,6 +170,7 @@ function wildCardString(value, operator = undefined) {
 }
 
 function errorCheck(operator, operands) {
+  // blacklist of invalid value types per operator
   const invalidTypeMap = {
     [IbmOperator.GREATER_THAN]: [IbmValueType.NULL],
     [IbmOperator.GREATER_OR_EQUAL]: [IbmValueType.NULL],
@@ -189,31 +197,45 @@ function errorCheck(operator, operands) {
     [IbmOperator.ANY]: [IbmValueType.ATTRIBUTE_REF],
   };
 
-  if (!Object.keys(invalidTypeMap).includes(operator)) {
-    return;
+  // throw error for any invalid operator / value type combos
+  if (Object.keys(invalidTypeMap).includes(operator)) {
+    invalidTypeMap[operator].forEach((valueType) => {
+      operands.forEach((operand) => {
+        if (typeOfValue(operand) === valueType) {
+          throw new Error(
+            `"${operator}" operator should not be used with ${valueType.description} value`
+          );
+        }
+      });
+    });
   }
 
-  invalidTypeMap[operator].forEach((valueType) => {
-    operands.forEach((operand) => {
-      if (valueIsOfType(operand, valueType)) {
-        throw new Error(
-          `"${operator}" operator should not be used with ${valueType.description} value`
-        );
-      }
-    });
-  });
+  // throw error if "ANY" operator has multiple types
+  if (operator === IbmOperator.ANY) {
+    const valueTypes = operands
+      .map(typeOfValue)
+      .filter((v) => v !== IbmValueType.NULL);
+    const hasMultipleTypes =
+      valueTypes.length && !valueTypes.every((vt) => vt === valueTypes[0]);
+    if (hasMultipleTypes) {
+      throw new Error(
+        `"any" operator should not be used with multiple value types`
+      );
+    }
+  }
 }
 
-function valueIsOfType(value, valueType) {
-  switch (valueType) {
-    case IbmValueType.NULL:
-      return value === null;
-    case IbmValueType.NUMBER:
-      return value !== null && !isNaN(value);
-    case IbmValueType.DATE:
-      return isDateString(value);
-    case IbmValueType.ATTRIBUTE_REF:
-      return isString(value) && value[0] === "#";
+function typeOfValue(value) {
+  if (value === null) {
+    return IbmValueType.NULL;
+  } else if (!isNaN(value)) {
+    return IbmValueType.NUMBER;
+  } else if (isDateString(value)) {
+    return IbmValueType.DATE;
+  } else if (isString(value) && value[0] === "#") {
+    return IbmValueType.ATTRIBUTE_REF;
+  } else if (isString(value)) {
+    return IbmValueType.STRING;
   }
 }
 
