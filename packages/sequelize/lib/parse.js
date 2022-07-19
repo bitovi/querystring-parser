@@ -1,4 +1,4 @@
-const lib = require("../../../index");
+const lib = require("@bitovi/querystring-parser");
 const parseFilters = require("./parse-filter");
 const parseInclude = require("./parse-include");
 const parsePagination = require("./parse-page");

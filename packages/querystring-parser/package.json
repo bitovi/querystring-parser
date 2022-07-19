@@ -4,32 +4,26 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "lerna run test",
-    "version": "lerna version --conventional-commits --yes",
-    "diff": "lerna diff",
+    "test": "jest",
+    "test:watch": "jest --watch",
     "lint": "eslint .",
     "lint:fix": "eslint --fix .",
     "pretty": "prettier --check .",
     "pretty:fix": "prettier --write .",
     "preversion": "npm run lint && npm test",
+    "version": "git commit -am \"Update version number\" && git checkout -b release",
     "postpublish": "git push --tags && git checkout main && git branch -D release && git push",
     "release:patch": "npm version patch && npm publish --access=public",
     "release:minor": "npm version minor && npm publish --access=public",
     "release:major": "npm version major && npm publish --access=public"
   },
-  "workspaces": [
-    "packages/*"
-  ],
   "repository": {
     "type": "git",
     "url": "https://github.com/bitovi/querystring-parser.git"
   },
   "keywords": [
     "querystring",
-    "parse",
-    "orm",
-    "objection",
-    "sequelize"
+    "parse"
   ],
   "bugs": {
     "url": "https://github.com/bitovi/querystring-parser/issues"

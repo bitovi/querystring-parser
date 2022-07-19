@@ -1,8 +1,11 @@
 {
-  "name": "@bitovi/querystring-parser-objection",
+  "name": "@bitovi/objection-querystring-parser",
   "version": "0.1.0",
   "description": "",
   "main": "index.js",
+  "directories": {
+    "lib": "lib"
+  },
   "scripts": {
     "test": "jest",
     "test:watch": "jest --watch",
@@ -23,8 +26,7 @@
     "objection"
   ],
   "dependencies": {
-    "@bitovi/querystring-parser": "",
-    "sequelize": "^6.21.2"
+    "@bitovi/querystring-parser": "^1.0.0"
   },
   "devDependencies": {
     "@bitovi/eslint-config": "^1.0.0",

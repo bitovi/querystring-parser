@@ -92,8 +92,6 @@ describe("parsePage", () => {
     "$title",
     ({ parameters, expectedResults }) => {
       const results = parsePage(...parameters);
-      console.log(results);
-      console.log(expectedResults);
       expect(results).toEqual(expectedResults);
     }
   );
