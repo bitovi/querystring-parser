@@ -68,7 +68,7 @@ describe("parsePage", () => {
       expectedResults: {
         results: {
           offset: 10,
-          size: 5,
+          limit: 5,
         },
         errors: [],
       },
@@ -81,7 +81,7 @@ describe("parsePage", () => {
       expectedResults: {
         results: {
           offset: 10,
-          size: 10,
+          limit: 10,
         },
         errors: [],
       },
