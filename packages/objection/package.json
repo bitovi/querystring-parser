@@ -29,7 +29,7 @@
     "@bitovi/querystring-parser": "^1.0.0"
   },
   "devDependencies": {
-    "@bitovi/eslint-config": "^1.0.0",
+    "@bitovi/eslint-config": "^0.5.4",
     "@types/jest": "^27.5.1",
     "eslint": "^8.15.0",
     "eslint-config-prettier": "^8.5.0",
