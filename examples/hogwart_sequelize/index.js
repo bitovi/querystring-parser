@@ -3,7 +3,7 @@ const dotenv = require("dotenv");
 const url = require("url");
 const cors = require("cors");
 const { Hogwarts } = require("./model");
-const lib = require("../../packages/sequelize/index");
+const lib = require("@bitovi/querystring-parser");
 
 //configurations
 dotenv.config();

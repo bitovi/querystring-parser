@@ -13,7 +13,6 @@ function parsePagination(page, pageErrors) {
       if (number) {
         //default size to 10 if undefined
         size = size ?? 10;
-        console.log(number);
         if (isNotValidInteger(number) || isNotValidInteger(size)) {
           errors.push("page[number] and page[size] should be integers");
         } else {
