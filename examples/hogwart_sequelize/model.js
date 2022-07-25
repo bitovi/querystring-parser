@@ -1,4 +1,5 @@
 const { Sequelize, DataTypes } = require("sequelize");
+const HogwartsData = require("./data");
 
 const sequelize = new Sequelize({
   dialect: "sqlite",
@@ -48,10 +49,19 @@ const Hogwarts = sequelize.define(
     await sequelize.authenticate();
     await sequelize.sync();
     console.log("Database and Tables connected successfully");
+    await seed();
   } catch (error) {
     console.error("Unable to connect to the database:", error);
   }
 })();
+
+const seed = async () => {
+  const hogwartsData = await Hogwarts.findAll();
+  if (hogwartsData.length === 0) {
+    await Hogwarts.bulkCreate(HogwartsData);
+    console.log("Successfully added data to the table");
+  }
+};
 
 module.exports = {
   Hogwarts,

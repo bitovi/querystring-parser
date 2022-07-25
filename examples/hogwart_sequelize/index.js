@@ -25,6 +25,7 @@ const fetchQuery = async (query) => {
     }
     orm = data;
   }
+  console.log(orm);
   const hogwart = await Hogwarts.findAll(orm);
   return hogwart;
 };
