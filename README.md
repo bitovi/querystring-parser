@@ -8,13 +8,6 @@ Transforms CRUD-related querystrings into structured data
 - [Why querystring-parser?](#why-querystring-parser)
 - [Installation](#installation)
 - [Usage](#usage)
-  - [Sort Parameters](#sort-parameters)
-  - [Pagination Parameters](#pagination-parameters)
-  - [Include Parameters](#include-parameters)
-  - [Fields Parameters](#fields-parameters)
-  - [Filter Parameters](#fields-parameters)
-    - [MongoDB-Style Filter Parameters](#mongodb-style-filter-parameters)
-    - [IBM-Style Filter Parameters](#ibm-style-filter-parameters)
 - [Development / Contributing](#development--contributing)
 
 ## Why querystring-parser?
