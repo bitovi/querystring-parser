@@ -1,6 +1,6 @@
 # Hogwart example project using Sequelize
 
-The project is a simple express server using sqlite as the database and sequelize as an ORM. It shows how to use the sequelize-querystring-parser library to query your database from the client following the [JSON API](https://jsonapi.org/format/).specifications.
+The project is a simple express server using sqlite as the database and sequelize as an ORM. It shows how to use the sequelize-querystring-parser library to query your database from the client following the [JSON API](https://jsonapi.org/format/) specifications.
 
 Note that this is not an example of how to build a web server or use sequelize. It's an example of how to use the sequelize-querystring-parser library in your project.
 
