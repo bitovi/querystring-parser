@@ -28,16 +28,13 @@ Reference: [JSON:API - Sorting](https://jsonapi.org/format/#fetching-sorting)
 ```js
 const result = querystringParser.parse("sort=-date,name");
 console.log(result);
-```
-
-```sh
-{
-  orm: "sequelize",
-  data: {
-    order: [["date", "DESC"],["name","ASC"]]
- },
-  errors: [],
-};
+// {
+//   orm: "sequelize",
+//   data: {
+//     order: [["date", "DESC"],["name","ASC"]]
+//  },
+//   errors: [],
+// };
 ```
 
 ### Pagination Parameters
@@ -47,17 +44,14 @@ Reference: [JSON:API - Pagination](https://jsonapi.org/format/#fetching-paginati
 ```js
 const result = querystringParser.parse("page[number]=0&page[size]=10");
 console.log(result);
-```
-
-```sh
-{
-  orm: "sequelize",
-  data: {
-    offset: 0,
-    limit: 10
- },
-  errors: []
-};
+// {
+//   orm: "sequelize",
+//   data: {
+//     offset: 0,
+//     limit: 10
+//  },
+//   errors: []
+// };
 ```
 
 ### Include Parameters
@@ -67,16 +61,13 @@ Reference: [JSON:API - Inclusion of Related Resources](https://jsonapi.org/forma
 ```js
 const result = querystringParser.parse("include=pets,dogs");
 console.log(result);
-```
-
-```sh
-{
-  orm: "sequelize",
-  data: {
-    attributes: ["pets","dogs"]
- },
-  errors: []
-};
+// {
+//   orm: "sequelize",
+//   data: {
+//     attributes: ["pets","dogs"]
+//  },
+//   errors: []
+// };
 ```
 
 ### Filter Parameters
@@ -85,25 +76,22 @@ console.log(result);
 const result = querystringParser.parse(
   "filter=and(any('age','10','20'),equals('name','mike'))"
 );
-```
-
-```sh
-{
-  orm: "sequelize",
-  data: {
-    where: {
-      [Symbol(and)] : {
-        [Symbol(any)]: {
-          age: [10, 20]
-        },
-        [Symbol(eq)]: {
-          name: 'mike'
-        }
-      }
-    }
- },
-  errors: []
-};
+// {
+//   orm: "sequelize",
+//   data: {
+//     where: {
+//       [Symbol(and)] : {
+//         [Symbol(any)]: {
+//           age: [10, 20]
+//         },
+//         [Symbol(eq)]: {
+//           name: 'mike'
+//         }
+//       }
+//     }
+//  },
+//   errors: []
+// };
 ```
 
 ** Note: The Symbol(\*) uses the Op imported from the Sequelize library, it is not a direct Javascript Symbol operator. **
