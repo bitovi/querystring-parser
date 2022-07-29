@@ -1,5 +1,5 @@
 function removeHashFromString(str) {
-  return str.replace("#", "");
+  return str?.replace("#", "");
 }
 
 function isNotValidInteger(number) {

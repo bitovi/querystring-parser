@@ -3,7 +3,7 @@ const dotenv = require("dotenv");
 const url = require("url");
 const cors = require("cors");
 const { Hogwarts } = require("./model");
-const lib = require("@bitovi/querystring-parser");
+const lib = require("../../packages/sequelize/index");
 
 //configurations
 dotenv.config();
@@ -25,7 +25,6 @@ const fetchQuery = async (query) => {
     }
     orm = data;
   }
-  console.log(orm);
   const hogwart = await Hogwarts.findAll(orm);
   return hogwart;
 };

@@ -18,7 +18,7 @@ function containsNoErrorFromParser(error) {
 }
 
 function removeHashFromString(str) {
-  return str.replace("#", "");
+  return str?.replace("#", "");
 }
 
 module.exports = {

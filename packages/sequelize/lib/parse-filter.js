@@ -11,6 +11,7 @@ const SequelizeSymbols = {
   AND: Op.and,
   NOT: Op.not,
   "=": Op.eq,
+  "!=": Op.ne,
   ">": Op.gt,
   ">=": Op.gte,
   "<": Op.lt,
