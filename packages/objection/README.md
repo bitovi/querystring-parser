@@ -34,19 +34,19 @@ Reference: [JSON:API - Sorting](https://jsonapi.org/format/#fetching-sorting)
 ```js
 const result = querystringParser.parse("sort=-date,name");
 console.log(result);
-// {
-//   orm: "objection",
-//   data: [
-//     {
-//       fx: "orderBy",
-//       parameters: [[
-//         { column: "date", order: "DESC" },
-//         { column: "name", order: "ASC" },
-//       ]],
-//     }
-//   ],
-//   errors: [],
-// };
+{
+  orm: "objection",
+  data: [
+    {
+      fx: "orderBy",
+      parameters: [[
+        { column: "date", order: "DESC" },
+        { column: "name", order: "ASC" },
+      ]],
+    }
+  ],
+  errors: [],
+};
 ```
 
 ### Pagination Parameters
@@ -56,22 +56,22 @@ Reference: [JSON:API - Pagination](https://jsonapi.org/format/#fetching-paginati
 ```js
 const result = querystringParser.parse("page[number]=0&page[size]=10");
 console.log(result);
-// {
-//   orm: "objection",
-//   data: [
-//     [
-//       {
-//         fx: "offset",
-//         parameters: [0],
-//       },
-//       {
-//         fx: "limit",
-//         parameters: [10],
-//       },
-//     ],
-//   ],
-//   errors: [],
-// };
+{
+  orm: "objection",
+  data: [
+    [
+      {
+        fx: "offset",
+        parameters: [0],
+      },
+      {
+        fx: "limit",
+        parameters: [10],
+      },
+    ],
+  ],
+  errors: [],
+};
 ```
 
 ### Include Parameters
@@ -81,18 +81,18 @@ Reference: [JSON:API - Inclusion of Related Resources](https://jsonapi.org/forma
 ```js
 const result = querystringParser.parse("include=pets,dogs");
 console.log(result);
-// {
-//   orm: "objection",
-//   data: [
-//     [
-//       {
-//         fx: "select",
-//         parameters: ["pets", "dogs"],
-//       },
-//     ],
-//   ],
-//   errors: [],
-// };
+{
+  orm: "objection",
+  data: [
+    [
+      {
+        fx: "select",
+        parameters: ["pets", "dogs"],
+      },
+    ],
+  ],
+  errors: [],
+};
 ```
 
 ### Filter Parameters
@@ -101,20 +101,20 @@ console.log(result);
 const result = querystringParser.parse(
   "filter=or(any('age','10','20'),equals('name','mike'))"
 );
-// {
-//   orm: "objection",
-//   data: [
-//     {
-//       fx: "where",
-//       parameters: ["age", "IN", [10, 20]],
-//     },
-//     {
-//       fx: "orWhere",
-//       parameters: ["name", "=", "mike"],
-//     },
-//   ],
-//   errors: [],
-// };
+{
+  orm: "objection",
+  data: [
+    {
+      fx: "where",
+      parameters: ["age", "IN", [10, 20]],
+    },
+    {
+      fx: "orWhere",
+      parameters: ["name", "=", "mike"],
+    },
+  ],
+  errors: [],
+};
 ```
 
 ## Example
