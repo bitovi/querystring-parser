@@ -17,7 +17,7 @@ describe("parseFilter", () => {
         "should return empty results and no errors when an undefined filter is passed and the error is empty",
       parameters: [undefined, []],
       expectedResults: {
-        results: {},
+        results: [],
         errors: [],
       },
     },
