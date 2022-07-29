@@ -32,34 +32,36 @@ function sortArrayFilters(filters, isOr = false) {
 function parseFilters(filters, filterErrors, isOr = false) {
   let parsedArray = [];
   let errors = [];
-  if (containsNoErrorFromParser(filterErrors)) {
-    if (isObject(filters)) {
-      const keys = Object.keys(filters);
-      if (keys.length > 0) {
-        for (let key of keys) {
-          if (key === "AND" || key === "OR") {
-            if (isAnArray(filters[key])) {
-              parsedArray = [
-                ...parsedArray,
-                ...sortArrayFilters(filters[key], key === "OR"),
-              ];
+  if (filters) {
+    if (containsNoErrorFromParser(filterErrors)) {
+      if (isObject(filters)) {
+        const keys = Object.keys(filters);
+        if (keys.length > 0) {
+          for (let key of keys) {
+            if (key === "AND" || key === "OR") {
+              if (isAnArray(filters[key])) {
+                parsedArray = [
+                  ...parsedArray,
+                  ...sortArrayFilters(filters[key], key === "OR"),
+                ];
+              } else {
+                errors.push(`${filters[key]} should be an array`);
+              }
             } else {
-              errors.push(`${filters[key]} should be an array`);
+              const parameters = parseParametersForObjection(key, filters[key]);
+              parsedArray.push({
+                fx: isOr ? "orWhere" : "where",
+                parameters,
+              });
             }
-          } else {
-            const parameters = parseParametersForObjection(key, filters[key]);
-            parsedArray.push({
-              fx: isOr ? "orWhere" : "where",
-              parameters,
-            });
           }
         }
+      } else {
+        errors.push("Filter field must be an object");
       }
     } else {
-      errors.push("Filter field must be an object");
+      errors = filterErrors;
     }
-  } else {
-    errors = filterErrors;
   }
   return {
     results: parsedArray,

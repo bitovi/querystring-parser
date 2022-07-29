@@ -14,6 +14,16 @@ describe("parseFilter", () => {
 
     {
       title:
+        "should return empty results and no errors when an undefined filter is passed and the error is empty",
+      parameters: [undefined, []],
+      expectedResults: {
+        results: {},
+        errors: [],
+      },
+    },
+
+    {
+      title:
         "should return an empty result and send back the error when an empty object and an error is passed",
       parameters: [{}, ["FAILURE!"]],
       expectedResults: {

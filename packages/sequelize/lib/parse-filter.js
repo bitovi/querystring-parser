@@ -30,8 +30,11 @@ function parseParametersForSequelize(operator, value) {
 
 function sortArrayFilters(filters) {
   let parsedArray = [];
+  let errors = [];
   for (let filter of filters) {
-    parsedArray.push(parseFilters(filter, [], false).results);
+    const parsedFiltersResult = parseFilters(filter, [], false);
+    parsedArray.push(parsedFiltersResult.results);
+    errors.push(parsedFiltersResult.errors);
   }
   return parsedArray;
 }
@@ -40,23 +43,27 @@ function parseFilters(filters, filtersError, isDefault = true) {
   let parsedResult = {};
   let errors = [];
   let isValidFilters = false; //check if any processing is done to filter data
-  if (containsNoErrorFromParser(filtersError)) {
-    if (isObject(filters)) {
-      const keys = Object.keys(filters);
-      if (keys.length > 0) isValidFilters = true;
-      for (let key of keys) {
-        if (key === "AND" || key === "OR") {
-          parsedResult[SequelizeSymbols[key]] = sortArrayFilters(filters[key]);
-        } else {
-          const parsedKey = parseParametersForSequelize(key, filters[key]);
-          parsedResult = { ...parsedResult, ...parsedKey };
+  if (filters) {
+    if (containsNoErrorFromParser(filtersError)) {
+      if (isObject(filters)) {
+        const keys = Object.keys(filters);
+        if (keys.length > 0) isValidFilters = true;
+        for (let key of keys) {
+          if (key === "AND" || key === "OR") {
+            parsedResult[SequelizeSymbols[key]] = sortArrayFilters(
+              filters[key]
+            );
+          } else {
+            const parsedKey = parseParametersForSequelize(key, filters[key]);
+            parsedResult = { ...parsedResult, ...parsedKey };
+          }
         }
+      } else {
+        errors.push("Filter field must be an object");
       }
     } else {
-      errors.push("Filter field must be an object");
+      errors = filtersError;
     }
-  } else {
-    errors = filtersError;
   }
   const results =
     isValidFilters && isDefault
