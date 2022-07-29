@@ -60,7 +60,7 @@ describe("parseFilter", () => {
       expectedResults: {
         results: {
           where: {
-            "#name": {
+            name: {
               [Op.eq]: "michael",
             },
           },
@@ -80,12 +80,12 @@ describe("parseFilter", () => {
           where: {
             [Op.or]: [
               {
-                "#age": {
+                age: {
                   [Op.in]: [10, 20],
                 },
               },
               {
-                "#name": {
+                name: {
                   [Op.eq]: "mike",
                 },
               },
@@ -107,12 +107,12 @@ describe("parseFilter", () => {
           where: {
             [Op.and]: [
               {
-                "#age": {
+                age: {
                   [Op.in]: [10, 20],
                 },
               },
               {
-                "#name": {
+                name: {
                   [Op.eq]: "mike",
                 },
               },

@@ -2,15 +2,16 @@ const {
   isAnArray,
   containsNoErrorFromParser,
   isObject,
+  removeHashFromString,
 } = require("../helpers/validation");
 
 //To reconstruct the parameters to objections format
 function parseParametersForObjection(operator, value) {
   return Array.isArray(value)
     ? value.length > 2
-      ? [value[0], operator, value.slice(1)]
-      : [value[0], operator, value[1]]
-    : [value, operator];
+      ? [removeHashFromString(value[0]), operator, value.slice(1)]
+      : [removeHashFromString(value[0]), operator, value[1]]
+    : [removeHashFromString(value), operator];
 }
 
 //To handle "OR" AND "AND" recursively

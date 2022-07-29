@@ -1,29 +1,29 @@
 const lib = require("@bitovi/querystring-parser");
 const parseFilters = require("./parse-filter");
-const parseInclude = require("./parse-include");
+const parseField = require("./parse-fields");
 const parsePagination = require("./parse-page");
 const parseSort = require("./parse-sort");
 
 function parse(query) {
   const parsedQuery = lib.parse(query);
-  const { include, filter, sort, page, errors: queryErrors } = parsedQuery;
+  const { fields, filter, sort, page, errors: queryErrors } = parsedQuery;
 
   const filterResult = parseFilters(filter, queryErrors?.filter);
-  const includeResult = parseInclude(include, queryErrors?.include);
+  const fieldsResult = parseField(fields, queryErrors?.fields);
   const sortResult = parseSort(sort, queryErrors?.sort);
   const pageResult = parsePagination(page, queryErrors?.page);
 
   let data = {
     ...sortResult.results,
     ...filterResult.results,
-    ...includeResult.results,
+    ...fieldsResult.results,
     ...pageResult.results,
   };
 
   let errors = [
     ...sortResult.errors,
     ...filterResult.errors,
-    ...includeResult.errors,
+    ...fieldsResult.errors,
     ...pageResult.errors,
   ];
 

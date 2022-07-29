@@ -60,7 +60,7 @@ describe("parseFilter", () => {
         results: [
           {
             fx: "where",
-            parameters: ["#name", "=", "michael"],
+            parameters: ["name", "=", "michael"],
           },
         ],
         errors: [],
@@ -77,11 +77,11 @@ describe("parseFilter", () => {
         results: [
           {
             fx: "where",
-            parameters: ["#age", "IN", [10, 20]],
+            parameters: ["age", "IN", [10, 20]],
           },
           {
             fx: "orWhere",
-            parameters: ["#name", "=", "mike"],
+            parameters: ["name", "=", "mike"],
           },
         ],
         errors: [],
@@ -98,11 +98,11 @@ describe("parseFilter", () => {
         results: [
           {
             fx: "where",
-            parameters: ["#age", "IN", [10, 20]],
+            parameters: ["age", "IN", [10, 20]],
           },
           {
             fx: "where",
-            parameters: ["#name", "=", "mike"],
+            parameters: ["name", "=", "mike"],
           },
         ],
         errors: [],

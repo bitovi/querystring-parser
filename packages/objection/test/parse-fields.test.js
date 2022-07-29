@@ -1,11 +1,11 @@
-const parseInclude = require("../lib/parse-include");
+const parseFields = require("../lib/parse-fields");
 
-describe("parseInclude", () => {
+describe("parseFields", () => {
   const testCases = [
     {
       title:
         "should return empty results and no errors when both parameters are empty",
-      parameters: [[], []],
+      parameters: [{}, []],
       expectedResults: {
         results: [],
         errors: [],
@@ -15,7 +15,7 @@ describe("parseInclude", () => {
     {
       title:
         "should return an empty result and send back the error when an empty object and an error is passed",
-      parameters: [[], ["FAILURE!"]],
+      parameters: [{}, ["FAILURE!"]],
       expectedResults: {
         results: [],
         errors: ["FAILURE!"],
@@ -25,7 +25,7 @@ describe("parseInclude", () => {
     {
       title:
         "should return an empty result and send back the error when a valid object with an error is passed",
-      parameters: [["field1", "field2"], ["FAILURE!"]],
+      parameters: [{ test: ["field1", "field2"] }, ["FAILURE!"]],
       expectedResults: {
         results: [],
         errors: ["FAILURE!"],
@@ -38,13 +38,13 @@ describe("parseInclude", () => {
       parameters: ["Hello world", []],
       expectedResults: {
         results: [],
-        errors: ["Include field should be an array"],
+        errors: ["Fields field should be an object"],
       },
     },
 
     {
       title: "should return valid results for valid parameters",
-      parameters: [["field1", "field2"], []],
+      parameters: [{ test: ["field1", "field2"] }, []],
       expectedResults: {
         results: [
           {
@@ -60,7 +60,7 @@ describe("parseInclude", () => {
   test.concurrent.each(testCases)(
     "$title",
     ({ parameters, expectedResults }) => {
-      const results = parseInclude(...parameters);
+      const results = parseFields(...parameters);
       expect(results).toEqual(expectedResults);
     }
   );

@@ -17,9 +17,14 @@ function containsNoErrorFromParser(error) {
   return error.length === 0;
 }
 
+function removeHashFromString(str) {
+  return str.replace("#", "");
+}
+
 module.exports = {
   isAnArray,
   containsNoErrorFromParser,
   isNotValidInteger,
   isObject,
+  removeHashFromString,
 };

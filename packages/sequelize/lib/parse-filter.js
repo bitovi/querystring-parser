@@ -2,6 +2,7 @@ const { Op } = require("sequelize");
 const {
   containsNoErrorFromParser,
   isObject,
+  removeHashFromString,
 } = require("../helpers/validation");
 
 const SequelizeSymbols = {
@@ -18,9 +19,10 @@ const SequelizeSymbols = {
 };
 
 function parseParametersForSequelize(operator, value) {
+  let key = removeHashFromString(value[0]);
   return Array.isArray(value)
     ? {
-        [value[0]]: {
+        [key]: {
           [SequelizeSymbols[operator]]:
             value.length > 2 ? value.slice(1) : value[1],
         },

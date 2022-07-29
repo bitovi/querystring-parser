@@ -1,3 +1,7 @@
+function removeHashFromString(str) {
+  return str.replace("#", "");
+}
+
 function isNotValidInteger(number) {
   return typeof number !== "number" || isNaN(number);
 }
@@ -22,4 +26,5 @@ module.exports = {
   containsNoErrorFromParser,
   isNotValidInteger,
   isObject,
+  removeHashFromString,
 };

@@ -3,7 +3,7 @@ const dotenv = require("dotenv");
 const url = require("url");
 const cors = require("cors");
 const { Hogwarts } = require("./model");
-const lib = require("@bitovi/querystring-parser");
+const lib = require("../../packages/objection/index");
 
 //configurations
 dotenv.config();
@@ -20,6 +20,8 @@ const fetchQuery = async (query) => {
   const hogwart = Hogwarts.query();
   if (query) {
     const { data, errors } = lib.parse(query);
+    console.log(data);
+    console.log(errors);
     if (errors.length > 0) {
       throw new Error(errors[0]);
     }

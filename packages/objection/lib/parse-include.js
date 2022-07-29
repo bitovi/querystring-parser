@@ -11,10 +11,12 @@ function parseInclude(include, includeErrors) {
       errors.push("Include field should be an array");
     } else {
       if (include.length > 0) {
-        parsedArray.push({
-          fx: "select",
-          parameters: include,
-        });
+        for (let param of include) {
+          parsedArray.push({
+            fx: "joinRelated",
+            parameters: param,
+          });
+        }
       }
     }
   } else {
