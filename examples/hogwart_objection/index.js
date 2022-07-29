@@ -20,8 +20,6 @@ const fetchQuery = async (query) => {
   const hogwart = Hogwarts.query();
   if (query) {
     const { data, errors } = lib.parse(query);
-    console.log(data);
-    console.log(errors);
     if (errors.length > 0) {
       throw new Error(errors[0]);
     }
