@@ -1,4 +1,6 @@
 {
+  "name": "@bitovi/querystring-parser-root",
+  "version": "0.5.4",
   "description": "",
   "main": "index.js",
   "scripts": {
