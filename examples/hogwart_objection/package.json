@@ -1,0 +1,18 @@
+{
+  "name": "test-lib",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "dependencies": {
+    "@bitovi/querystring-parser": "^0.5.0",
+    "cors": "^2.8.5",
+    "dotenv": "^16.0.1",
+    "express": "^4.18.1",
+    "knex": "^2.1.0",
+    "objection": "^3.0.1",
+    "sqlite3": "^5.0.8"
+  }
+}

@@ -1,6 +1,7 @@
 const parse = require("../lib/parse");
 
 /** High level sanity tests */
+
 describe("parse", function () {
   it("should return results for multiple query parameters (mongo filter)", function () {
     const querystring =

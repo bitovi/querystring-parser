@@ -1,43 +1,32 @@
 {
-  "name": "@bitovi/querystring-parser",
-  "version": "0.5.4",
+  "name": "@bitovi/sequelize-querystring-parser",
+  "version": "0.1.0",
   "description": "",
   "main": "index.js",
+  "directories": {
+    "lib": "lib"
+  },
   "scripts": {
-    "test": "lerna run test",
-    "version": "lerna version --conventional-commits --yes",
-    "diff": "lerna diff",
+    "test": "jest",
+    "test:watch": "jest --watch",
     "lint": "eslint .",
     "lint:fix": "eslint --fix .",
     "pretty": "prettier --check .",
     "pretty:fix": "prettier --write .",
     "preversion": "npm run lint && npm test",
+    "version": "git commit -am \"Update version number\" && git checkout -b release",
     "postpublish": "git push --tags && git checkout main && git branch -D release && git push",
     "release:patch": "npm version patch && npm publish --access=public",
     "release:minor": "npm version minor && npm publish --access=public",
     "release:major": "npm version major && npm publish --access=public"
   },
-  "workspaces": [
-    "packages/*"
-  ],
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/bitovi/querystring-parser.git"
-  },
   "keywords": [
     "querystring",
     "parse",
-    "orm",
-    "objection",
     "sequelize"
   ],
-  "bugs": {
-    "url": "https://github.com/bitovi/querystring-parser/issues"
-  },
-  "homepage": "https://www.bitovi.com/nodejs",
-  "license": "MIT",
   "dependencies": {
-    "qs": "^6.10.3",
+    "@bitovi/querystring-parser": "^0.5.4",
     "sequelize": "^6.21.2"
   },
   "devDependencies": {
@@ -46,7 +35,6 @@
     "eslint": "^8.15.0",
     "eslint-config-prettier": "^8.5.0",
     "jest": "^28.1.0",
-    "lerna": "^5.1.8",
     "prettier": "2.6.2"
   }
 }
