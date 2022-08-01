@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "lerna run test",
-    "version": "lerna version --conventional-commits --yes",
+    "version": "lerna version",
     "diff": "lerna diff",
     "lint": "eslint .",
     "lint:fix": "eslint --fix .",
