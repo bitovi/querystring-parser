@@ -6,13 +6,14 @@
   "scripts": {
     "test": "lerna run test",
     "version": "lerna version",
+    "publish": "lerna publish",
     "diff": "lerna diff",
     "lint": "eslint .",
     "lint:fix": "eslint --fix .",
     "pretty": "prettier --check .",
     "pretty:fix": "prettier --write .",
     "preversion": "npm run lint && npm test",
-    "postpublish": "git push --tags && git checkout main && git branch -D release && git push",
+    "postpublish": "git push --tags",
     "release:patch": "npm version patch && npm publish --access=public",
     "release:minor": "npm version minor && npm publish --access=public",
     "release:major": "npm version major && npm publish --access=public"

@@ -11,7 +11,6 @@
     "pretty": "prettier --check .",
     "pretty:fix": "prettier --write .",
     "preversion": "npm run lint && npm test",
-    "postpublish": "git push --tags && git checkout main && git branch -D release && git push",
     "release:patch": "npm version patch && npm publish --access=public",
     "release:minor": "npm version minor && npm publish --access=public",
     "release:major": "npm version major && npm publish --access=public"
