@@ -32,5 +32,9 @@
     "eslint-config-prettier": "^8.5.0",
     "jest": "^28.1.0",
     "prettier": "2.6.2"
-  }
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "gitHead": "e6c78d07257affc6352a304eced33991e5688071"
 }
