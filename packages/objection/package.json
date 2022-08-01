@@ -25,7 +25,7 @@
     "objection"
   ],
   "dependencies": {
-    "@bitovi/querystring-parser": "^0.5.4"
+    "@bitovi/querystring-parser": "^0.6.0"
   },
   "devDependencies": {
     "@bitovi/eslint-config": "^1.0.0",
