@@ -9,7 +9,7 @@ function parseInclude(include, includeErrors) {
   if (containsNoErrorFromParser(includeErrors)) {
     if (isAnArray(include)) {
       if (include.length > 0) {
-        parsedArray.attributes = include;
+        parsedArray.include = include;
       }
     } else {
       errors.push("Include field should be an array");
