@@ -120,3 +120,5 @@ const result = querystringParser.parse(
 ## Example
 
 - A more practical example on how to use this library in your project can be found [here](https://github.com/bitovi/querystring-parser/tree/main/examples)
+
+### lerna changes (to be removed)
