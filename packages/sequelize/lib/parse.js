@@ -3,12 +3,21 @@ const parseFilters = require("./parse-filter");
 const parseField = require("./parse-fields");
 const parsePagination = require("./parse-page");
 const parseSort = require("./parse-sort");
+const parseInclude = require("./parse-include");
 
 function parse(query) {
   const parsedQuery = lib.parse(query);
-  const { fields, filter, sort, page, errors: queryErrors } = parsedQuery;
+  const {
+    fields,
+    filter,
+    sort,
+    page,
+    include,
+    errors: queryErrors,
+  } = parsedQuery;
 
   const filterResult = parseFilters(filter, queryErrors?.filter);
+  const includeResult = parseInclude(include, queryErrors?.filter);
   const fieldsResult = parseField(fields, queryErrors?.fields);
   const sortResult = parseSort(sort, queryErrors?.sort);
   const pageResult = parsePagination(page, queryErrors?.page);
@@ -16,6 +25,7 @@ function parse(query) {
   let data = {
     ...sortResult.results,
     ...filterResult.results,
+    ...includeResult.results,
     ...fieldsResult.results,
     ...pageResult.results,
   };
@@ -23,6 +33,7 @@ function parse(query) {
   let errors = [
     ...sortResult.errors,
     ...filterResult.errors,
+    ...includeResult.errors,
     ...fieldsResult.errors,
     ...pageResult.errors,
   ];
