@@ -48,11 +48,11 @@ describe("parseInclude", () => {
       expectedResults: {
         results: [
           {
-            fx: "joinRelated",
+            fx: "withGraphFetched",
             parameters: ["include1"],
           },
           {
-            fx: "joinRelated",
+            fx: "withGraphFetched",
             parameters: ["include2"],
           },
         ],
