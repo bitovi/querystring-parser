@@ -2,8 +2,8 @@ const express = require("express");
 const dotenv = require("dotenv");
 const url = require("url");
 const cors = require("cors");
-const { Hogwarts } = require("./model");
-const lib = require("../../packages/objection/index");
+const { Students } = require("./model");
+const { fetchQuery } = require("./helper");
 
 //configurations
 dotenv.config();
@@ -16,26 +16,12 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
 //code required to make query work..
-const fetchQuery = async (query) => {
-  const hogwart = Hogwarts.query();
-  if (query) {
-    const { data, errors } = lib.parse(query);
-    if (errors.length > 0) {
-      throw new Error(errors[0]);
-    }
-    for (let d of data) {
-      hogwart[d.fx](...d.parameters);
-    }
-  }
-  const queryData = await hogwart;
-  return queryData;
-};
 
 app.get("/students", async (req, res) => {
   try {
     //turn query to a raw string
     const query = url.parse(req.url).query;
-    const students = await fetchQuery(query);
+    const students = await fetchQuery(query, Students);
     res.status(200).json({
       data: students,
     });
