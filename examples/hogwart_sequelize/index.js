@@ -2,7 +2,7 @@ const express = require("express");
 const dotenv = require("dotenv");
 const url = require("url");
 const cors = require("cors");
-const { Students, Spells } = require("./model");
+const { Students } = require("./model");
 const { fetchQuery } = require("./helper");
 
 //configurations
@@ -28,23 +28,6 @@ app.get("/students", async (req, res) => {
     console.log(error);
     //ensure to use a proper error handler
     //this is to handle error for just one endpoint
-    res.status(500).json({
-      errors: error.message,
-    });
-  }
-});
-
-app.get("/students/spells", async (req, res) => {
-  try {
-    //turn query to a raw string
-    const query = url.parse(req.url).query;
-    //fetch queries
-    const spells = await fetchQuery(query, Spells);
-    res.status(200).json({
-      data: spells,
-    });
-  } catch (error) {
-    console.log(error);
     res.status(500).json({
       errors: error.message,
     });

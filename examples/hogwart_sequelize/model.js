@@ -75,9 +75,8 @@ const Spells = sequelize.define(
 (async () => {
   try {
     //Create Relationship
-    Students.hasMany(Spells, { foreignKey: "user_id", as: "students" });
-    //It is important to include the alias using the 'as' keyword, this will be used by the library as includes
-    Spells.belongsTo(Students, { foreignKey: "user_id", as: "spells" });
+    Students.hasMany(Spells, { foreignKey: "user_id" });
+    Spells.belongsTo(Students, { foreignKey: "user_id" });
     await sequelize.authenticate();
     await sequelize.sync();
     console.log("Database and Tables connected successfully");
@@ -98,5 +97,4 @@ const seed = async () => {
 
 module.exports = {
   Students,
-  Spells,
 };
