@@ -123,7 +123,6 @@ typings/
 .env.production.local
 /config/config.env
 config.env
-/package-lock.json
 
 # logs
 npm-debug.log*

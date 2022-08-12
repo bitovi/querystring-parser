@@ -1,21 +1,18 @@
 {
   "name": "@bitovi/querystring-parser",
-  "version": "0.5.4",
+  "version": "0.6.2",
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "lerna run test",
-    "version": "lerna version",
-    "publish": "lerna publish",
-    "diff": "lerna diff",
-    "lint": "eslint .",
-    "lint:fix": "eslint --fix .",
     "pretty": "prettier --check .",
     "pretty:fix": "prettier --write .",
-    "preversion": "npm run lint && npm test",
-    "release:patch": "npm version patch && npm publish --access=public",
-    "release:minor": "npm version minor && npm publish --access=public",
-    "release:major": "npm version major && npm publish --access=public"
+    "lint": "eslint .",
+    "lint:fix": "eslint --fix .",
+    "test": "lerna run test",
+    "preversion": "npm run pretty && npm run lint && npm test",
+    "version": "lerna version",
+    "publish": "lerna publish",
+    "diff": "lerna diff"
   },
   "workspaces": [
     "packages/*"

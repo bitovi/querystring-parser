@@ -122,6 +122,25 @@ describe("parseFilter", () => {
         errors: [],
       },
     },
+
+    {
+      title: "should return valid results when using the 'NOT' operator",
+      parameters: [{ NOT: { "=": ["#name", "mike"] } }, []],
+      expectedResults: {
+        results: {
+          where: {
+            [Op.not]: [
+              {
+                name: {
+                  [Op.eq]: "mike",
+                },
+              },
+            ],
+          },
+        },
+        errors: [],
+      },
+    },
   ];
 
   test.concurrent.each(testCases)(
