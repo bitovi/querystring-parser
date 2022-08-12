@@ -13,8 +13,8 @@ function parseInclude(include, includeErrors) {
       if (include.length > 0) {
         for (let param of include) {
           parsedArray.push({
-            fx: "joinRelated",
-            parameters: param,
+            fx: "withGraphFetched",
+            parameters: [param],
           });
         }
       }

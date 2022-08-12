@@ -2,8 +2,8 @@ const express = require("express");
 const dotenv = require("dotenv");
 const url = require("url");
 const cors = require("cors");
-const { Hogwarts } = require("./model");
-const lib = require("../../packages/sequelize/index");
+const { Students } = require("./model");
+const { fetchQuery } = require("./helper");
 
 //configurations
 dotenv.config();
@@ -15,25 +15,12 @@ app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
-//code required to make query work..
-const fetchQuery = async (query) => {
-  let orm = {};
-  if (query) {
-    const { data, errors } = lib.parse(query);
-    if (errors.length > 0) {
-      throw new Error(errors[0]);
-    }
-    orm = data;
-  }
-  const hogwart = await Hogwarts.findAll(orm);
-  return hogwart;
-};
-
 app.get("/students", async (req, res) => {
   try {
     //turn query to a raw string
     const query = url.parse(req.url).query;
-    const students = await fetchQuery(query);
+    //fetch queries
+    const students = await fetchQuery(query, Students);
     res.status(200).json({
       data: students,
     });

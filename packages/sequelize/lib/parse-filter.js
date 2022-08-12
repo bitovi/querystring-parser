@@ -21,11 +21,17 @@ const SequelizeSymbols = {
 
 function parseParametersForSequelize(operator, value) {
   let key = removeHashFromString(value[0]);
+  const specialOperators = ["IN", "NOT"];
   return Array.isArray(value)
     ? {
         [key]: {
           [SequelizeSymbols[operator]]:
-            value.length > 2 ? value.slice(1) : value[1],
+            value.length > 2 ||
+            specialOperators.some(
+              (op) => op.toLocaleLowerCase() === operator.toLocaleLowerCase()
+            )
+              ? value.slice(1)
+              : value[1],
         },
       }
     : [value, operator];

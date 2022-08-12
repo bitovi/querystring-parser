@@ -3,11 +3,11 @@ const HogwartsData = require("./data");
 
 const sequelize = new Sequelize({
   dialect: "sqlite",
-  storage: "example.db",
+  storage: "hogwarts.db",
 });
 
-const Hogwarts = sequelize.define(
-  "hogwarts",
+const Students = sequelize.define(
+  "students",
   {
     // Model attributes are defined here
     id: {
@@ -44,8 +44,39 @@ const Hogwarts = sequelize.define(
   }
 );
 
+const Spells = sequelize.define(
+  "spells",
+  {
+    id: {
+      type: DataTypes.INTEGER,
+      autoIncrement: true,
+      primaryKey: true,
+    },
+    user_id: {
+      type: DataTypes.INTEGER,
+      references: {
+        model: Students,
+        key: "id",
+      },
+    },
+    title: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+    date_casted: {
+      type: DataTypes.DATE,
+    },
+  },
+  {
+    timestamps: false,
+  }
+);
+
 (async () => {
   try {
+    //Create Relationship
+    Students.hasMany(Spells, { foreignKey: "user_id" });
+    Spells.belongsTo(Students, { foreignKey: "user_id" });
     await sequelize.authenticate();
     await sequelize.sync();
     console.log("Database and Tables connected successfully");
@@ -56,13 +87,14 @@ const Hogwarts = sequelize.define(
 })();
 
 const seed = async () => {
-  const hogwartsData = await Hogwarts.findAll();
-  if (hogwartsData.length === 0) {
-    await Hogwarts.bulkCreate(HogwartsData);
+  const students = await Students.findAll();
+  if (students.length === 0) {
+    await Students.bulkCreate(HogwartsData.students);
+    await Spells.bulkCreate(HogwartsData.spells);
     console.log("Successfully added data to the table");
   }
 };
 
 module.exports = {
-  Hogwarts,
+  Students,
 };

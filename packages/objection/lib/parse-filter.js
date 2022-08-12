@@ -7,8 +7,12 @@ const {
 
 //To reconstruct the parameters to objections format
 function parseParametersForObjection(operator, value) {
+  const specialOperators = ["IN", "NOT"];
   return Array.isArray(value)
-    ? value.length > 2
+    ? value.length > 2 ||
+      specialOperators.some(
+        (op) => op.toLocaleLowerCase() === operator.toLocaleLowerCase()
+      )
       ? [removeHashFromString(value[0]), operator, value.slice(1)]
       : [removeHashFromString(value[0]), operator, value[1]]
     : [removeHashFromString(value), operator];
