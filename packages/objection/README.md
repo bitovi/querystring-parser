@@ -96,6 +96,7 @@ console.log(result);
 ```
 
 ### Filter Parameters
+
 ```js
 const result = querystringParser.parse(
   "filter=or(any('age','10','20'),equals('name','mike'))"
@@ -119,6 +120,7 @@ const result = querystringParser.parse(
 > **NOTE:** The `objection-querystring-parser` does not support nested `and()` or `or()` filter expressions yet. (See the [core-parser docs](https://github.com/bitovi/querystring-parser/tree/main/packages/querystring-parser#ibm-style-operators) more details about operators.) This issue is being tracked [here](https://github.com/bitovi/querystring-parser/issues/35).
 
 > **NOTE:** The `objection-querystring-parser` does not support the `not()` filter operator yet. (See the [core-parser docs](https://github.com/bitovi/querystring-parser/tree/main/packages/querystring-parser#ibm-style-operators) more details about operators.) This issue is being tracked [here](https://github.com/bitovi/querystring-parser/issues/29).
+
 ## Example
 
 - A more practical example on how to use this library in your project can be found [here](https://github.com/bitovi/querystring-parser/tree/main/examples)

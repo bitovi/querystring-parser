@@ -125,10 +125,7 @@ describe("parseFilter", () => {
 
     {
       title: "should return valid results when using the 'NOT' operator",
-      parameters: [
-        { NOT: { "=": ["#name", "mike"] } },
-        [],
-      ],
+      parameters: [{ NOT: { "=": ["#name", "mike"] } }, []],
       expectedResults: {
         results: {
           where: {
