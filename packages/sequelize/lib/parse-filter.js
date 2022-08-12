@@ -34,6 +34,10 @@ function parseParametersForSequelize(operator, value) {
 function sortArrayFilters(filters) {
   let parsedArray = [];
   let errors = [];
+
+  // wrap NOT sub-expressions (which are singular objects) in an array
+  filters = Array.isArray(filters) ? filters : [filters];
+
   for (let filter of filters) {
     const parsedFiltersResult = parseFilters(filter, [], false);
     parsedArray.push(parsedFiltersResult.results);
@@ -52,7 +56,8 @@ function parseFilters(filters, filtersError, isDefault = true) {
         const keys = Object.keys(filters);
         if (keys.length > 0) isValidFilters = true;
         for (let key of keys) {
-          if (key === "AND" || key === "OR") {
+          // Handle operators with sub-expressions recursively
+          if (key === "AND" || key === "OR" || key === "NOT") {
             parsedResult[SequelizeSymbols[key]] = sortArrayFilters(
               filters[key]
             );
@@ -79,12 +84,5 @@ function parseFilters(filters, filtersError, isDefault = true) {
     errors,
   };
 }
-
-console.log(
-  parseFilters(
-    { OR: [{ IN: ["#age", 10, 20] }, { "=": ["#name", "mike"] }] },
-    []
-  )
-);
 
 module.exports = parseFilters;
