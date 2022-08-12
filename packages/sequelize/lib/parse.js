@@ -15,7 +15,6 @@ function parse(query) {
     include,
     errors: queryErrors,
   } = parsedQuery;
-  console.log(parsedQuery);
 
   const filterResult = parseFilters(filter, queryErrors?.filter);
   const includeResult = parseInclude(include, queryErrors?.filter);
