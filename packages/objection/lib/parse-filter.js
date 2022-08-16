@@ -67,7 +67,6 @@ function parseParametersForObjection(operator, value, isOr) {
     fx = objectionFunctions[operator];
     parameters = [sequelizeKey];
   }
-  console.log(parameters);
   return {
     fx: isOr ? convertToOrFormat(fx) : fx,
     parameters,
