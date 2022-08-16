@@ -1,21 +1,77 @@
 const {
+  convertToOrFormat,
+  removeHashFromString,
+} = require("../helpers/helperfunctions");
+const {
   isAnArray,
   containsNoErrorFromParser,
   isObject,
-  removeHashFromString,
 } = require("../helpers/validation");
 
+const Operator = Object.freeze({
+  EQUALS: "=",
+  NOT_EQUALS: "<>",
+  GREATER_THAN: ">",
+  GREATER_OR_EQUAL: ">=",
+  LESS_THAN: "<",
+  LESS_OR_EQUAL: "<=",
+  LIKE: "LIKE",
+  IN: "IN",
+  NOT_IN: "NOT IN",
+  NOT: "NOT",
+  AND: "AND",
+  OR: "OR",
+  IS_NULL: "IS NULL",
+  IS_NOT_NULL: "IS NOT NULL",
+});
+
+const objectionFunctions = Object.freeze({
+  default: "where",
+  [Operator.NOT_IN]: "whereNotIn",
+  [Operator.IN]: "whereIn",
+  [Operator.IS_NULL]: "whereNull",
+  [Operator.IS_NOT_NULL]: "whereNotNull",
+});
+
 //To reconstruct the parameters to objections format
-function parseParametersForObjection(operator, value) {
-  const specialOperators = ["IN", "NOT"];
-  return Array.isArray(value)
-    ? value.length > 2 ||
-      specialOperators.some(
-        (op) => op.toLocaleLowerCase() === operator.toLocaleLowerCase()
-      )
-      ? [removeHashFromString(value[0]), operator, value.slice(1)]
-      : [removeHashFromString(value[0]), operator, value[1]]
-    : [removeHashFromString(value), operator];
+function parseParametersForObjection(operator, value, isOr) {
+  let sequelizeKey, sequelizeOperator, sequelizeValue;
+  let fx, parameters;
+  const specialOperators = [
+    Operator.IN,
+    Operator.NOT_IN,
+    Operator.NOT,
+    Operator.IS_NULL,
+    Operator.IS_NOT_NULL,
+  ];
+  const isArray = Array.isArray(value);
+  const isSpecialOperator = specialOperators.some(
+    (op) => op.toLocaleLowerCase() === operator.toLocaleLowerCase()
+  );
+  sequelizeOperator = operator;
+  if (isArray) {
+    sequelizeKey = removeHashFromString(value[0]);
+    if (isSpecialOperator) {
+      //HANDLE IN AND NOT IN
+      fx = objectionFunctions[operator];
+      sequelizeValue = value.slice(1);
+      parameters = [sequelizeKey, sequelizeValue];
+    } else {
+      fx = objectionFunctions["default"];
+      sequelizeValue = value.length > 2 ? value?.slice(1) : value[1];
+      parameters = [sequelizeKey, sequelizeOperator, sequelizeValue];
+    }
+  } else {
+    //handle NULL AND NOT NULL
+    sequelizeKey = removeHashFromString(value);
+    fx = objectionFunctions[operator];
+    parameters = [sequelizeKey];
+  }
+  console.log(parameters);
+  return {
+    fx: isOr ? convertToOrFormat(fx) : fx,
+    parameters,
+  };
 }
 
 //To handle "OR" AND "AND" recursively
@@ -43,19 +99,23 @@ function parseFilters(filters, filterErrors, isOr = false) {
         const keys = Object.keys(filters);
         if (keys.length > 0) {
           for (let key of keys) {
-            if (key === "AND" || key === "OR") {
+            if (key === Operator.AND || key === Operator.OR) {
               if (isAnArray(filters[key])) {
                 parsedArray = [
                   ...parsedArray,
-                  ...sortArrayFilters(filters[key], key === "OR"),
+                  ...sortArrayFilters(filters[key], key === Operator.OR),
                 ];
               } else {
                 errors.push(`${filters[key]} should be an array`);
               }
             } else {
-              const parameters = parseParametersForObjection(key, filters[key]);
+              const { fx, parameters } = parseParametersForObjection(
+                key,
+                filters[key],
+                isOr
+              );
               parsedArray.push({
-                fx: isOr ? "orWhere" : "where",
+                fx,
                 parameters,
               });
             }

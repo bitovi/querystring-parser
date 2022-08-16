@@ -5,36 +5,64 @@ const {
   removeHashFromString,
 } = require("../helpers/validation");
 
-const SequelizeSymbols = {
-  LIKE: Op.like,
-  OR: Op.or,
-  AND: Op.and,
-  NOT: Op.not,
-  "=": Op.eq,
-  "!=": Op.ne,
-  ">": Op.gt,
-  ">=": Op.gte,
-  "<": Op.lt,
-  "<=": Op.lte,
-  IN: Op.in,
-};
+const Operator = Object.freeze({
+  EQUALS: "=",
+  NOT_EQUALS: "<>",
+  GREATER_THAN: ">",
+  GREATER_OR_EQUAL: ">=",
+  LESS_THAN: "<",
+  LESS_OR_EQUAL: "<=",
+  LIKE: "LIKE",
+  IN: "IN",
+  NOT_IN: "NOT IN",
+  NOT: "NOT",
+  AND: "AND",
+  OR: "OR",
+  IS_NULL: "IS NULL",
+  IS_NOT_NULL: "IS NOT NULL",
+});
+
+const SequelizeSymbols = Object.freeze({
+  [Operator.OR]: Op.or,
+  [Operator.AND]: Op.and,
+  [Operator.NOT]: Op.not,
+  [Operator.NOT_IN]: Op.notIn,
+  [Operator.IN]: Op.in,
+  [Operator.LIKE]: Op.like,
+  [Operator.EQUALS]: Op.eq,
+  [Operator.NOT_EQUALS]: Op.ne,
+  [Operator.GREATER_THAN]: Op.gt,
+  [Operator.GREATER_THAN_OR_EQUAL]: Op.gte,
+  [Operator.LESS_THAN]: Op.lt,
+  [Operator.LESS_THAN_OR_EQUAL]: Op.lte,
+});
 
 function parseParametersForSequelize(operator, value) {
-  let key = removeHashFromString(value[0]);
-  const specialOperators = ["IN", "NOT"];
-  return Array.isArray(value)
-    ? {
-        [key]: {
-          [SequelizeSymbols[operator]]:
-            value.length > 2 ||
-            specialOperators.some(
-              (op) => op.toLocaleLowerCase() === operator.toLocaleLowerCase()
-            )
-              ? value.slice(1)
-              : value[1],
-        },
-      }
-    : [value, operator];
+  let sequelizeKey, sequelizeOperator, sequelizeValue;
+  const specialOperators = [Operator.IN, Operator.NOT_IN, Operator.NOT];
+  const isArray = Array.isArray(value);
+  const isSpecialOperator = specialOperators.some(
+    (op) => op.toLocaleLowerCase() === operator.toLocaleLowerCase()
+  );
+  //ALL NON-ARRAYS ARE FOR NULL HANDLERS
+  if (isArray) {
+    sequelizeKey = removeHashFromString(value[0]);
+    sequelizeOperator = SequelizeSymbols[operator];
+    sequelizeValue =
+      value.length > 2 || isSpecialOperator ? value.slice(1) : value[1];
+  } else {
+    sequelizeKey = removeHashFromString(value);
+    sequelizeOperator =
+      operator === Operator.IS_NULL
+        ? SequelizeSymbols[Operator.EQUALS]
+        : SequelizeSymbols[Operator.NOT_EQUALS];
+    sequelizeValue = null;
+  }
+  return {
+    [sequelizeKey]: {
+      [sequelizeOperator]: sequelizeValue,
+    },
+  };
 }
 
 function sortArrayFilters(filters) {
@@ -63,7 +91,11 @@ function parseFilters(filters, filtersError, isDefault = true) {
         if (keys.length > 0) isValidFilters = true;
         for (let key of keys) {
           // Handle operators with sub-expressions recursively
-          if (key === "AND" || key === "OR" || key === "NOT") {
+          if (
+            key === Operator.AND ||
+            key === Operator.OR ||
+            key === Operator.NOT
+          ) {
             parsedResult[SequelizeSymbols[key]] = sortArrayFilters(
               filters[key]
             );

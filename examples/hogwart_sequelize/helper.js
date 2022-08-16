@@ -9,6 +9,7 @@ const fetchQuery = async (query, model) => {
     }
     orm = data;
   }
+  console.log(orm);
   const results = await model.findAll(orm);
   return results;
 };

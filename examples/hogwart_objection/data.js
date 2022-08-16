@@ -41,6 +41,11 @@ const students = [
     house: "Hufflepuff",
     date_registered: new Date("12-12-1993"),
   },
+  {
+    name: "John Doe.",
+    userType: "Staff",
+    date_registered: new Date("12-12-1999"),
+  },
 ];
 
 const spells = [
