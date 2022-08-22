@@ -74,13 +74,14 @@ function parseParametersForObjection(operator, value, isOr) {
 }
 
 //To handle "OR" AND "AND" recursively
-function sortArrayFilters(filters, isOr = false) {
+function sortNestedFilters(filters, isOr = false) {
   let i = 0;
   let parsedArray = [];
   let errors = [];
   for (let filter of filters) {
-    //use the orWhere only on from the second iteration.
+    //use the orWhere only from the second iteration.
     let useOr = isOr && i > 0;
+    console.log(useOr + "#");
     const parseFilterResponse = parseFilters(filter, [], useOr);
     parsedArray = [...parsedArray, ...parseFilterResponse.results];
     errors = [...errors, ...parseFilterResponse.errors];
@@ -100,14 +101,25 @@ function parseFilters(filters, filterErrors, isOr = false) {
           for (let key of keys) {
             if (key === Operator.AND || key === Operator.OR) {
               if (isAnArray(filters[key])) {
+                const parameters = sortNestedFilters(
+                  filters[key],
+                  key === Operator.OR
+                );
+                //use the orWhere only on from the second iteration.
+                const fx = objectionFunctions.default;
                 parsedArray = [
                   ...parsedArray,
-                  ...sortArrayFilters(filters[key], key === Operator.OR),
+                  {
+                    fx: isOr ? convertToOrFormat(fx) : fx,
+                    isNested: true,
+                    parameters,
+                  },
                 ];
               } else {
                 errors.push(`${filters[key]} should be an array`);
               }
             } else {
+              console.log(isOr);
               const { fx, parameters } = parseParametersForObjection(
                 key,
                 filters[key],
@@ -115,6 +127,7 @@ function parseFilters(filters, filterErrors, isOr = false) {
               );
               parsedArray.push({
                 fx,
+                isNested: false,
                 parameters,
               });
             }
