@@ -76,8 +76,8 @@ describe("parseFilter", () => {
       expectedResults: {
         results: [
           {
-            fx: "where",
-            parameters: ["age", "IN", [10, 20]],
+            fx: "whereIn",
+            parameters: ["age", [10, 20]],
           },
           {
             fx: "orWhere",
@@ -97,8 +97,8 @@ describe("parseFilter", () => {
       expectedResults: {
         results: [
           {
-            fx: "where",
-            parameters: ["age", "IN", [10, 20]],
+            fx: "whereIn",
+            parameters: ["age", [10, 20]],
           },
           {
             fx: "where",

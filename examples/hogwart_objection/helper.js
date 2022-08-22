@@ -4,7 +4,6 @@ const fetchQuery = async (queryString, model) => {
   const query = model.query();
   if (queryString) {
     const { data, errors } = lib.parse(queryString);
-    console.log(data);
     if (errors.length > 0) {
       throw new Error(errors[0]);
     }
