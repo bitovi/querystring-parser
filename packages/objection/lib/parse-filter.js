@@ -27,6 +27,7 @@ const Operator = Object.freeze({
 
 const objectionFunctions = Object.freeze({
   default: "where",
+  [Operator.NOT]: "whereNot",
   [Operator.NOT_IN]: "whereNotIn",
   [Operator.IN]: "whereIn",
   [Operator.IS_NULL]: "whereNull",
@@ -74,12 +75,13 @@ function parseParametersForObjection(operator, value, isOr) {
 }
 
 //To handle "OR" AND "AND" recursively
-function sortArrayFilters(filters, isOr = false) {
+function sortNestedFilters(filters, isOr = false) {
   let i = 0;
   let parsedArray = [];
   let errors = [];
+  filters = isAnArray(filters) ? filters : [filters];
   for (let filter of filters) {
-    //use the orWhere only on from the second iteration.
+    //use the orWhere only from the second iteration.
     let useOr = isOr && i > 0;
     const parseFilterResponse = parseFilters(filter, [], useOr);
     parsedArray = [...parsedArray, ...parseFilterResponse.results];
@@ -98,15 +100,27 @@ function parseFilters(filters, filterErrors, isOr = false) {
         const keys = Object.keys(filters);
         if (keys.length > 0) {
           for (let key of keys) {
-            if (key === Operator.AND || key === Operator.OR) {
-              if (isAnArray(filters[key])) {
-                parsedArray = [
-                  ...parsedArray,
-                  ...sortArrayFilters(filters[key], key === Operator.OR),
-                ];
-              } else {
-                errors.push(`${filters[key]} should be an array`);
-              }
+            if (
+              key === Operator.AND ||
+              key === Operator.OR ||
+              key === Operator.NOT
+            ) {
+              const parameters = sortNestedFilters(
+                filters[key],
+                key === Operator.OR
+              );
+              const fx =
+                key === Operator.NOT
+                  ? objectionFunctions[Operator.NOT]
+                  : objectionFunctions.default;
+              parsedArray = [
+                ...parsedArray,
+                {
+                  fx: isOr ? convertToOrFormat(fx) : fx,
+                  isNested: true,
+                  parameters,
+                },
+              ];
             } else {
               const { fx, parameters } = parseParametersForObjection(
                 key,
@@ -115,6 +129,7 @@ function parseFilters(filters, filterErrors, isOr = false) {
               );
               parsedArray.push({
                 fx,
+                isNested: false,
                 parameters,
               });
             }

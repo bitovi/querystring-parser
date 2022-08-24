@@ -60,6 +60,7 @@ describe("parseFilter", () => {
         results: [
           {
             fx: "where",
+            isNested: false,
             parameters: ["name", "=", "michael"],
           },
         ],
@@ -68,20 +69,15 @@ describe("parseFilter", () => {
     },
 
     {
-      title: "should return valid results when using the 'OR' operator",
-      parameters: [
-        { OR: [{ IN: ["#age", 10, 20] }, { "=": ["#name", "mike"] }] },
-        [],
-      ],
+      title:
+        "should return valid results for valid parameters for the 'not' operator",
+      parameters: [{ "=": ["#name", "michael"] }, []],
       expectedResults: {
         results: [
           {
-            fx: "whereIn",
-            parameters: ["age", [10, 20]],
-          },
-          {
-            fx: "orWhere",
-            parameters: ["name", "=", "mike"],
+            fx: "where",
+            isNested: false,
+            parameters: ["name", "=", "michael"],
           },
         ],
         errors: [],
@@ -97,12 +93,85 @@ describe("parseFilter", () => {
       expectedResults: {
         results: [
           {
-            fx: "whereIn",
-            parameters: ["age", [10, 20]],
+            fx: "where",
+            isNested: true,
+            parameters: [
+              {
+                fx: "whereIn",
+                isNested: false,
+                parameters: ["age", [10, 20]],
+              },
+              {
+                fx: "where",
+                isNested: false,
+                parameters: ["name", "=", "mike"],
+              },
+            ],
           },
+        ],
+        errors: [],
+      },
+    },
+
+    {
+      title:
+        "should return valid results when using the Nested 'AND' & 'OR' operator",
+      parameters: [
+        {
+          AND: [
+            { "=": ["#userType", "Student"] },
+            {
+              OR: [
+                { "IS NULL": "#house" },
+                {
+                  AND: [{ "=": ["#id", 4] }, { "=": ["#house", "Gryffindor"] }],
+                },
+              ],
+            },
+          ],
+        },
+        [],
+      ],
+
+      expectedResults: {
+        results: [
           {
             fx: "where",
-            parameters: ["name", "=", "mike"],
+            isNested: true,
+            parameters: [
+              {
+                fx: "where",
+                isNested: false,
+                parameters: ["userType", "=", "Student"],
+              },
+              {
+                fx: "where",
+                isNested: true,
+                parameters: [
+                  {
+                    fx: "whereNull",
+                    isNested: false,
+                    parameters: ["house"],
+                  },
+                  {
+                    fx: "orWhere",
+                    isNested: true,
+                    parameters: [
+                      {
+                        fx: "where",
+                        isNested: false,
+                        parameters: ["id", "=", 4],
+                      },
+                      {
+                        fx: "where",
+                        isNested: false,
+                        parameters: ["house", "=", "Gryffindor"],
+                      },
+                    ],
+                  },
+                ],
+              },
+            ],
           },
         ],
         errors: [],

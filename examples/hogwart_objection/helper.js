@@ -1,15 +1,26 @@
 const lib = require("../../packages/objection/index");
 
+function handleQuery(query, data) {
+  for (let d of data) {
+    if (d.isNested) {
+      query[d.fx](function () {
+        handleQuery(this, d.parameters);
+      });
+    } else {
+      query[d.fx](...d.parameters);
+    }
+  }
+  return query;
+}
+
 const fetchQuery = async (queryString, model) => {
-  const query = model.query();
+  let query = model.query();
   if (queryString) {
     const { data, errors } = lib.parse(queryString);
     if (errors.length > 0) {
       throw new Error(errors[0]);
     }
-    for (let d of data) {
-      query[d.fx](...d.parameters);
-    }
+    query = handleQuery(query, data);
   }
   const queryData = await query;
   return queryData;
