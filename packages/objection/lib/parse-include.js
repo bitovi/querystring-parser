@@ -14,6 +14,7 @@ function parseInclude(include, includeErrors) {
         for (let param of include) {
           parsedArray.push({
             fx: "withGraphFetched",
+            isNested: false,
             parameters: [param],
           });
         }

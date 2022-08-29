@@ -5,17 +5,27 @@ Transforms CRUD-related querystrings into structured data
 ![Tests Workflow Status](https://github.com/bitovi/querystring-parser/actions/workflows/tests.yml/badge.svg?branch=main)
 [![Join our Slack](https://img.shields.io/badge/slack-join%20chat-611f69.svg)](https://www.bitovi.com/community/slack?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
-- [Why querystring-parser?](#why-querystring-parser)
-- [Installation](#installation)
-- [Usage](#usage)
-  - [Sort Parameters](#sort-parameters)
-  - [Pagination Parameters](#pagination-parameters)
-  - [Include Parameters](#include-parameters)
-  - [Fields Parameters](#fields-parameters)
-  - [Filter Parameters](#fields-parameters)
+- [querystring-parser](#querystring-parser)
+  - [Why querystring-parser?](#why-querystring-parser)
+  - [Installation](#installation)
+  - [Usage](#usage)
+    - [Sort Parameters](#sort-parameters)
+    - [Pagination Parameters](#pagination-parameters)
+    - [Include Parameters](#include-parameters)
+    - [Fields Parameters](#fields-parameters)
+    - [Filter Parameters](#filter-parameters)
     - [MongoDB-Style Filter Parameters](#mongodb-style-filter-parameters)
+      - [Quick Examples](#quick-examples)
+      - [MongoDB-Style Operators](#mongodb-style-operators)
+      - [Omitted Operators](#omitted-operators)
+      - [Arrays](#arrays)
+      - [Compound Filters](#compound-filters)
     - [IBM-Style Filter Parameters](#ibm-style-filter-parameters)
-- [Development / Contributing](#development--contributing)
+      - [Quick Examples](#quick-examples-1)
+      - [IBM-Style Operators](#ibm-style-operators)
+      - [Attribute References](#attribute-references)
+      - [Compound Filters](#compound-filters-1)
+  - [Development / Contributing](#development--contributing)
 
 ## Why querystring-parser?
 
@@ -247,5 +257,3 @@ expect(filter).toEqual({
 ## Development / Contributing
 
 See [CONTRIBUTING.md](CONTRIBUTING.md)
-
-### lerna changes (to be removed)

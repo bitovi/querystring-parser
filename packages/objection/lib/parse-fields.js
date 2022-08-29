@@ -15,6 +15,7 @@ function parseField(field, fieldErrors) {
         const parameters = field[keys[0]];
         parsedArray.push({
           fx: "select",
+          isNested: false,
           parameters,
         });
       }

@@ -19,6 +19,7 @@ function parseSort(sort, sortErrors) {
         });
         parsedArray.push({
           fx: "orderBy",
+          isNested: false,
           parameters: [newSortFields],
         });
       }

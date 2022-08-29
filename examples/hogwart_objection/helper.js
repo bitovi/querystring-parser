@@ -14,6 +14,7 @@ function handleQuery(query, data) {
 }
 
 const fetchQuery = async (queryString, model) => {
+  //Proper database validations to check the query should be done before passing the query to the library.
   let query = model.query();
   if (queryString) {
     const { data, errors } = lib.parse(queryString);
