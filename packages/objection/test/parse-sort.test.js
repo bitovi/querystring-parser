@@ -49,6 +49,7 @@ describe("parseSort", () => {
         results: [
           {
             fx: "orderBy",
+            isNested: false,
             parameters: [[{ column: "test", order: "ASC" }]],
           },
         ],

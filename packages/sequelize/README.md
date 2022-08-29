@@ -54,6 +54,22 @@ console.log(result);
 };
 ```
 
+### Fields Parameters
+
+Reference: [JSON:API - Inclusion of Related Resources](https://jsonapi.org/format/#fetching-sparse-fieldsets)
+
+```js
+const result = querystringParser.parse("fields[people]=id,name");
+console.log(result);
+{
+  orm: "sequelize",
+  data: {
+    attributes: ["id","name"]
+ },
+  errors: []
+};
+```
+
 ### Include Parameters
 
 Reference: [JSON:API - Inclusion of Related Resources](https://jsonapi.org/format/#fetching-includes)
@@ -64,7 +80,7 @@ console.log(result);
 {
   orm: "sequelize",
   data: {
-    attributes: ["pets","dogs"]
+    include: ["pets","dogs"]
  },
   errors: []
 };
@@ -94,10 +110,10 @@ const result = querystringParser.parse(
 };
 ```
 
+** Note: Database Validations should be done before or after passing the query to the library before the database call is made. **
+
 ** Note: The Symbol(\*) uses the Op imported from the Sequelize library, it is not a direct Javascript Symbol operator. **
 
 ## Example
 
 - A more practical example on how to use this library in your project can be found in the [here](https://github.com/bitovi/querystring-parser/tree/main/examples)
-
-### lerna changes (to be removed)

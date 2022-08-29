@@ -49,6 +49,7 @@ describe("parseFields", () => {
         results: [
           {
             fx: "select",
+            isNested: false,
             parameters: ["field1", "field2"],
           },
         ],

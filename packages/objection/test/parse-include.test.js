@@ -49,10 +49,12 @@ describe("parseInclude", () => {
         results: [
           {
             fx: "withGraphFetched",
+            isNested: false,
             parameters: ["include1"],
           },
           {
             fx: "withGraphFetched",
+            isNested: false,
             parameters: ["include2"],
           },
         ],

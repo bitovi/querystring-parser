@@ -69,10 +69,12 @@ describe("parsePage", () => {
         results: [
           {
             fx: "offset",
+            isNested: false,
             parameters: [10],
           },
           {
             fx: "limit",
+            isNested: false,
             parameters: [5],
           },
         ],
@@ -88,10 +90,12 @@ describe("parsePage", () => {
         results: [
           {
             fx: "offset",
+            isNested: false,
             parameters: [10],
           },
           {
             fx: "limit",
+            isNested: false,
             parameters: [10],
           },
         ],

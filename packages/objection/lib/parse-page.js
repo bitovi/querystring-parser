@@ -19,10 +19,12 @@ function parsePagination(page, pageErrors) {
           const offset = getOffsetByPageNumber(number, size);
           parsedArray.push({
             fx: "offset",
+            isNested: false,
             parameters: [offset],
           });
           parsedArray.push({
             fx: "limit",
+            isNested: false,
             parameters: [size],
           });
         }
