@@ -7,6 +7,7 @@ Transforms CRUD-related querystrings into structured data
 
 - [querystring-parser](#querystring-parser)
   - [Why querystring-parser?](#why-querystring-parser)
+  - [Need help or have questions?](#need-help-or-have-questions)
   - [Installation](#installation)
   - [Usage](#usage)
     - [Sort Parameters](#sort-parameters)
@@ -26,6 +27,7 @@ Transforms CRUD-related querystrings into structured data
       - [Attribute References](#attribute-references)
       - [Compound Filters](#compound-filters-1)
   - [Development / Contributing](#development--contributing)
+- [We want to hear from you.](#we-want-to-hear-from-you)
 
 ## Why querystring-parser?
 
@@ -37,6 +39,15 @@ Consider the following situation:
   - `?sort=-date,name&page[number]=1&page[size]=5`
   - `?fields[articles]=title,body&fields[people]=name`
 - You need to parse these query parameters to fetch the requested data. This library does the querystring parsing for you.
+
+## Need help or have questions?
+
+This project is supported by [Bitovi, a Nodejs consultancy](https://www.bitovi.com/backend-consulting/nodejs-consulting). You can get help or ask questions on our:
+
+- [Slack Community](https://www.bitovi.com/community/slack)
+- [Twitter](https://twitter.com/bitovi)
+
+Or, you can hire us for training, consulting, or development. [Set up a free consultation.](https://www.bitovi.com/backend-consulting/nodejs-consulting)
 
 ## Installation
 
@@ -259,3 +270,9 @@ expect(filter).toEqual({
 ## Development / Contributing
 
 See [CONTRIBUTING.md](CONTRIBUTING.md)
+
+# We want to hear from you.
+
+Come chat with us about open source in our community [Slack](https://www.bitovi.com/community/slack).
+
+See what we're up to by following us on [Twitter](https://twitter.com/bitovi).
