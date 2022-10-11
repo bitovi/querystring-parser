@@ -31,7 +31,7 @@
   "bugs": {
     "url": "https://github.com/bitovi/querystring-parser/issues"
   },
-  "homepage": "https://www.bitovi.com/nodejs",
+  "homepage": "https://www.bitovi.com/backend-consulting/nodejs-consulting",
   "license": "MIT",
   "dependencies": {
     "qs": "^6.10.3",
