@@ -12,7 +12,7 @@ Consider the following situation:
 ## Installation
 
 ```sh
-npm install @bitovi/sequelize-querystring-parser --save
+npm install @bitovi/sequelize-querystring-parser
 ```
 
 ## Usage

@@ -41,7 +41,7 @@ Consider the following situation:
 ## Installation
 
 ```sh
-npm install @bitovi/querystring-parser --save
+npm install @bitovi/querystring-parser
 ```
 
 ## Usage
