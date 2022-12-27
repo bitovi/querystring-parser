@@ -2,16 +2,15 @@
 
 This library builds on top of [`@bitovi/querystring-parser`](https://github.com/bitovi/querystring-parser/tree/main/packages/querystring-parser#readme) to transform CRUD-related querystrings into structured data for the [Objection ORM](https://vincit.github.io/objection.js/).
 
-- [objection-querystring-parser](#objection-querystring-parser)
-  - [Installation](#installation)
-  - [Usage](#usage)
-    - [Sort Parameters](#sort-parameters)
-    - [Pagination Parameters](#pagination-parameters)
-    - [Fields Parameters](#fields-parameters)
-    - [Include Parameters](#include-parameters)
-    - [Filter Parameters](#filter-parameters)
-  - [Example](#example)
-  - [Further Documentation](#further-documentation)
+- [Installation](#installation)
+- [Usage](#usage)
+  - [Sort Parameters](#sort-parameters)
+  - [Pagination Parameters](#pagination-parameters)
+  - [Fields Parameters](#fields-parameters)
+  - [Include Parameters](#include-parameters)
+  - [Filter Parameters](#filter-parameters)
+- [Example](#example)
+- [Further Documentation](#further-documentation)
 - [Home](https://github.com/bitovi/querystring-parser#readme)
 
 ## Installation
@@ -44,19 +43,19 @@ Reference: [JSON:API - Sorting](https://jsonapi.org/format/#fetching-sorting)
 ```js
 const result = querystringParser.parse("sort=-date,name");
 console.log(result);
-{
-  orm: "objection",
-  data: [
-    {
-      fx: "orderBy",
-      parameters: [[
-        { column: "date", order: "DESC" },
-        { column: "name", order: "ASC" },
-      ]],
-    }
-  ],
-  errors: [],
-};
+// {
+//   orm: "objection",
+//   data: [
+//     {
+//       fx: "orderBy",
+//       parameters: [[
+//         { column: "date", order: "DESC" },
+//         { column: "name", order: "ASC" },
+//       ]],
+//     }
+//   ],
+//   errors: [],
+// };
 ```
 
 ### Pagination Parameters
@@ -66,24 +65,24 @@ Reference: [JSON:API - Pagination](https://jsonapi.org/format/#fetching-paginati
 ```js
 const result = querystringParser.parse("page[number]=0&page[size]=10");
 console.log(result);
-{
-  orm: "objection",
-  data: [
-    [
-      {
-        fx: "offset",
-        isNested: false,
-        parameters: [0],
-      },
-      {
-        fx: "limit",
-        isNested: false,
-        parameters: [10],
-      },
-    ],
-  ],
-  errors: [],
-};
+// {
+//   orm: "objection",
+//   data: [
+//     [
+//       {
+//         fx: "offset",
+//         isNested: false,
+//         parameters: [0],
+//       },
+//       {
+//         fx: "limit",
+//         isNested: false,
+//         parameters: [10],
+//       },
+//     ],
+//   ],
+//   errors: [],
+// };
 ```
 
 ### Fields Parameters
@@ -93,19 +92,19 @@ Reference: [JSON:API - Inclusion of Related Resources](https://jsonapi.org/forma
 ```js
 const result = querystringParser.parse("fields[people]=id,name");
 console.log(result);
-{
-  orm: "objection",
-  data: [
-    [
-      {
-        fx: "select",
-        isNested: false,
-        parameters: ["id","name"],
-      },
-    ],
-  ],
-  errors: [],
-};
+// {
+//   orm: "objection",
+//   data: [
+//     [
+//       {
+//         fx: "select",
+//         isNested: false,
+//         parameters: ["id","name"],
+//       },
+//     ],
+//   ],
+//   errors: [],
+// };
 ```
 
 ### Include Parameters
@@ -115,19 +114,19 @@ Reference: [JSON:API - Inclusion of Related Resources](https://jsonapi.org/forma
 ```js
 const result = querystringParser.parse("include=pets,dogs");
 console.log(result);
-{
-  orm: "objection",
-  data: [
-    [
-      {
-        fx: "withGraphFetched",
-        isNested: false,
-        parameters: ["pets", "dogs"],
-      },
-    ],
-  ],
-  errors: [],
-};
+// {
+//   orm: "objection",
+//   data: [
+//     [
+//       {
+//         fx: "withGraphFetched",
+//         isNested: false,
+//         parameters: ["pets", "dogs"],
+//       },
+//     ],
+//   ],
+//   errors: [],
+// };
 ```
 
 ### Filter Parameters
@@ -136,54 +135,56 @@ console.log(result);
 const result = querystringParser.parse(
   "filter=or(any(age,'10','20'),equals(name,'mike'))"
 );
-{
-  orm: "objection",
-  data: [
-    {
-      fx: "where",
-      isNested: true,
-      parameters: [
-        {
-          fx: "whereIn",
-          isNested: false,
-          parameters: ["age", [10, 20]],
-        },
-        {
-          fx: "orWhere",
-          parameters: ["name", "=", "mike"],
-        },
-      ],
-    },
-  ],
-  errors: [],
-};
+console.log(result);
+// {
+//   orm: "objection",
+//   data: [
+//     {
+//       fx: "where",
+//       isNested: true,
+//       parameters: [
+//         {
+//           fx: "whereIn",
+//           isNested: false,
+//           parameters: ["age", [10, 20]],
+//         },
+//         {
+//           fx: "orWhere",
+//           parameters: ["name", "=", "mike"],
+//         },
+//       ],
+//     },
+//   ],
+//   errors: [],
+// };
 ```
 
 ```js
 const result = querystringParser.parse(
   "filter=not(lessOrEqual(age,'10'),equals(name,null))"
 );
-{
-  orm: "objection",
-  data: [
-    {
-      fx: "whereNot",
-      isNested: true,
-      parameters: [
-        {
-          fx: "where",
-          isNested: false,
-          parameters: ["age", "<=", 10],
-        },
-        {
-          fx: "whereNull",
-          parameters: ["name"],
-        },
-      ],
-    },
-  ],
-  errors: [],
-};
+console.log(result);
+// {
+//   orm: "objection",
+//   data: [
+//     {
+//       fx: "whereNot",
+//       isNested: true,
+//       parameters: [
+//         {
+//           fx: "where",
+//           isNested: false,
+//           parameters: ["age", "<=", 10],
+//         },
+//         {
+//           fx: "whereNull",
+//           parameters: ["name"],
+//         },
+//       ],
+//     },
+//   ],
+//   errors: [],
+// };
 ```
 
 **Note**: Database Validations should be done before or after passing the query to the library before the database call is made.
