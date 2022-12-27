@@ -32,13 +32,13 @@ Reference: [JSON:API - Sorting](https://jsonapi.org/format/#fetching-sorting)
 ```js
 const result = querystringParser.parse("sort=-date,name");
 console.log(result);
-{
-  orm: "sequelize",
-  data: {
-    order: [["date", "DESC"],["name","ASC"]]
- },
-  errors: [],
-};
+// {
+//   orm: "sequelize",
+//   data: {
+//     order: [["date", "DESC"],["name","ASC"]]
+//  },
+//   errors: [],
+// };
 ```
 
 ### Pagination Parameters
@@ -48,14 +48,14 @@ Reference: [JSON:API - Pagination](https://jsonapi.org/format/#fetching-paginati
 ```js
 const result = querystringParser.parse("page[number]=0&page[size]=10");
 console.log(result);
-{
-  orm: "sequelize",
-  data: {
-    offset: 0,
-    limit: 10
- },
-  errors: []
-};
+// {
+//   orm: "sequelize",
+//   data: {
+//     offset: 0,
+//     limit: 10
+//  },
+//   errors: []
+// };
 ```
 
 ### Fields Parameters
@@ -65,13 +65,13 @@ Reference: [JSON:API - Inclusion of Related Resources](https://jsonapi.org/forma
 ```js
 const result = querystringParser.parse("fields[people]=id,name");
 console.log(result);
-{
-  orm: "sequelize",
-  data: {
-    attributes: ["id","name"]
- },
-  errors: []
-};
+// {
+//   orm: "sequelize",
+//   data: {
+//     attributes: ["id","name"]
+//  },
+//   errors: []
+// };
 ```
 
 ### Include Parameters
@@ -81,13 +81,13 @@ Reference: [JSON:API - Inclusion of Related Resources](https://jsonapi.org/forma
 ```js
 const result = querystringParser.parse("include=pets,dogs");
 console.log(result);
-{
-  orm: "sequelize",
-  data: {
-    include: ["pets","dogs"]
- },
-  errors: []
-};
+// {
+//   orm: "sequelize",
+//   data: {
+//     include: ["pets","dogs"]
+//  },
+//   errors: []
+// };
 ```
 
 ### Filter Parameters
@@ -96,27 +96,28 @@ console.log(result);
 const result = querystringParser.parse(
   "filter=and(any('age','10','20'),equals('name','mike'))"
 );
-{
-  orm: "sequelize",
-  data: {
-    where: {
-      [Symbol(and)] : {
-        [Symbol(any)]: {
-          age: [10, 20]
-        },
-        [Symbol(eq)]: {
-          name: 'mike'
-        }
-      }
-    }
- },
-  errors: []
-};
+console.log(result);
+// {
+//   orm: "sequelize",
+//   data: {
+//     where: {
+//       [Symbol(and)] : {
+//         [Symbol(any)]: {
+//           age: [10, 20]
+//         },
+//         [Symbol(eq)]: {
+//           name: 'mike'
+//         }
+//       }
+//     }
+//  },
+//   errors: []
+// };
 ```
 
 **Note**: Database Validations should be done before or after passing the query to the library before the database call is made.
 
-**Note**: The Symbol(\*) uses the [Op imported from the Sequelize library](), it is not a direct Javascript Symbol operator.
+**Note**: The `Symbol()` calls use the [`Op` imported from the Sequelize library](https://sequelize.org/docs/v6/core-concepts/model-querying-basics/), not the [Javascript Symbol class](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Symbol).
 
 ## Example
 
