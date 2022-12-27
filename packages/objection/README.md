@@ -1,19 +1,26 @@
-## objection-querystring-parser
+# objection-querystring-parser
 
-Consider the following situation:
+This library builds on top of [`@bitovi/querystring-parser`](https://github.com/bitovi/querystring-parser/tree/main/packages/querystring-parser#readme) to transform CRUD-related querystrings into structured data for the [Objection ORM](https://vincit.github.io/objection.js/).
 
-- You're building a standard CRUD app that more-or-less follows the [JSON:API specification](https://jsonapi.org/format/)
-- This app will receive HTTP GET requests with querystrings like those in the examples below:
-  - `?filter[start_date][$gt]=2020-01-01`
-  - `?sort=-date,name&page[number]=1&page[size]=5`
-  - `?fields[articles]=title,body&fields[people]=name`
-- You need to parse these query parameters to fetch the requested data. This library transforms CRUD-related querystrings into structured data for the Objection ORM.
+- [objection-querystring-parser](#objection-querystring-parser)
+  - [Installation](#installation)
+  - [Usage](#usage)
+    - [Sort Parameters](#sort-parameters)
+    - [Pagination Parameters](#pagination-parameters)
+    - [Fields Parameters](#fields-parameters)
+    - [Include Parameters](#include-parameters)
+    - [Filter Parameters](#filter-parameters)
+  - [Example](#example)
+  - [Further Documentation](#further-documentation)
+- [Home](https://github.com/bitovi/querystring-parser#readme)
 
 ## Installation
 
 ```sh
 npm install @bitovi/objection-querystring-parser
 ```
+
+If you do not plan to use this library with Objection, please install [`@bitovi/querystring-parser`](https://github.com/bitovi/querystring-parser/tree/main/packages/querystring-parser#readme).
 
 ## Usage
 
@@ -179,8 +186,12 @@ const result = querystringParser.parse(
 };
 ```
 
-** Note: Database Validations should be done before or after passing the query to the library before the database call is made. **
+**Note**: Database Validations should be done before or after passing the query to the library before the database call is made.
 
 ## Example
 
-- A more practical example on how to use this library in your project can be found [here](https://github.com/bitovi/querystring-parser/tree/main/examples)
+A more practical example on how to use this library in your project can be found [here](https://github.com/bitovi/querystring-parser/tree/main/examples).
+
+## Further Documentation
+
+This library builds on [`@bitovi/querystring-parser`](https://github.com/bitovi/querystring-parser/tree/main/packages/querystring-parser#readme). See its [documentation](https://github.com/bitovi/querystring-parser/tree/main/packages/querystring-parser#readme) for more on using `querystring-parser`.
