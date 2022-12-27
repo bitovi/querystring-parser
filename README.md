@@ -33,7 +33,7 @@ npm install @bitovi/querystring-parser
 ## Next steps
 
 - Read the [full documentation](https://github.com/bitovi/querystring-parser/tree/main/packages/querystring-parser#readme)
-- ORM-specific documentation
+- Read the docs for ORM-specific versions
   - [Objection](https://github.com/bitovi/querystring-parser/tree/main/packages/objection#readme)
   - [Sequelize](https://github.com/bitovi/querystring-parser/tree/main/packages/sequelize#readme)
 
