@@ -2,7 +2,7 @@
 
 Transforms CRUD-related querystrings into structured data.
 
-```typescript
+```js
 const querystringParser = require("@bitovi/querystring-parser");
 
 const { page } = querystringParser.parse("page[number]=0&page[size]=10");
