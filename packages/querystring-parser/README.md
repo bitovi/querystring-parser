@@ -1,31 +1,29 @@
 # querystring-parser
 
-Transforms CRUD-related querystrings into structured data
-
 ![Tests Workflow Status](https://github.com/bitovi/querystring-parser/actions/workflows/tests.yml/badge.svg?branch=main)
 [![Join our Slack](https://img.shields.io/badge/slack-join%20chat-611f69.svg)](https://www.bitovi.com/community/slack?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
-- [querystring-parser](#querystring-parser)
-  - [Why querystring-parser?](#why-querystring-parser)
-  - [Installation](#installation)
-  - [Usage](#usage)
-    - [Sort Parameters](#sort-parameters)
-    - [Pagination Parameters](#pagination-parameters)
-    - [Include Parameters](#include-parameters)
-    - [Fields Parameters](#fields-parameters)
-    - [Filter Parameters](#filter-parameters)
-    - [MongoDB-Style Filter Parameters](#mongodb-style-filter-parameters)
-      - [Quick Examples](#quick-examples)
-      - [MongoDB-Style Operators](#mongodb-style-operators)
-      - [Omitted Operators](#omitted-operators)
-      - [Arrays](#arrays)
-      - [Compound Filters](#compound-filters)
-    - [IBM-Style Filter Parameters](#ibm-style-filter-parameters)
-      - [Quick Examples](#quick-examples-1)
-      - [IBM-Style Operators](#ibm-style-operators)
-      - [Attribute References](#attribute-references)
-      - [Compound Filters](#compound-filters-1)
-  - [Development / Contributing](#development--contributing)
+- [Why querystring-parser?](#why-querystring-parser)
+- [Installation](#installation)
+- [Usage](#usage)
+  - [Sort Parameters](#sort-parameters)
+  - [Pagination Parameters](#pagination-parameters)
+  - [Include Parameters](#include-parameters)
+  - [Fields Parameters](#fields-parameters)
+  - [Filter Parameters](#filter-parameters)
+  - [MongoDB-Style Filter Parameters](#mongodb-style-filter-parameters)
+    - [Quick Examples](#quick-examples)
+    - [MongoDB-Style Operators](#mongodb-style-operators)
+    - [Omitted Operators](#omitted-operators)
+    - [Arrays](#arrays)
+    - [Compound Filters](#compound-filters)
+  - [IBM-Style Filter Parameters](#ibm-style-filter-parameters)
+    - [Quick Examples](#quick-examples-1)
+    - [IBM-Style Operators](#ibm-style-operators)
+    - [Attribute References](#attribute-references)
+    - [Compound Filters](#compound-filters-1)
+- [Development / Contributing](#development--contributing)
+- [Home](https://github.com/bitovi/querystring-parser#readme)
 
 ## Why querystring-parser?
 
@@ -41,8 +39,13 @@ Consider the following situation:
 ## Installation
 
 ```sh
-npm install @bitovi/querystring-parser --save
+npm install @bitovi/querystring-parser
 ```
+
+If you plan to use this library with [Objection](https://vincit.github.io/objection.js/) or [Sequelize](https://sequelize.org), do not install `@bitovi/querystring-parser`. Instead, install either:
+
+- [`@bitovi/objection-querystring-parser`](https://github.com/bitovi/querystring-parser/tree/main/packages/objection#readme)
+- [`@bitovi/sequelize-querystring-parser`](https://github.com/bitovi/querystring-parser/tree/main/packages/sequelize#readme)
 
 ## Usage
 
