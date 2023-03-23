@@ -41,7 +41,7 @@ npm install @bitovi/querystring-parser
 
 This project is supported by [Bitovi, a Nodejs consultancy](https://www.bitovi.com/backend-consulting/nodejs-consulting). You can get help or ask questions on our:
 
-- [Slack Community](https://www.bitovi.com/community/slack)
+- Bitovi community [Discord](https://discord.gg/J7ejFsZnJ4)
 - [Twitter](https://twitter.com/bitovi)
 
 Or, you can hire us for training, consulting, or development. [Set up a free consultation.](https://www.bitovi.com/backend-consulting/nodejs-consulting)
