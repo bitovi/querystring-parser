@@ -47,7 +47,16 @@ describe("parseInclude", () => {
       parameters: [["include1", "include2"], []],
       expectedResults: {
         results: {
-          include: ["include1", "include2"],
+          include: [
+            {
+              association: "include1",
+              include: [],
+            },
+            {
+              association: "include2",
+              include: [],
+            },
+          ],
         },
         errors: [],
       },

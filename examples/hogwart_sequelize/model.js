@@ -75,8 +75,8 @@ const Spells = sequelize.define(
 (async () => {
   try {
     //Create Relationship
-    Students.hasMany(Spells, { foreignKey: "user_id" });
-    Spells.belongsTo(Students, { foreignKey: "user_id" });
+    Students.hasMany(Spells, { foreignKey: "user_id", as: "spells" });
+    Spells.belongsTo(Students, { foreignKey: "user_id", as: "student" });
     await sequelize.authenticate();
     await sequelize.sync();
     console.log("Database and Tables connected successfully");
