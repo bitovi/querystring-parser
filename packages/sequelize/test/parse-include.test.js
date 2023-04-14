@@ -44,7 +44,7 @@ describe("parseInclude", () => {
 
     {
       title: "should return valid results for valid parameters",
-      parameters: [["include1", "include2"], []],
+      parameters: [["include1", "include2.test"], []],
       expectedResults: {
         results: {
           include: [
@@ -54,7 +54,11 @@ describe("parseInclude", () => {
             },
             {
               association: "include2",
-              include: [],
+              include: [
+                {
+                  association: "test",
+                },
+              ],
             },
           ],
         },
