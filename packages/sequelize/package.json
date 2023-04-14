@@ -17,7 +17,7 @@
     "sequelize"
   ],
   "dependencies": {
-    "@bitovi/querystring-parser": "^0.6.4",
+    "@bitovi/querystring-parser": "^0.6.3",
     "sequelize": "^6.21.2"
   },
   "devDependencies": {
