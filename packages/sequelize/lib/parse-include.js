@@ -10,7 +10,7 @@ function parseInclude(include, includeErrors, includeAttributes = []) {
   if (containsNoErrorFromParser(includeErrors)) {
     if (isAnArray(include)) {
       if (include.length > 0) {
-        parsedArray.include = constructIncludes(include, includeErrors);
+        parsedArray.include = constructIncludes(include, includeAttributes);
       }
     } else {
       errors.push("Include field should be an array");
@@ -24,7 +24,7 @@ function parseInclude(include, includeErrors, includeAttributes = []) {
   };
 }
 
-function constructIncludes(include, includedAttributes = {}) {
+function constructIncludes(include) {
   const updatedincludes = [];
   const includeWithAlias = {};
 
@@ -80,8 +80,8 @@ function constructIncludes(include, includedAttributes = {}) {
     if (key.split(".").length === 1) {
       const { value } = mergeAlliance(
         includeWithAlias,
-        key,
-        includedAttributes
+        key
+        // includedAttributes
       );
       updatedincludes.push(value);
     }
