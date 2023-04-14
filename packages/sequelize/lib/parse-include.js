@@ -32,7 +32,7 @@ function constructIncludes(include) {
     const splittedArray = splitArray(i);
     if (splittedArray.length === 1) {
       includeWithAlias[splittedArray[0]] = {
-        model: splittedArray[0],
+        association: splittedArray[0],
         alias: [],
         include: [],
       };
@@ -45,7 +45,7 @@ function constructIncludes(include) {
             index + 1 === splittedArray.length - 1
               ? [
                   ...includeWithAlias[key].include,
-                  { model: splittedArray[index + 1] },
+                  { association: splittedArray[index + 1] },
                 ]
               : includeWithAlias[key].include;
           includeWithAlias[key].alias =
@@ -54,12 +54,12 @@ function constructIncludes(include) {
               : Array.from(new Set([...includeWithAlias[key].alias, alias]));
         } else {
           includeWithAlias[key] = {
-            model: splittedArray[index],
+            association: splittedArray[index],
             ...(index + 1 === splittedArray.length - 1
               ? {
                   include: [
                     {
-                      model: splittedArray[index + 1],
+                      association: splittedArray[index + 1],
                     },
                   ],
                   alias: [],
