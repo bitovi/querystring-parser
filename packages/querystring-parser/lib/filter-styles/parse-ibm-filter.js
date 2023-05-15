@@ -83,9 +83,11 @@ function parseExpression(expression) {
 
       // AND/OR - (binary, higher-order operators)
       else if ([IbmOperator.AND, IbmOperator.OR].includes(token)) {
-        const objOperandA = stack.pop();
-        const objOperandB = stack.pop();
-        stack.push({ [mapOperator(token)]: [objOperandA, objOperandB] });
+        let operands = [];
+        while (stack.length) {
+          operands.push(stack.pop())
+        }
+        stack.push({ [mapOperator(token)]: operands });
       }
 
       // ...the rest - (binary operators)
