@@ -17,6 +17,36 @@ describe("parseFilter", () => {
   describe("parseFilter happy paths", () => {
     testEachCase([
       {
+        title: "should parse strings correctly",
+        querystring: "filter[name]=kevin",
+        expectedResults: { LIKE: ["#name", "%kevin%"] },
+      },
+      {
+        title: "should parse numbers correctly",
+        querystring: "filter[age]=3",
+        expectedResults: { "=": ["#age", 3] },
+      },
+      {
+        title: "should parse booleans correctly",
+        querystring: "filter[active]=true",
+        expectedResults: { "=": ["#active", true] },
+      },
+      {
+        title: "should parse strings correctly",
+        querystring: "filter=contains(name,'kevin')",
+        expectedResults: { LIKE: ["#name", "%kevin%"] },
+      },
+      {
+        title: "should parse numbers correctly",
+        querystring: "filter=equals(age,'3')",
+        expectedResults: { "=": ["#age", 3] },
+      },
+      {
+        title: "should parse booleans correctly",
+        querystring: "filter=equals(active,'true')",
+        expectedResults: { "=": ["#active", true] },
+      },
+      {
         title:
           "should return undefined if querystring does not have filter param",
         querystring: "sort=name",

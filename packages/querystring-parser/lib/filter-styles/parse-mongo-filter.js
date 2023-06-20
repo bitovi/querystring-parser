@@ -43,7 +43,7 @@ function parseMongoFilter(querystring) {
     };
 
     /************************************************************************
-     * 2. Apply defaults and type coersion
+     * 2. Apply defaults and type coercion
      ************************************************************************/
     // temp wrap single values in array so the logic works the same either way
     let operator = providedOperator;
@@ -58,13 +58,11 @@ function parseMongoFilter(querystring) {
 
     // coerce values
     values = values.map((value) => {
-      if (isNullString(value)) {
-        return null;
-      } else if (valueType === MongoValueType.NUMBER) {
-        return Number(value);
-      } else {
-        return value;
-      }
+      if (isNullString(value)) return null;
+      if (valueType === MongoValueType.BOOLEAN)
+        return value.toLowerCase() === "true";
+      if (valueType === MongoValueType.NUMBER) return Number(value);
+      return value;
     });
 
     // determine mongo operator
@@ -73,6 +71,7 @@ function parseMongoFilter(querystring) {
         operator = MongoOperator.IN;
       } else {
         switch (valueType) {
+          case MongoValueType.BOOLEAN:
           case MongoValueType.NUMBER:
           case MongoValueType.DATE:
             operator = MongoOperator.EQUALS;
@@ -91,7 +90,7 @@ function parseMongoFilter(querystring) {
     /************************************************************************
      * 3. Check for errors
      ************************************************************************/
-    // array compatability check
+    // array compatibility check
     if (
       providedValueWasAnArray &&
       ![MongoOperator.IN, MongoOperator.NOT_IN].includes(operator)
@@ -104,7 +103,7 @@ function parseMongoFilter(querystring) {
       return { results, errors }; // short circuit
     }
 
-    // null compatability check
+    // null compatibility check
     if (
       valueType === MongoValueType.NULL &&
       [
@@ -121,7 +120,20 @@ function parseMongoFilter(querystring) {
       return { results, errors }; // short circuit
     }
 
-    // number compatability check
+    // boolean compatibility check
+    if (
+      valueType === MongoValueType.BOOLEAN &&
+      operator === MongoOperator.ILIKE
+    ) {
+      errors.push(
+        createError(
+          `"${operator}" operator should not be used with boolean values`
+        )
+      );
+      return { results, errors }; // short circuit
+    }
+
+    // number compatibility check
     if (
       valueType === MongoValueType.NUMBER &&
       operator === MongoOperator.ILIKE
@@ -134,7 +146,7 @@ function parseMongoFilter(querystring) {
       return { results, errors }; // short circuit
     }
 
-    // date compatability check
+    // date compatibility check
     if (valueType === MongoValueType.DATE && operator === MongoOperator.ILIKE) {
       errors.push(
         createError(

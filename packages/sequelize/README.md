@@ -46,7 +46,7 @@ console.log(result);
 Reference: [JSON:API - Pagination](https://jsonapi.org/format/#fetching-pagination)
 
 ```js
-const result = querystringParser.parse("page[number]=0&page[size]=10");
+const result = querystringParser.parse("page[number]=1&page[size]=10");
 console.log(result);
 // {
 //   orm: "sequelize",
@@ -84,7 +84,10 @@ console.log(result);
 // {
 //   orm: "sequelize",
 //   data: {
-//     include: ["pets","dogs"]
+//     include: [
+//       { association: "pets", include: [] },
+//       { association: "dogs", include: [] }
+//     ]
 //  },
 //   errors: []
 // };
@@ -101,14 +104,18 @@ console.log(result);
 //   orm: "sequelize",
 //   data: {
 //     where: {
-//       [Symbol(and)] : {
-//         [Symbol(any)]: {
-//           age: [10, 20]
+//       [Symbol(and)] : [
+//         {
+//           age: {
+//             [Symbol(in)]: [10, 20]
+//           }
 //         },
-//         [Symbol(eq)]: {
-//           name: 'mike'
+//         {
+//           name: {
+//             [Symbol(eq)]: "mike"
+//           }
 //         }
-//       }
+//       ]
 //     }
 //  },
 //   errors: []

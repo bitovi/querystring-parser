@@ -52,8 +52,8 @@ If you plan to use this library with [Objection](https://vincit.github.io/object
 ```js
 const querystringParser = require("@bitovi/querystring-parser");
 
-const { page } = querystringParser.parse("page[number]=0&page[size]=10");
-console.log(page.number); // --> 0
+const { page } = querystringParser.parse("page[number]=1&page[size]=10");
+console.log(page.number); // --> 1
 console.log(page.size); // --> 10
 ```
 
@@ -77,8 +77,8 @@ The parsed results of the `page` query parameters are stored in the `page` prope
 Reference: [JSON:API - Pagination](https://jsonapi.org/format/#fetching-pagination)
 
 ```js
-const { page } = querystringParser.parse("page[number]=0&page[size]=10");
-console.log(page.number); // --> 0
+const { page } = querystringParser.parse("page[number]=1&page[size]=10");
+console.log(page.number); // --> 1
 console.log(page.size); // --> 10
 ```
 
