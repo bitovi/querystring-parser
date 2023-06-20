@@ -1,6 +1,6 @@
 /**
  * An enumeration of value types available for use in "IBM-style" query filters.
- * Examples: equals(name,true)          -> boolean value
+ * Examples: equals(name,'true')          -> boolean value
  *           equals(name,'michael')     -> string value
  *           equals(age,'25')           -> number value
  *           equals(born,'2020-01-01')  -> date value
