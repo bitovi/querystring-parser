@@ -52,8 +52,8 @@ If you plan to use this library with [Objection](https://vincit.github.io/object
 ```js
 const querystringParser = require("@bitovi/querystring-parser");
 
-const { page } = querystringParser.parse("page[number]=0&page[size]=10");
-console.log(page.number); // --> 0
+const { page } = querystringParser.parse("page[number]=1&page[size]=10");
+console.log(page.number); // --> 1
 console.log(page.size); // --> 10
 ```
 
@@ -77,8 +77,8 @@ The parsed results of the `page` query parameters are stored in the `page` prope
 Reference: [JSON:API - Pagination](https://jsonapi.org/format/#fetching-pagination)
 
 ```js
-const { page } = querystringParser.parse("page[number]=0&page[size]=10");
-console.log(page.number); // --> 0
+const { page } = querystringParser.parse("page[number]=1&page[size]=10");
+console.log(page.number); // --> 1
 console.log(page.size); // --> 10
 ```
 
@@ -89,9 +89,7 @@ The parsed results of the `include` query parameter is stored in the `include` p
 Reference: [JSON:API - Inclusion of Related Resources](https://jsonapi.org/format/#fetching-includes)
 
 ```js
-const { include } = querystringParser.parse(
-  "include=children.movies.actors.children,children.movies.actors.pets,children.pets,pets"
-);
+const { include } = querystringParser.parse("include=children.movies.actors.children,children.movies.actors.pets,children.pets,pets");
 console.log(include[0]); // --> 'children.movies.actors.children'
 console.log(include[1]); // --> 'children.movies.actors.pets'
 console.log(include[2]); // --> 'children.pets'
@@ -105,9 +103,7 @@ The parsed results of the `fields[TYPE]` query parameters are stored in the `fie
 Reference: [JSON:API - Sparse Fieldsets](https://jsonapi.org/format/#fetching-sparse-fieldsets)
 
 ```js
-const { fields } = querystringParser.parse(
-  "fields[articles]=title,body&fields[people]=name"
-);
+const { fields } = querystringParser.parse("fields[articles]=title,body&fields[people]=name");
 console.log(fields.articles); // --> [ 'title', 'body' ]
 console.log(fields.people); // --> [ 'name' ]
 ```

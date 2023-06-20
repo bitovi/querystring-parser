@@ -5,8 +5,8 @@ Transforms CRUD-related querystrings into structured data.
 ```js
 const querystringParser = require("@bitovi/querystring-parser");
 
-const { page } = querystringParser.parse("page[number]=0&page[size]=10");
-console.log(page.number); // --> 0
+const { page } = querystringParser.parse("page[number]=1&page[size]=10");
+console.log(page.number); // --> 1
 console.log(page.size); // --> 10
 ```
 

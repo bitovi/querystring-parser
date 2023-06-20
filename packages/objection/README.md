@@ -63,7 +63,7 @@ console.log(result);
 Reference: [JSON:API - Pagination](https://jsonapi.org/format/#fetching-pagination)
 
 ```js
-const result = querystringParser.parse("page[number]=0&page[size]=10");
+const result = querystringParser.parse("page[number]=1&page[size]=10");
 console.log(result);
 // {
 //   orm: "objection",
