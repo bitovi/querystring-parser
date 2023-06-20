@@ -7,6 +7,7 @@ const isDateString = require("../helpers/is-date-string");
 const isString = require("../helpers/is-string");
 const IbmValueType = require("../enums/ibm-value-type");
 const QuerystringParsingError = require("../../lib/errors/querystring-parsing-error");
+const isBooleanString = require("../helpers/is-boolean-string");
 
 /** Parses "IBM-style" filter expression from of a querystring. */
 function parseIbmFilter(querystring) {
@@ -121,16 +122,10 @@ function coerceValue(value, parentOperator) {
   } else if (value.startsWith("'") && value.endsWith("'")) {
     // constant value
     value = value.slice(1, value.length - 1);
-    if (isNumberString(value)) {
-      // number
-      return Number(value);
-    } else if (isDateString(value)) {
-      // date
-      return value;
-    } else {
-      // string
-      return wildCardString(value, parentOperator);
-    }
+    if (isBooleanString(value)) return value.toLowerCase() === "true";
+    if (isNumberString(value)) return Number(value);
+    if (isDateString(value)) return value;
+    return wildCardString(value, parentOperator); // string
   } else {
     // attribute reference
     return "#" + value;

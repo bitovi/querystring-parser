@@ -1,7 +1,8 @@
 const MongoValueType = require("../enums/mongo-value-type");
-const isDateString = require("../helpers/is-date-string");
-const isNullString = require("../helpers/is-null-string");
-const isNumberString = require("../helpers/is-number-string");
+const isBooleanString = require("./is-boolean-string");
+const isDateString = require("./is-date-string");
+const isNullString = require("./is-null-string");
+const isNumberString = require("./is-number-string");
 
 /**
  * Determines if all values in an array represent the same {@link MongoValueType}.
@@ -13,15 +14,11 @@ const isNumberString = require("../helpers/is-number-string");
  */
 function areMongoTypesTheSame(values) {
   const types = values.map((val) => {
-    if (isNumberString(val)) {
-      return MongoValueType.NUMBER;
-    } else if (isDateString(val)) {
-      return MongoValueType.DATE;
-    } else if (isNullString(val)) {
-      return MongoValueType.NULL;
-    } else {
-      return MongoValueType.STRING;
-    }
+    if (isBooleanString(val)) return MongoValueType.BOOLEAN;
+    if (isNumberString(val)) return MongoValueType.NUMBER;
+    if (isDateString(val)) return MongoValueType.DATE;
+    if (isNullString(val)) return MongoValueType.NULL;
+    return MongoValueType.STRING;
   });
 
   const allNull = types.every((type) => type === MongoValueType.NULL);

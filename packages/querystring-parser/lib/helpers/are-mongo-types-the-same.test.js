@@ -1,12 +1,18 @@
 const MongoValueType = require("../../lib/enums/mongo-value-type");
-const areMongoTypesTheSame = require("../../lib/helpers/are-mongo-types-the-same");
+const areMongoTypesTheSame = require("./are-mongo-types-the-same");
 
 describe("areMongoTypesTheSame", () => {
   /**
-   * Should return the MongoValueType if they all match eachother (besides null)
+   * Should return the MongoValueType if they all match each other (besides null)
    * Otherwise, should return false
    */
   const testCases = [
+    // booleans
+    [MongoValueType.BOOLEAN, ["true"]],
+    [MongoValueType.BOOLEAN, ["true", "false"]],
+    [MongoValueType.BOOLEAN, ["true", "false", "null"]],
+    [MongoValueType.BOOLEAN, ["null", "true"]],
+
     // strings
     [MongoValueType.STRING, ["michael"]],
     [MongoValueType.STRING, ["michael", "brad"]],
@@ -29,6 +35,7 @@ describe("areMongoTypesTheSame", () => {
     [MongoValueType.NULL, ["null"]],
 
     // false
+    [false, ["true", "2020-01-02"]],
     [false, ["michael", "2020-01-02"]],
     [false, ["25", "2020-01-02"]],
     [false, ["michael", "25", "null"]],
