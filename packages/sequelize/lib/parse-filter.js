@@ -32,9 +32,9 @@ const SequelizeSymbols = Object.freeze({
   [Operator.EQUALS]: Op.eq,
   [Operator.NOT_EQUALS]: Op.ne,
   [Operator.GREATER_THAN]: Op.gt,
-  [Operator.GREATER_THAN_OR_EQUAL]: Op.gte,
+  [Operator.GREATER_OR_EQUAL]: Op.gte,
   [Operator.LESS_THAN]: Op.lt,
-  [Operator.LESS_THAN_OR_EQUAL]: Op.lte,
+  [Operator.LESS_OR_EQUAL]: Op.lte,
 });
 
 function parseParametersForSequelize(operator, value) {

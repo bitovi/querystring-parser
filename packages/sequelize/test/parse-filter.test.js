@@ -70,6 +70,70 @@ describe("parseFilter", () => {
     },
 
     {
+      title:
+        "should return valid results for valid parameters for the '<' operator",
+      parameters: [{ "<": ["#age", 3] }, []],
+      expectedResults: {
+        results: {
+          where: {
+            age: {
+              [Op.lt]: 3,
+            },
+          },
+        },
+        errors: [],
+      },
+    },
+
+    {
+      title:
+        "should return valid results for valid parameters for the '<=' operator",
+      parameters: [{ "<=": ["#age", 3] }, []],
+      expectedResults: {
+        results: {
+          where: {
+            age: {
+              [Op.lte]: 3,
+            },
+          },
+        },
+        errors: [],
+      },
+    },
+
+    {
+      title:
+        "should return valid results for valid parameters for the '>' operator",
+      parameters: [{ ">": ["#age", 3] }, []],
+      expectedResults: {
+        results: {
+          where: {
+            age: {
+              [Op.gt]: 3,
+            },
+          },
+        },
+        errors: [],
+      },
+    },
+
+    {
+      title:
+        "should return valid results for valid parameters for the '>=' operator",
+      parameters: [{ ">=": ["#age", 3] }, []],
+      expectedResults: {
+        results: {
+          where: {
+            age: {
+              [Op.gte]: 3,
+            },
+          },
+        },
+        errors: [],
+      },
+    },
+
+    {
       title: "should return valid results when using the 'OR' operator",
       parameters: [
         { OR: [{ IN: ["#age", 10, 20] }, { "=": ["#name", "mike"] }] },
