@@ -3,6 +3,7 @@ const parseFields = require("./parse-fields");
 const parsePage = require("./parse-page");
 const parseSort = require("./parse-sort");
 const parseInclude = require("./parse-include");
+const parseMeta = require("./parse-meta");
 
 function parse(querystring) {
   const filter = parseFilter(querystring);
@@ -10,6 +11,7 @@ function parse(querystring) {
   const page = parsePage(querystring);
   const sort = parseSort(querystring);
   const include = parseInclude(querystring);
+  const meta = parseMeta(querystring);
 
   return {
     filter: filter.results,
@@ -17,6 +19,7 @@ function parse(querystring) {
     page: page.results,
     sort: sort.results,
     include: include.results,
+    meta: meta.results,
     errors: {
       filter: filter.errors,
       fields: fields.errors,

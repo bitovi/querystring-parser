@@ -5,7 +5,7 @@ const parse = require("../lib/parse");
 describe("parse", function () {
   it("should return results for multiple query parameters (mongo filter)", function () {
     const querystring =
-      "sort=-date,name&page[number]=1&page[size]=5&include=pets&fields[people]=name&filter[name]=jay";
+      "sort=-date,name&page[number]=1&page[size]=5&include=pets&fields[people]=name&filter[name]=jay&meta=count";
     expect(parse(querystring)).toEqual({
       filter: {
         LIKE: ["#name", "%jay%"],
@@ -28,6 +28,7 @@ describe("parse", function () {
         },
       ],
       include: ["pets"],
+      meta: ["count"],
       errors: {
         filter: [],
         fields: [],
@@ -40,7 +41,7 @@ describe("parse", function () {
 
   it("should return results for multiple query parameters (ibm filter)", function () {
     const querystring =
-      "sort=-date,name&page[number]=1&page[size]=5&include=pets&fields[people]=name&filter=contains(name,'jay')";
+      "sort=-date,name&page[number]=1&page[size]=5&include=pets&fields[people]=name&filter=contains(name,'jay')&meta=count";
     expect(parse(querystring)).toEqual({
       filter: {
         LIKE: ["#name", "%jay%"],
@@ -63,6 +64,7 @@ describe("parse", function () {
         },
       ],
       include: ["pets"],
+      meta: ["count"],
       errors: {
         filter: [],
         fields: [],
