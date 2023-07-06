@@ -89,6 +89,19 @@ describe("parsePage", () => {
       },
       {
         title:
+          "should return error if invalid value was provided for page number (0)",
+        querystring: "page[number]=0&page[size]=5",
+        expectedErrors: [
+          new QuerystringParsingError({
+            message: "Invalid page number was provided.",
+            querystring: "page[number]=0&page[size]=5",
+            paramKey: "page[number]",
+            paramValue: "0",
+          }),
+        ],
+      },
+      {
+        title:
           "should return error if invalid value was provided for page number (-1)",
         querystring: "page[number]=-1&page[size]=5",
         expectedErrors: [

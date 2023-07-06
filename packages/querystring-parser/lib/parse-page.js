@@ -34,8 +34,8 @@ function parsePage(querystring) {
       const parsedNumber = parseInt(number);
       const parsedSize = parseInt(size);
 
-      const numberIsValid = !Number.isNaN(parsedNumber) && parsedNumber >= 0;
-      const sizeIsValid = !Number.isNaN(parsedSize) && parsedSize > 0;
+      const numberIsValid = Number.isInteger(parsedNumber) && parsedNumber > 0;
+      const sizeIsValid = Number.isInteger(parsedSize) && parsedSize > 0;
 
       if (!numberIsValid) {
         errors.push(
