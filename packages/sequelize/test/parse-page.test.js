@@ -48,7 +48,7 @@ describe("parsePage", () => {
       parameters: [{ number: "notANumber" }, []],
       expectedResults: {
         results: {},
-        errors: ["page[number] and page[size] should be integers"],
+        errors: ["page[number] and page[size] should be positive integers"],
       },
     },
 
@@ -58,7 +58,25 @@ describe("parsePage", () => {
       parameters: [{ number: 10, size: "notANumber" }, []],
       expectedResults: {
         results: {},
-        errors: ["page[number] and page[size] should be integers"],
+        errors: ["page[number] and page[size] should be positive integers"],
+      },
+    },
+
+    {
+      title: "should return an error if a zero is passed as the page size",
+      parameters: [{ number: 0, size: 0 }, []],
+      expectedResults: {
+        results: {},
+        errors: ["page[number] and page[size] should be positive integers"],
+      },
+    },
+
+    {
+      title: "should return an error if a float is passed as the page size",
+      parameters: [{ number: 1.1, size: 1.2 }, []],
+      expectedResults: {
+        results: {},
+        errors: ["page[number] and page[size] should be positive integers"],
       },
     },
 
