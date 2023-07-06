@@ -31,8 +31,8 @@ function parsePage(querystring) {
         })
       );
     } else {
-      const parsedNumber = parseInt(number);
-      const parsedSize = parseInt(size);
+      const parsedNumber = +number;
+      const parsedSize = +size;
 
       const numberIsValid = Number.isInteger(parsedNumber) && parsedNumber > 0;
       const sizeIsValid = Number.isInteger(parsedSize) && parsedSize > 0;
