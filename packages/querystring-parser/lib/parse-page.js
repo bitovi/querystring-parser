@@ -40,7 +40,7 @@ function parsePage(querystring) {
       if (!numberIsValid) {
         errors.push(
           new QuerystringParsingError({
-            message: "Invalid page number was provided.",
+            message: "Page number should be a positive integer.",
             querystring,
             paramKey: "page[number]",
             paramValue: number,
@@ -50,7 +50,7 @@ function parsePage(querystring) {
       if (!sizeIsValid) {
         errors.push(
           new QuerystringParsingError({
-            message: "Invalid page size was provided.",
+            message: "Page size should be a positive integer.",
             querystring,
             paramKey: "page[size]",
             paramValue: size,

@@ -80,7 +80,7 @@ describe("parsePage", () => {
         querystring: "page[number]=nope&page[size]=5",
         expectedErrors: [
           new QuerystringParsingError({
-            message: "Invalid page number was provided.",
+            message: "Page number should be a positive integer.",
             querystring: "page[number]=nope&page[size]=5",
             paramKey: "page[number]",
             paramValue: "nope",
@@ -93,7 +93,7 @@ describe("parsePage", () => {
         querystring: "page[number]=0&page[size]=5",
         expectedErrors: [
           new QuerystringParsingError({
-            message: "Invalid page number was provided.",
+            message: "Page number should be a positive integer.",
             querystring: "page[number]=0&page[size]=5",
             paramKey: "page[number]",
             paramValue: "0",
@@ -106,7 +106,7 @@ describe("parsePage", () => {
         querystring: "page[number]=-1&page[size]=5",
         expectedErrors: [
           new QuerystringParsingError({
-            message: "Invalid page number was provided.",
+            message: "Page number should be a positive integer.",
             querystring: "page[number]=-1&page[size]=5",
             paramKey: "page[number]",
             paramValue: "-1",
@@ -119,7 +119,7 @@ describe("parsePage", () => {
         querystring: "page[number]=1&page[size]=nope",
         expectedErrors: [
           new QuerystringParsingError({
-            message: "Invalid page size was provided.",
+            message: "Page size should be a positive integer.",
             querystring: "page[number]=1&page[size]=nope",
             paramKey: "page[size]",
             paramValue: "nope",
@@ -132,7 +132,7 @@ describe("parsePage", () => {
         querystring: "page[number]=1&page[size]=0",
         expectedErrors: [
           new QuerystringParsingError({
-            message: "Invalid page size was provided.",
+            message: "Page size should be a positive integer.",
             querystring: "page[number]=1&page[size]=0",
             paramKey: "page[size]",
             paramValue: "0",
@@ -145,13 +145,13 @@ describe("parsePage", () => {
         querystring: "page[number]=nope&page[size]=nopedynope",
         expectedErrors: [
           new QuerystringParsingError({
-            message: "Invalid page number was provided.",
+            message: "Page number should be a positive integer.",
             querystring: "page[number]=nope&page[size]=nopedynope",
             paramKey: "page[number]",
             paramValue: "nope",
           }),
           new QuerystringParsingError({
-            message: "Invalid page size was provided.",
+            message: "Page size should be a positive integer.",
             querystring: "page[number]=nope&page[size]=nopedynope",
             paramKey: "page[size]",
             paramValue: "nopedynope",
