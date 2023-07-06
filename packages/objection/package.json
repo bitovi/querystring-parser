@@ -1,6 +1,6 @@
 {
   "name": "@bitovi/objection-querystring-parser",
-  "version": "0.1.5",
+  "version": "0.1.6",
   "description": "",
   "main": "index.js",
   "directories": {
@@ -17,7 +17,7 @@
     "objection"
   ],
   "dependencies": {
-    "@bitovi/querystring-parser": "^0.6.5"
+    "@bitovi/querystring-parser": "^0.6.6"
   },
   "devDependencies": {
     "@bitovi/eslint-config": "^1.0.0",
