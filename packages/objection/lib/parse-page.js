@@ -10,11 +10,13 @@ function parsePagination(page, pageErrors) {
   if (containsNoErrorFromParser(pageErrors)) {
     if (isObject(page)) {
       let { number, size } = page;
-      if (number) {
+      if (number != null) {
         //default size to 10 if undefined
         size = size ?? 10;
         if (isNotValidInteger(number) || isNotValidInteger(size)) {
-          errors.push("page[number] and page[size] should be integers");
+          errors.push(
+            "page[number] and page[size] should be positive integers"
+          );
         } else {
           const offset = getOffsetByPageNumber(number, size);
           parsedArray.push({

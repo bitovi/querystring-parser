@@ -1,5 +1,5 @@
 function isNotValidInteger(number) {
-  return typeof number !== "number" || isNaN(number);
+  return !Number.isInteger(number) || number < 1;
 }
 
 function isAnArray(item) {
