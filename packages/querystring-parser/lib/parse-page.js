@@ -11,31 +11,14 @@ function parsePage(querystring) {
     const { number, size } = qsPage;
     const numberWasProvided = isNonEmptyString(number);
     const sizeWasProvided = isNonEmptyString(size);
+    let parsedNumber;
+    let numberIsValid;
+    let parsedSize;
+    let sizeIsValid;
 
-    if (numberWasProvided && !sizeWasProvided) {
-      errors.push(
-        new QuerystringParsingError({
-          message: "Page number was provided but page size was not provided.",
-          querystring,
-          paramKey: "page[number]",
-          paramValue: number,
-        })
-      );
-    } else if (!numberWasProvided && sizeWasProvided) {
-      errors.push(
-        new QuerystringParsingError({
-          message: "Page size was provided but page number was not provided.",
-          querystring,
-          paramKey: "page[size]",
-          paramValue: size,
-        })
-      );
-    } else {
-      const parsedNumber = +number;
-      const parsedSize = +size;
-
-      const numberIsValid = Number.isInteger(parsedNumber) && parsedNumber > 0;
-      const sizeIsValid = Number.isInteger(parsedSize) && parsedSize > 0;
+    if (numberWasProvided) {
+      parsedNumber = +number;
+      numberIsValid = Number.isInteger(parsedNumber) && parsedNumber > 0;
 
       if (!numberIsValid) {
         errors.push(
@@ -47,6 +30,34 @@ function parsePage(querystring) {
           })
         );
       }
+
+      if (!sizeWasProvided) {
+        errors.push(
+          new QuerystringParsingError({
+            message: "Page number was provided but page size was not provided.",
+            querystring,
+            paramKey: "page[size]",
+            paramValue: "",
+          })
+        );
+      }
+    }
+
+    if (sizeWasProvided) {
+      parsedSize = +size;
+      sizeIsValid = Number.isInteger(parsedSize) && parsedSize > 0;
+
+      if (!numberWasProvided) {
+        errors.push(
+          new QuerystringParsingError({
+            message: "Page size was provided but page number was not provided.",
+            querystring,
+            paramKey: "page[number]",
+            paramValue: "",
+          })
+        );
+      }
+
       if (!sizeIsValid) {
         errors.push(
           new QuerystringParsingError({
@@ -57,11 +68,11 @@ function parsePage(querystring) {
           })
         );
       }
+    }
 
-      if (numberIsValid && sizeIsValid) {
-        results.number = parsedNumber;
-        results.size = parsedSize;
-      }
+    if (numberIsValid && sizeIsValid) {
+      results.number = parsedNumber;
+      results.size = parsedSize;
     }
   }
 
