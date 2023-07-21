@@ -51,26 +51,66 @@ describe("parsePage", () => {
   describe("parsePage error paths", () => {
     testEachCase([
       {
-        title: "should return error if number was provided but size was not",
+        title:
+          "should return error if number is valid but size was not provided",
         querystring: "page[number]=1",
         expectedErrors: [
           new QuerystringParsingError({
             message: "Page number was provided but page size was not provided.",
             querystring: "page[number]=1",
-            paramKey: "page[number]",
-            paramValue: "1",
+            paramKey: "page[size]",
+            paramValue: "",
           }),
         ],
       },
       {
-        title: "should return error if size was provided but number was not",
+        title:
+          "should return error if number is invalid but size was not provided",
+        querystring: "page[number]=0",
+        expectedErrors: [
+          new QuerystringParsingError({
+            message: "Page number should be a positive integer.",
+            querystring: "page[number]=0",
+            paramKey: "page[number]",
+            paramValue: "0",
+          }),
+          new QuerystringParsingError({
+            message: "Page number was provided but page size was not provided.",
+            querystring: "page[number]=0",
+            paramKey: "page[size]",
+            paramValue: "",
+          }),
+        ],
+      },
+      {
+        title:
+          "should return error if size is valid but number was not provided",
         querystring: "page[size]=5",
         expectedErrors: [
           new QuerystringParsingError({
             message: "Page size was provided but page number was not provided.",
             querystring: "page[size]=5",
+            paramKey: "page[number]",
+            paramValue: "",
+          }),
+        ],
+      },
+      {
+        title:
+          "should return error if size is invalid but number was not provided",
+        querystring: "page[size]=0",
+        expectedErrors: [
+          new QuerystringParsingError({
+            message: "Page size was provided but page number was not provided.",
+            querystring: "page[size]=0",
+            paramKey: "page[number]",
+            paramValue: "",
+          }),
+          new QuerystringParsingError({
+            message: "Page size should be a positive integer.",
+            querystring: "page[size]=0",
             paramKey: "page[size]",
-            paramValue: "5",
+            paramValue: "0",
           }),
         ],
       },
