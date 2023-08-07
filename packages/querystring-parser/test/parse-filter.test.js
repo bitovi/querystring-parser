@@ -89,6 +89,38 @@ describe("parseFilter", () => {
           LIKE: ["#name", "john"],
         },
       },
+      {
+        title:
+          "should parse strings correctly with the $ilike operator - end of string (Mongo)",
+        querystring: `filter[name][$ilike]=${encodeURIComponent("%NE")}`,
+        expectedResults: {
+          ILIKE: ["#name", "%NE"],
+        },
+      },
+      {
+        title:
+          "should parse strings correctly with the $ilike operator - beginning of string (Mongo)",
+        querystring: `filter[name][$ilike]=${encodeURIComponent("JO%")}`,
+        expectedResults: {
+          ILIKE: ["#name", "JO%"],
+        },
+      },
+      {
+        title:
+          "should parse strings correctly with the $ilike operator - contains string (Mongo)",
+        querystring: `filter[name][$ilike]=${encodeURIComponent("%An%")}`,
+        expectedResults: {
+          ILIKE: ["#name", "%An%"],
+        },
+      },
+      {
+        title:
+          "should parse strings correctly with the $ilike operator - entire string (Mongo)",
+        querystring: "filter[name][$ilike]=jOhN",
+        expectedResults: {
+          ILIKE: ["#name", "jOhN"],
+        },
+      },
       // numbers
       {
         title: "should parse numbers correctly with the $eq operator (Mongo)",
@@ -223,7 +255,7 @@ describe("parseFilter", () => {
       {
         title: "should parse strings correctly (Mongo)",
         querystring: "filter[name]=kevin",
-        expectedResults: { LIKE: ["#name", "kevin"] },
+        expectedResults: { ILIKE: ["#name", "kevin"] },
       },
       {
         title: "should parse numbers correctly (Mongo)",

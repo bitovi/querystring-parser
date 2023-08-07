@@ -173,7 +173,7 @@ function parseMongoFilter(querystring) {
       [MongoOperator.LESS_THAN]: SqlOperator.LESS_THAN,
       [MongoOperator.LESS_OR_EQUAL]: SqlOperator.LESS_OR_EQUAL,
       [MongoOperator.LIKE]: SqlOperator.LIKE,
-      [MongoOperator.ILIKE]: SqlOperator.LIKE,
+      [MongoOperator.ILIKE]: SqlOperator.ILIKE,
       [MongoOperator.IN]: SqlOperator.IN,
       [MongoOperator.NOT_IN]: SqlOperator.NOT_IN,
     }[operator];

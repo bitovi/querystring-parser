@@ -6,6 +6,7 @@ const SqlOperator = Object.freeze({
   GREATER_OR_EQUAL: ">=",
   LESS_THAN: "<",
   LESS_OR_EQUAL: "<=",
+  ILIKE: "ILIKE",
   LIKE: "LIKE",
   IN: "IN",
   NOT_IN: "NOT IN",
