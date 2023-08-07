@@ -16,7 +16,7 @@ function testEachCase(testCases) {
 describe("parseFilter", () => {
   describe("parseFilter happy paths", () => {
     testEachCase([
-      //string
+      // string
       {
         title: "should parse strings correctly with the $eq operator (Mongo)",
         querystring: "filter[name][$eq]=John",
@@ -57,34 +57,38 @@ describe("parseFilter", () => {
         querystring: "filter[name][$nin]=John&filter[name][$nin]=Jane",
         expectedResults: { "NOT IN": ["#name", "John", "Jane"] },
       },
-      // TODO: resolve with HATCH-293. Skipped due to test failing
-      // {
-      //   title:
-      //     "should parse strings correctly with the $like operator - end of string (Mongo)",
-      //   querystring: "filter[name][$like]=%ne",
-      //   expectedResults: TODO,
-      // },
-      // TODO: resolve with HATCH-293. Skipped due to test failing
-      // {
-      //   title:
-      //     "should parse strings correctly with the $like operator - beginning of string (Mongo)",
-      //   querystring: "filter[name][$like]=Jo%",
-      //   expectedResults: TODO,
-      // },
-      // TODO: resolve with HATCH-293. Skipped due to test failing
-      // {
-      //   title:
-      //     "should parse strings correctly with the $like operator - contains string (Mongo)",
-      //   querystring: "filter[name][$like]=%an%",
-      //   expectedResults: TODO,
-      // },
-      // TODO: resolve with HATCH-293. Skipped due to test failing
-      // {
-      //   title:
-      //     "should parse strings correctly with the $like operator - entire string (Mongo)",
-      //   querystring: "filter[name][$like]=john",
-      //   expectedResults: TODO,
-      // },
+      {
+        title:
+          "should parse strings correctly with the $like operator - end of string (Mongo)",
+        querystring: `filter[name][$like]=${encodeURIComponent("%ne")}`,
+        expectedResults: {
+          LIKE: ["#name", "%ne"],
+        },
+      },
+      {
+        title:
+          "should parse strings correctly with the $like operator - beginning of string (Mongo)",
+        querystring: `filter[name][$like]=${encodeURIComponent("Jo%")}`,
+        expectedResults: {
+          LIKE: ["#name", "Jo%"],
+        },
+      },
+      {
+        title:
+          "should parse strings correctly with the $like operator - contains string (Mongo)",
+        querystring: `filter[name][$like]=${encodeURIComponent("%an%")}`,
+        expectedResults: {
+          LIKE: ["#name", "%an%"],
+        },
+      },
+      {
+        title:
+          "should parse strings correctly with the $like operator - entire string (Mongo)",
+        querystring: "filter[name][$like]=john",
+        expectedResults: {
+          LIKE: ["#name", "john"],
+        },
+      },
       // numbers
       {
         title: "should parse numbers correctly with the $eq operator (Mongo)",
@@ -219,7 +223,7 @@ describe("parseFilter", () => {
       {
         title: "should parse strings correctly (Mongo)",
         querystring: "filter[name]=kevin",
-        expectedResults: { LIKE: ["#name", "%kevin%"] },
+        expectedResults: { LIKE: ["#name", "kevin"] },
       },
       {
         title: "should parse numbers correctly (Mongo)",
