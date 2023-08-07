@@ -284,58 +284,58 @@ describe("parseMongoFilter() tests", () => {
     ]);
   });
 
-  describe("ilike mongo operator", () => {
+  describe("$ilike mongo operator", () => {
     testEachCase([
       {
         title:
-          'the "ilike" mongo operator should map to the "LIKE" sql operator for string values',
-        querystring: "filter[name][ilike]=michael",
-        expectedResults: { LIKE: ["#name", "%michael%"] },
+          'the "$ilike" mongo operator should map to the "ilike" sql operator for string values',
+        querystring: "filter[name][$ilike]=michael",
+        expectedResults: { ILIKE: ["#name", "michael"] },
       },
       {
-        title: 'the "ilike" mongo operator should not allow number values',
-        querystring: "filter[age][ilike]=25",
+        title: 'the "$ilike" mongo operator should not allow number values',
+        querystring: "filter[age][$ilike]=25",
         expectedErrors: [
           new QuerystringParsingError({
-            message: '"ilike" operator should not be used with number values',
-            querystring: "filter[age][ilike]=25",
-            paramKey: "filter[age][ilike]",
+            message: '"$ilike" operator should not be used with number values',
+            querystring: "filter[age][$ilike]=25",
+            paramKey: "filter[age][$ilike]",
             paramValue: "25",
           }),
         ],
       },
       {
-        title: 'the "ilike" mongo operator should not allow date values',
-        querystring: "filter[born][ilike]=2020-01-01",
+        title: 'the "$ilike" mongo operator should not allow date values',
+        querystring: "filter[born][$ilike]=2020-01-01",
         expectedErrors: [
           new QuerystringParsingError({
-            message: '"ilike" operator should not be used with date values',
-            querystring: "filter[born][ilike]=2020-01-01",
-            paramKey: "filter[born][ilike]",
+            message: '"$ilike" operator should not be used with date values',
+            querystring: "filter[born][$ilike]=2020-01-01",
+            paramKey: "filter[born][$ilike]",
             paramValue: "2020-01-01",
           }),
         ],
       },
       {
-        title: 'the "ilike" mongo operator should not allow null values',
-        querystring: "filter[name][ilike]=null",
+        title: 'the "$ilike" mongo operator should not allow null values',
+        querystring: "filter[name][$ilike]=null",
         expectedErrors: [
           new QuerystringParsingError({
-            message: '"ilike" operator should not be used with null value',
-            querystring: "filter[name][ilike]=null",
-            paramKey: "filter[name][ilike]",
+            message: '"$ilike" operator should not be used with null value',
+            querystring: "filter[name][$ilike]=null",
+            paramKey: "filter[name][$ilike]",
             paramValue: "null",
           }),
         ],
       },
       {
-        title: 'the "ilike" mongo operator should not allow array values',
-        querystring: "filter[age][ilike]=24,25",
+        title: 'the "$ilike" mongo operator should not allow array values',
+        querystring: "filter[age][$ilike]=24,25",
         expectedErrors: [
           new QuerystringParsingError({
-            message: '"ilike" operator should not be used with array value',
-            querystring: "filter[age][ilike]=24,25",
-            paramKey: "filter[age][ilike]",
+            message: '"$ilike" operator should not be used with array value',
+            querystring: "filter[age][$ilike]=24,25",
+            paramKey: "filter[age][$ilike]",
             paramValue: ["24", "25"],
           }),
         ],
@@ -443,7 +443,7 @@ describe("parseMongoFilter() tests", () => {
         title:
           'the "LIKE" sql operator should be the default for string values',
         querystring: "filter[name]=michael",
-        expectedResults: { LIKE: ["#name", "%michael%"] },
+        expectedResults: { ILIKE: ["#name", "michael"] },
       },
       {
         title: 'the "=" sql operator should be the default for number values',
@@ -509,7 +509,7 @@ describe("parseMongoFilter() tests", () => {
           "multiple filters should be join together in an AND fashion (ex: 2)",
         querystring: "filter[name]=michael&filter[age]=25",
         expectedResults: {
-          AND: [{ LIKE: ["#name", "%michael%"] }, { "=": ["#age", 25] }],
+          AND: [{ ILIKE: ["#name", "michael"] }, { "=": ["#age", 25] }],
         },
       },
       {
@@ -519,7 +519,7 @@ describe("parseMongoFilter() tests", () => {
           "filter[name]=michael&filter[age]=25&filter[born]=2020-01-01",
         expectedResults: {
           AND: [
-            { AND: [{ LIKE: ["#name", "%michael%"] }, { "=": ["#age", 25] }] },
+            { AND: [{ ILIKE: ["#name", "michael"] }, { "=": ["#age", 25] }] },
             { "=": ["#born", "2020-01-01"] },
           ],
         },
@@ -536,7 +536,7 @@ describe("parseMongoFilter() tests", () => {
           "should be able to use multiple filters on the same attribute (implicit + explicit operators)",
         querystring: "filter[name]=ad&filter[name][$eq]=brad",
         expectedResults: {
-          AND: [{ LIKE: ["#name", "%ad%"] }, { "=": ["#name", "brad"] }],
+          AND: [{ ILIKE: ["#name", "ad"] }, { "=": ["#name", "brad"] }],
         },
       },
     ]);
