@@ -111,6 +111,7 @@ function parseMongoFilter(querystring) {
         MongoOperator.GREATER_OR_EQUAL,
         MongoOperator.LESS_THAN,
         MongoOperator.LESS_OR_EQUAL,
+        MongoOperator.LIKE,
         MongoOperator.ILIKE,
       ].includes(operator)
     ) {
@@ -123,7 +124,7 @@ function parseMongoFilter(querystring) {
     // boolean compatibility check
     if (
       valueType === MongoValueType.BOOLEAN &&
-      operator === MongoOperator.ILIKE
+      (operator === MongoOperator.ILIKE || operator === MongoOperator.LIKE)
     ) {
       errors.push(
         createError(
@@ -136,7 +137,7 @@ function parseMongoFilter(querystring) {
     // number compatibility check
     if (
       valueType === MongoValueType.NUMBER &&
-      operator === MongoOperator.ILIKE
+      (operator === MongoOperator.ILIKE || operator === MongoOperator.LIKE)
     ) {
       errors.push(
         createError(
@@ -147,7 +148,10 @@ function parseMongoFilter(querystring) {
     }
 
     // date compatibility check
-    if (valueType === MongoValueType.DATE && operator === MongoOperator.ILIKE) {
+    if (
+      valueType === MongoValueType.DATE &&
+      (operator === MongoOperator.ILIKE || operator === MongoOperator.LIKE)
+    ) {
       errors.push(
         createError(
           `"${operator}" operator should not be used with date values`
@@ -168,7 +172,8 @@ function parseMongoFilter(querystring) {
       [MongoOperator.GREATER_OR_EQUAL]: SqlOperator.GREATER_OR_EQUAL,
       [MongoOperator.LESS_THAN]: SqlOperator.LESS_THAN,
       [MongoOperator.LESS_OR_EQUAL]: SqlOperator.LESS_OR_EQUAL,
-      [MongoOperator.ILIKE]: SqlOperator.LIKE,
+      [MongoOperator.LIKE]: SqlOperator.LIKE,
+      [MongoOperator.ILIKE]: SqlOperator.ILIKE,
       [MongoOperator.IN]: SqlOperator.IN,
       [MongoOperator.NOT_IN]: SqlOperator.NOT_IN,
     }[operator];
@@ -184,11 +189,6 @@ function parseMongoFilter(querystring) {
       }[sqlOperator];
     }
 
-    // wrap ilike strings in wildcards
-    const sqlValues = values.map((val) => {
-      return sqlOperator === SqlOperator.LIKE ? `%${val}%` : val;
-    });
-
     // format like json-logic
     const attributeRef = `#${field}`;
     const operatorIsUnary = [
@@ -201,7 +201,7 @@ function parseMongoFilter(querystring) {
     if (operatorIsUnary) {
       fieldResults.push({ [sqlOperator]: attributeRef });
     } else {
-      fieldResults.push({ [sqlOperator]: [attributeRef, ...sqlValues] });
+      fieldResults.push({ [sqlOperator]: [attributeRef, ...values] });
     }
   }
 

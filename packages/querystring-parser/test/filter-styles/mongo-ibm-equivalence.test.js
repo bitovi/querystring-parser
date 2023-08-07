@@ -66,7 +66,7 @@ describe("MongoDB-style filtering vs IBM-style filtering Equivalence Tests", () 
       },
       {
         title: 'both styles should output the "LIKE" sql operator the same way',
-        mongoQueryString: "filter[name][ilike]=ch",
+        mongoQueryString: `filter[name][$like]=${encodeURIComponent("%ch%")}`,
         ibmQueryString: "filter=contains(name,'ch')",
       },
       {

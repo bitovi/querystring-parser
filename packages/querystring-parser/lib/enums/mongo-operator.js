@@ -14,7 +14,8 @@ const MongoOperator = Object.freeze({
   LESS_OR_EQUAL: "$lte",
   IN: "$in",
   NOT_IN: "$nin",
-  ILIKE: "ilike",
+  LIKE: "$like",
+  ILIKE: "$ilike",
   IS_NULL: Symbol(), // lib internal
 });
 
