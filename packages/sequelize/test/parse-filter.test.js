@@ -283,34 +283,78 @@ describe("parseFilter operations tests", () => {
         results: { where: { name: { [Op.notIn]: ["John", "Jane"] } } },
       },
     },
-    // TODO: resolve with HATCH-293. Skipped due to test failing
-    // {
-    //   title:
-    //     "should parse strings correctly with the $like operator - end of string (Mongo)",
-    //   parameters: TODO,
-    // expectedResults: TODO
-    // },
-    // TODO: resolve with HATCH-293. Skipped due to test failing
-    // {
-    //   title:
-    //     "should parse strings correctly with the $like operator - beginning of string (Mongo)",
-    //   parameters: TODO,
-    // expectedResults: TODO
-    // },
-    // TODO: resolve with HATCH-293. Skipped due to test failing
-    // {
-    //   title:
-    //     "should parse strings correctly with the $like operator - contains string (Mongo)",
-    //   parameters: TODO,
-    // expectedResults: TODO
-    // },
-    // TODO: resolve with HATCH-293. Skipped due to test failing
-    // {
-    //   title:
-    //     "should parse strings correctly with the $like operator - entire string (Mongo)",
-    //   parameters: TODO,
-    // expectedResults: TODO
-    // },
+    {
+      title:
+        "should parse strings correctly with the $like operator - end of string",
+      parameters: [{ LIKE: ["#name", "%ne"] }, []],
+      expectedResults: {
+        errors: [],
+        results: { where: { name: { [Op.like]: "%ne" } } },
+      },
+    },
+    {
+      title:
+        "should parse strings correctly with the $like operator - beginning of string",
+      parameters: [{ LIKE: ["#name", "%ne"] }, []],
+      expectedResults: {
+        errors: [],
+        results: { where: { name: { [Op.like]: "%ne" } } },
+      },
+    },
+    {
+      title:
+        "should parse strings correctly with the $like operator - contains string",
+      parameters: [{ LIKE: ["#name", "Jo%"] }, []],
+      expectedResults: {
+        errors: [],
+        results: { where: { name: { [Op.like]: "Jo%" } } },
+      },
+    },
+    {
+      title:
+        "should parse strings correctly with the $like operator - entire string",
+      parameters: [{ LIKE: ["#name", "%an%"] }, []],
+      expectedResults: {
+        errors: [],
+        results: { where: { name: { [Op.like]: "%an%" } } },
+      },
+    },
+    {
+      title:
+        "should parse strings correctly with the $ilike operator - end of string",
+      parameters: [{ ILIKE: ["#name", "%NE"] }, []],
+      expectedResults: {
+        errors: [],
+        results: { where: { name: { [Op.iLike]: "%NE" } } },
+      },
+    },
+    {
+      title:
+        "should parse strings correctly with the $ilike operator - beginning of string",
+      parameters: [{ ILIKE: ["#name", "JO%"] }, []],
+      expectedResults: {
+        errors: [],
+        results: { where: { name: { [Op.iLike]: "JO%" } } },
+      },
+    },
+    {
+      title:
+        "should parse strings correctly with the $ilike operator - contains string",
+      parameters: [{ ILIKE: ["#name", "%An%"] }, []],
+      expectedResults: {
+        errors: [],
+        results: { where: { name: { [Op.iLike]: "%An%" } } },
+      },
+    },
+    {
+      title:
+        "should parse strings correctly with the $ilike operator - contains string",
+      parameters: [{ ILIKE: ["#name", "jOhN"] }, []],
+      expectedResults: {
+        errors: [],
+        results: { where: { name: { [Op.iLike]: "jOhN" } } },
+      },
+    },
     // numbers
     {
       title: "should parse numbers correctly with the $eq operator (Mongo)",
