@@ -441,9 +441,9 @@ describe("parseMongoFilter() tests", () => {
     testEachCase([
       {
         title:
-          'the "LIKE" sql operator should be the default for string values',
+          'the "EQUALS" sql operator should be the default for string values',
         querystring: "filter[name]=michael",
-        expectedResults: { ILIKE: ["#name", "michael"] },
+        expectedResults: { "=": ["#name", "michael"] },
       },
       {
         title: 'the "=" sql operator should be the default for number values',
@@ -509,7 +509,7 @@ describe("parseMongoFilter() tests", () => {
           "multiple filters should be join together in an AND fashion (ex: 2)",
         querystring: "filter[name]=michael&filter[age]=25",
         expectedResults: {
-          AND: [{ ILIKE: ["#name", "michael"] }, { "=": ["#age", 25] }],
+          AND: [{ "=": ["#name", "michael"] }, { "=": ["#age", 25] }],
         },
       },
       {
@@ -519,7 +519,7 @@ describe("parseMongoFilter() tests", () => {
           "filter[name]=michael&filter[age]=25&filter[born]=2020-01-01",
         expectedResults: {
           AND: [
-            { AND: [{ ILIKE: ["#name", "michael"] }, { "=": ["#age", 25] }] },
+            { AND: [{ "=": ["#name", "michael"] }, { "=": ["#age", 25] }] },
             { "=": ["#born", "2020-01-01"] },
           ],
         },
@@ -536,7 +536,7 @@ describe("parseMongoFilter() tests", () => {
           "should be able to use multiple filters on the same attribute (implicit + explicit operators)",
         querystring: "filter[name]=ad&filter[name][$eq]=brad",
         expectedResults: {
-          AND: [{ ILIKE: ["#name", "ad"] }, { "=": ["#name", "brad"] }],
+          AND: [{ "=": ["#name", "ad"] }, { "=": ["#name", "brad"] }],
         },
       },
     ]);

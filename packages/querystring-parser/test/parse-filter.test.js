@@ -255,7 +255,7 @@ describe("parseFilter", () => {
       {
         title: "should parse strings correctly (Mongo)",
         querystring: "filter[name]=kevin",
-        expectedResults: { ILIKE: ["#name", "kevin"] },
+        expectedResults: { "=": ["#name", "kevin"] },
       },
       {
         title: "should parse numbers correctly (Mongo)",
