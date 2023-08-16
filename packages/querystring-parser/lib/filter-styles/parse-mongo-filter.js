@@ -81,7 +81,7 @@ function parseMongoFilter(querystring) {
             break;
           case MongoValueType.STRING:
           default:
-            operator = MongoOperator.ILIKE;
+            operator = MongoOperator.EQUALS;
             break;
         }
       }

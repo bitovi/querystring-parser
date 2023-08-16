@@ -8,7 +8,7 @@ describe("parse", function () {
       "sort=-date,name&page[number]=1&page[size]=5&include=pets&fields[people]=name&filter[name]=jay";
     expect(parse(querystring)).toEqual({
       filter: {
-        ILIKE: ["#name", "jay"],
+        "=": ["#name", "jay"],
       },
       fields: {
         people: ["name"],
