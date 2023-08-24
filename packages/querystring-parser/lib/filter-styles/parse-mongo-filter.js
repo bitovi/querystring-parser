@@ -93,7 +93,12 @@ function parseMongoFilter(querystring) {
     // array compatibility check
     if (
       providedValueWasAnArray &&
-      ![MongoOperator.IN, MongoOperator.NOT_IN].includes(operator)
+      ![
+        MongoOperator.IN,
+        MongoOperator.NOT_IN,
+        MongoOperator.ILIKE,
+        MongoOperator.LIKE,
+      ].includes(operator)
     ) {
       errors.push(
         createError(

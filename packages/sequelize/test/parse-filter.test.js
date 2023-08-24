@@ -602,4 +602,23 @@ describe("parseFilter operations tests", () => {
       expect(results).toEqual(expectedResults);
     }
   );
+  // {
+  //   title:
+  //     "should parse strings correctly with the $like operator - end of string",
+  //   parameters: [{ LIKE: ["#name", "%ne"] }, []],
+  //   expectedResults: {
+  //     errors: [],
+  //     results: { where: { name: { [Op.like]: "%ne" } } },
+  //   },
+  // },
+  it("test", () => {
+    const example = { LIKE: [ '#name', ['john', ' jane'] ] }
+    const results = parseFilter(example);
+    console.log(results)
+    expect(results).toEqual({
+      where: {
+        [Op.like]: { name: ["john", "jane"] },
+      }
+    })
+  })
 });

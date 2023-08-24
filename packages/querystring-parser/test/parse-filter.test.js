@@ -337,4 +337,9 @@ describe("parseFilter", () => {
       },
     ]);
   });
+
+  it("test", () => {
+    const result = parseFilter("filter[name][$like]=[john, jane]");
+    console.log(result);
+  });
 });
