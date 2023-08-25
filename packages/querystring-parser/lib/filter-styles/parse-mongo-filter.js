@@ -23,7 +23,7 @@ function parseMongoFilter(querystring) {
 
     const arraySplitRegex = new RegExp(/(=)/g);
     const arraySplit = splitQuerystring[2].split(arraySplitRegex);
-    const arrayOfQueryStringSplitRegex = new RegExp(/(\[|\]|, )/g);
+    const arrayOfQueryStringSplitRegex = new RegExp(/(\[|\]|, |,%20)/g);
     const arrayOfQueryStrings = arraySplit[arraySplit.length - 1]
       .split(arrayOfQueryStringSplitRegex)
       .filter(
