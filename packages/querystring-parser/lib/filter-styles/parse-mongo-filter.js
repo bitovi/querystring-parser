@@ -11,8 +11,32 @@ function parseMongoFilter(querystring) {
   const errors = [];
   let results;
 
-  // perform initial parse with qs lib
-  const qsParams = qs.parse(querystring, { depth: 0, comma: true });
+  let qsParams;
+
+  // check for like or ilike array as parsing should look different
+  const regex = new RegExp(/(\[\$like\]=\[|\[\$ilike\]=\[)/g);
+  const matchingResults = querystring.match(regex);
+  if (matchingResults?.length) {
+    const splitRegex = new RegExp(/(\[\$like\]|\[\$ilike\]=)/g);
+    const splitQuerystring = querystring.split(splitRegex);
+    const objectKey = splitQuerystring[0].concat(splitQuerystring[1]);
+
+    const arraySplitRegex = new RegExp(/(=)/g);
+    const arraySplit = splitQuerystring[2].split(arraySplitRegex);
+    const arrayOfQueryStringSplitRegex = new RegExp(/(\[|\]|, )/g);
+    const arrayOfQueryStrings = arraySplit[arraySplit.length - 1]
+      .split(arrayOfQueryStringSplitRegex)
+      .filter(
+        (item) => item.match(new RegExp(/(^[a-zA-Z0-9_.-]*$)/g)) && item !== ""
+      );
+
+    qsParams = {};
+    qsParams[objectKey] = arrayOfQueryStrings;
+  } else {
+    // perform initial parse with qs lib
+    qsParams = qs.parse(querystring, { depth: 0, comma: true });
+  }
+
   const filterParams = Object.entries(qsParams).filter(([key]) =>
     key.startsWith("filter")
   );

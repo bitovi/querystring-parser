@@ -321,6 +321,15 @@ describe("parseFilter operations tests", () => {
     },
     {
       title:
+        "should parse array of strings correctly with the $like operator - beginning of string",
+      parameters: [{ LIKE: ["#name", "john", "jane"] }, []],
+      expectedResults: {
+        errors: [],
+        results: { where: { name: { [Op.like]: ["john", "jane"] } } },
+      },
+    },
+    {
+      title:
         "should parse strings correctly with the $ilike operator - end of string",
       parameters: [{ ILIKE: ["#name", "%NE"] }, []],
       expectedResults: {
@@ -335,6 +344,15 @@ describe("parseFilter operations tests", () => {
       expectedResults: {
         errors: [],
         results: { where: { name: { [Op.iLike]: "JO%" } } },
+      },
+    },
+    {
+      title:
+        "should parse array of strings correctly with the $ilike operator - beginning of string",
+      parameters: [{ ILIKE: ["#name", "john", "jane"] }, []],
+      expectedResults: {
+        errors: [],
+        results: { where: { name: { [Op.iLike]: ["john", "jane"] } } },
       },
     },
     {
@@ -602,23 +620,4 @@ describe("parseFilter operations tests", () => {
       expect(results).toEqual(expectedResults);
     }
   );
-  // {
-  //   title:
-  //     "should parse strings correctly with the $like operator - end of string",
-  //   parameters: [{ LIKE: ["#name", "%ne"] }, []],
-  //   expectedResults: {
-  //     errors: [],
-  //     results: { where: { name: { [Op.like]: "%ne" } } },
-  //   },
-  // },
-  it("test", () => {
-    const example = { LIKE: [ '#name', ['john', ' jane'] ] }
-    const results = parseFilter(example);
-    console.log(results)
-    expect(results).toEqual({
-      where: {
-        [Op.like]: { name: ["john", "jane"] },
-      }
-    })
-  })
 });
