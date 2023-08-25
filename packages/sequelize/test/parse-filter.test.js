@@ -325,7 +325,7 @@ describe("parseFilter operations tests", () => {
       parameters: [{ LIKE: ["#name", "john", "jane"] }, []],
       expectedResults: {
         errors: [],
-        results: { where: { name: { [Op.like]: ["john", "jane"] } } },
+        results: { where: { [Op.like]: { name: ["john", "jane"] } } },
       },
     },
     {
@@ -352,7 +352,7 @@ describe("parseFilter operations tests", () => {
       parameters: [{ ILIKE: ["#name", "john", "jane"] }, []],
       expectedResults: {
         errors: [],
-        results: { where: { name: { [Op.iLike]: ["john", "jane"] } } },
+        results: { where: { [Op.iLike]: { name: ["john", "jane"] } } },
       },
     },
     {
@@ -620,4 +620,16 @@ describe("parseFilter operations tests", () => {
       expect(results).toEqual(expectedResults);
     }
   );
+
+  it("test", () => {
+    const results = parseFilter(
+      ...[
+        {
+          AND: [{ IN: ["#onSite", true] }, { IN: ["#manager", false] }],
+        },
+        [],
+      ]
+    );
+    expect(results).toBeTruthy();
+  });
 });

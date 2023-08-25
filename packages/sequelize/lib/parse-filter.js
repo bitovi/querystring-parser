@@ -67,6 +67,17 @@ function parseParametersForSequelize(operator, value) {
   };
 }
 
+function parseLikeArrayForSequelize(operator, parameter, arrayOfStrings) {
+  const queryObj = {};
+  const sequelizeOperator = SequelizeSymbols[operator];
+  queryObj[sequelizeOperator] = {};
+
+  const parsedParam = removeHashFromString(parameter);
+  queryObj[sequelizeOperator][parsedParam] = arrayOfStrings;
+
+  return queryObj;
+}
+
 function sortArrayFilters(filters) {
   let parsedArray = [];
   let errors = [];
@@ -100,6 +111,20 @@ function parseFilters(filters, filtersError, isDefault = true) {
           ) {
             parsedResult[SequelizeSymbols[key]] = sortArrayFilters(
               filters[key]
+            );
+          }
+          // Handle like/ilike for array of strings
+          if (
+            (key === Operator.LIKE || key === Operator.ILIKE) &&
+            filters[key].length > 2
+          ) {
+            const clonedArray = [...filters[key]];
+            //remove first item to get array of strings
+            clonedArray.shift();
+            parsedResult = parseLikeArrayForSequelize(
+              key,
+              filters[key][0],
+              clonedArray
             );
           } else {
             const parsedKey = parseParametersForSequelize(key, filters[key]);
