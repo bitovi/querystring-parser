@@ -1,6 +1,6 @@
 {
   "name": "@bitovi/querystring-parser",
-  "version": "0.7.2",
+  "version": "0.7.3",
   "description": "",
   "main": "index.js",
   "license": "MIT",

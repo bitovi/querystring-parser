@@ -21,6 +21,7 @@ const Operator = Object.freeze({
   OR: "OR",
   IS_NULL: "IS NULL",
   IS_NOT_NULL: "IS NOT NULL",
+  ANY: "ANY",
 });
 
 const SequelizeSymbols = Object.freeze({
@@ -37,6 +38,7 @@ const SequelizeSymbols = Object.freeze({
   [Operator.GREATER_OR_EQUAL]: Op.gte,
   [Operator.LESS_THAN]: Op.lt,
   [Operator.LESS_OR_EQUAL]: Op.lte,
+  [Operator.ANY]: Op.any,
 });
 
 function parseParametersForSequelize(operator, value) {
@@ -68,12 +70,12 @@ function parseParametersForSequelize(operator, value) {
 }
 
 function parseLikeArrayForSequelize(operator, parameter, arrayOfStrings) {
-  const queryObj = {};
-  const sequelizeOperator = SequelizeSymbols[operator];
-  queryObj[sequelizeOperator] = {};
-
   const parsedParam = removeHashFromString(parameter);
-  queryObj[sequelizeOperator][parsedParam] = arrayOfStrings;
+  const queryObj = {};
+  queryObj[parsedParam] = {};
+
+  const sequelizeOperator = SequelizeSymbols[operator];
+  queryObj[parsedParam][sequelizeOperator] = { [Op.any]: arrayOfStrings };
 
   return queryObj;
 }
@@ -114,7 +116,7 @@ function parseFilters(filters, filtersError, isDefault = true) {
             );
           }
           // Handle like/ilike for array of strings
-          if (
+          else if (
             (key === Operator.LIKE || key === Operator.ILIKE) &&
             filters[key].length > 2
           ) {
