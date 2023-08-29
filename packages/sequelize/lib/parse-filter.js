@@ -122,13 +122,11 @@ function parseFilters(filters, filtersError, isDefault = true) {
             (key === Operator.LIKE || key === Operator.ILIKE) &&
             filters[key].length > 2
           ) {
-            const clonedArray = [...filters[key]];
-            //remove first item to get array of strings
-            clonedArray.shift();
+            const [parameter, ...arrayOfStrings] = filters[key];
             parsedResult = parseLikeArrayForSequelize(
               key,
-              filters[key][0],
-              clonedArray
+              parameter,
+              arrayOfStrings
             );
           } else {
             const parsedKey = parseParametersForSequelize(key, filters[key]);

@@ -5,37 +5,26 @@ const MongoOperator = require("../enums/mongo-operator");
 const SqlOperator = require("../enums/sql-operator");
 const MongoValueType = require("../enums/mongo-value-type");
 const QuerystringParsingError = require("../../lib/errors/querystring-parsing-error");
-const {
-  iLikeLikeRegExp,
-  isIlikeLikeArray,
-} = require("../helpers/is-ilike-like-array");
+
+function parseValue(value) {
+  if (!value || Array.isArray(value)) return value;
+
+  value = value.match(/^\[(?<contents>(.*?))\]$/)?.groups?.contents ?? value;
+
+  return value.includes(",")
+    ? value.split(",").map((string) => string.trim())
+    : value.trim();
+}
 
 /** Parses "MongoDB-style" filters from of a querystring. */
 function parseMongoFilter(querystring) {
   const errors = [];
   let results;
 
-  let qsParams;
-
-  if (isIlikeLikeArray(querystring)) {
-    const splitQuerystring = querystring.split(iLikeLikeRegExp);
-    const objectKey = splitQuerystring[0].concat(splitQuerystring[1]);
-
-    const arraySplitRegex = new RegExp(/(=)/g);
-    const arraySplit = splitQuerystring[2].split(arraySplitRegex);
-    const arrayOfQueryStringSplitRegex = new RegExp(/(\[|\]|, |,%20)/g);
-    const arrayOfQueryStrings = arraySplit[arraySplit.length - 1]
-      .split(arrayOfQueryStringSplitRegex)
-      .filter(
-        (item) => item.match(new RegExp(/(^[a-zA-Z0-9_.-]*$)/g)) && item !== ""
-      );
-
-    qsParams = {};
-    qsParams[objectKey] = arrayOfQueryStrings;
-  } else {
-    // perform initial parse with qs lib
-    qsParams = qs.parse(querystring, { depth: 0, comma: true });
-  }
+  let qsParams = Object.entries(qs.parse(querystring, { depth: 0 })).reduce(
+    (acc, [key, value]) => ({ ...acc, [key]: parseValue(value) }),
+    {}
+  );
 
   const filterParams = Object.entries(qsParams).filter(([key]) =>
     key.startsWith("filter")
