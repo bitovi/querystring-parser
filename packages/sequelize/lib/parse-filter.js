@@ -69,17 +69,6 @@ function parseParametersForSequelize(operator, value) {
   };
 }
 
-function parseLikeArrayForSequelize(operator, parameter, arrayOfStrings) {
-  const parsedParam = removeHashFromString(parameter);
-  const queryObj = {};
-  queryObj[parsedParam] = {};
-
-  const sequelizeOperator = SequelizeSymbols[operator];
-  queryObj[parsedParam][sequelizeOperator] = { [Op.any]: arrayOfStrings };
-
-  return queryObj;
-}
-
 function sortArrayFilters(filters) {
   let parsedArray = [];
   let errors = [];
@@ -123,11 +112,11 @@ function parseFilters(filters, filtersError, isDefault = true) {
             filters[key].length > 2
           ) {
             const [parameter, ...arrayOfStrings] = filters[key];
-            parsedResult = parseLikeArrayForSequelize(
-              key,
-              parameter,
-              arrayOfStrings
-            );
+            parsedResult = {
+              [removeHashFromString(parameter)]: {
+                [SequelizeSymbols[key]]: { [Op.any]: arrayOfStrings },
+              },
+            };
           } else {
             const parsedKey = parseParametersForSequelize(key, filters[key]);
             parsedResult = { ...parsedResult, ...parsedKey };
