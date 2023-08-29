@@ -321,6 +321,17 @@ describe("parseFilter operations tests", () => {
     },
     {
       title:
+        "should parse array of strings correctly with the $like operator - beginning of string",
+      parameters: [{ LIKE: ["#name", "john", "jane"] }, []],
+      expectedResults: {
+        errors: [],
+        results: {
+          where: { name: { [Op.like]: { [Op.any]: ["john", "jane"] } } },
+        },
+      },
+    },
+    {
+      title:
         "should parse strings correctly with the $ilike operator - end of string",
       parameters: [{ ILIKE: ["#name", "%NE"] }, []],
       expectedResults: {
@@ -335,6 +346,17 @@ describe("parseFilter operations tests", () => {
       expectedResults: {
         errors: [],
         results: { where: { name: { [Op.iLike]: "JO%" } } },
+      },
+    },
+    {
+      title:
+        "should parse array of strings correctly with the $ilike operator - beginning of string",
+      parameters: [{ ILIKE: ["#name", "john", "jane"] }, []],
+      expectedResults: {
+        errors: [],
+        results: {
+          where: { name: { [Op.iLike]: { [Op.any]: ["john", "jane"] } } },
+        },
       },
     },
     {

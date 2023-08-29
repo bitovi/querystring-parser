@@ -328,18 +328,6 @@ describe("parseMongoFilter() tests", () => {
           }),
         ],
       },
-      {
-        title: 'the "$ilike" mongo operator should not allow array values',
-        querystring: "filter[age][$ilike]=24,25",
-        expectedErrors: [
-          new QuerystringParsingError({
-            message: '"$ilike" operator should not be used with array value',
-            querystring: "filter[age][$ilike]=24,25",
-            paramKey: "filter[age][$ilike]",
-            paramValue: ["24", "25"],
-          }),
-        ],
-      },
     ]);
   });
 

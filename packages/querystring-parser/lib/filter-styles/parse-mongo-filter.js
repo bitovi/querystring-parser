@@ -6,13 +6,26 @@ const SqlOperator = require("../enums/sql-operator");
 const MongoValueType = require("../enums/mongo-value-type");
 const QuerystringParsingError = require("../../lib/errors/querystring-parsing-error");
 
+function parseValue(value) {
+  if (!value || Array.isArray(value)) return value;
+
+  value = value.match(/^\[(?<contents>(.*?))\]$/)?.groups?.contents ?? value;
+
+  return value.includes(",")
+    ? value.split(",").map((string) => string.trim())
+    : value.trim();
+}
+
 /** Parses "MongoDB-style" filters from of a querystring. */
 function parseMongoFilter(querystring) {
   const errors = [];
   let results;
 
-  // perform initial parse with qs lib
-  const qsParams = qs.parse(querystring, { depth: 0, comma: true });
+  let qsParams = Object.entries(qs.parse(querystring, { depth: 0 })).reduce(
+    (acc, [key, value]) => ({ ...acc, [key]: parseValue(value) }),
+    {}
+  );
+
   const filterParams = Object.entries(qsParams).filter(([key]) =>
     key.startsWith("filter")
   );
@@ -93,7 +106,12 @@ function parseMongoFilter(querystring) {
     // array compatibility check
     if (
       providedValueWasAnArray &&
-      ![MongoOperator.IN, MongoOperator.NOT_IN].includes(operator)
+      ![
+        MongoOperator.IN,
+        MongoOperator.NOT_IN,
+        MongoOperator.ILIKE,
+        MongoOperator.LIKE,
+      ].includes(operator)
     ) {
       errors.push(
         createError(
