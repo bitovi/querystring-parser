@@ -116,6 +116,8 @@ function parseFilters(filters, filtersError, isDefault = true) {
             );
           }
           // Handle like/ilike for array of strings
+          // filters[key] should have the name of the column + at least 2 query strings
+          // thus, the filters[key].length > 2.. example: [ '#name', 'John', 'Jane' ]
           else if (
             (key === Operator.LIKE || key === Operator.ILIKE) &&
             filters[key].length > 2

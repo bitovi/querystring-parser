@@ -5,6 +5,10 @@ const MongoOperator = require("../enums/mongo-operator");
 const SqlOperator = require("../enums/sql-operator");
 const MongoValueType = require("../enums/mongo-value-type");
 const QuerystringParsingError = require("../../lib/errors/querystring-parsing-error");
+const {
+  iLikeLikeRegExp,
+  isIlikeLikeArray,
+} = require("../helpers/is-ilike-like-array");
 
 /** Parses "MongoDB-style" filters from of a querystring. */
 function parseMongoFilter(querystring) {
@@ -13,12 +17,8 @@ function parseMongoFilter(querystring) {
 
   let qsParams;
 
-  // check for like or ilike array as parsing should look different
-  const regex = new RegExp(/(\[\$like\]=\[|\[\$ilike\]=\[)/g);
-  const matchingResults = querystring.match(regex);
-  if (matchingResults?.length) {
-    const splitRegex = new RegExp(/(\[\$like\]|\[\$ilike\]=)/g);
-    const splitQuerystring = querystring.split(splitRegex);
+  if (isIlikeLikeArray(querystring)) {
+    const splitQuerystring = querystring.split(iLikeLikeRegExp);
     const objectKey = splitQuerystring[0].concat(splitQuerystring[1]);
 
     const arraySplitRegex = new RegExp(/(=)/g);
