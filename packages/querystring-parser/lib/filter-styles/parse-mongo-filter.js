@@ -7,9 +7,7 @@ const MongoValueType = require("../enums/mongo-value-type");
 const QuerystringParsingError = require("../../lib/errors/querystring-parsing-error");
 
 function parseValue(value) {
-  if (!value || Array.isArray(value)) return value;
-
-  value = value.match(/^\[(?<contents>(.*?))\]$/)?.groups?.contents ?? value;
+  if (typeof value !== "string") return value;
 
   return value.includes(",")
     ? value.split(",").map((string) => string.trim())
@@ -21,7 +19,7 @@ function parseMongoFilter(querystring) {
   const errors = [];
   let results;
 
-  let qsParams = Object.entries(qs.parse(querystring, { depth: 0 })).reduce(
+  const qsParams = Object.entries(qs.parse(querystring, { depth: 0 })).reduce(
     (acc, [key, value]) => ({ ...acc, [key]: parseValue(value) }),
     {}
   );
