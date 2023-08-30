@@ -6,23 +6,12 @@ const SqlOperator = require("../enums/sql-operator");
 const MongoValueType = require("../enums/mongo-value-type");
 const QuerystringParsingError = require("../../lib/errors/querystring-parsing-error");
 
-function parseValue(value) {
-  if (typeof value !== "string") return value;
-
-  return value.includes(",")
-    ? value.split(",").map((string) => string.trim())
-    : value.trim();
-}
-
 /** Parses "MongoDB-style" filters from of a querystring. */
 function parseMongoFilter(querystring) {
   const errors = [];
   let results;
 
-  const qsParams = Object.entries(qs.parse(querystring, { depth: 0 })).reduce(
-    (acc, [key, value]) => ({ ...acc, [key]: parseValue(value) }),
-    {}
-  );
+  const qsParams = qs.parse(querystring, { depth: 0, comma: true });
 
   const filterParams = Object.entries(qsParams).filter(([key]) =>
     key.startsWith("filter")

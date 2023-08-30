@@ -1,6 +1,6 @@
 {
   "name": "@bitovi/sequelize-querystring-parser",
-  "version": "0.2.6",
+  "version": "0.2.7",
   "description": "",
   "main": "index.js",
   "directories": {
@@ -17,7 +17,7 @@
     "sequelize"
   ],
   "dependencies": {
-    "@bitovi/querystring-parser": "^0.7.6",
+    "@bitovi/querystring-parser": "^0.7.7",
     "sequelize": "^6.21.2"
   },
   "devDependencies": {
