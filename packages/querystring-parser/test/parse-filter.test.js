@@ -92,9 +92,9 @@ describe("parseFilter", () => {
       {
         title:
           "should parse an array of strings correctly with the $like operator (Mongo)",
-        querystring: `filter[name][$like]=[${encodeURIComponent(
+        querystring: `filter[name][$like]=${encodeURIComponent(
           "john"
-        )}, ${encodeURIComponent("jane")}]`,
+        )},${encodeURIComponent("jane")}`,
         expectedResults: {
           LIKE: ["#name", "john", "jane"],
         },
@@ -134,7 +134,7 @@ describe("parseFilter", () => {
       {
         title:
           "should parse an array of strings correctly with the $ilike operator (Mongo)",
-        querystring: "filter[name][$ilike]=[jOhN, jAnE]",
+        querystring: "filter[name][$ilike]=jOhN,jAnE",
         expectedResults: {
           ILIKE: ["#name", "jOhN", "jAnE"],
         },
