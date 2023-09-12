@@ -132,9 +132,7 @@ console.log(result);
 ### Filter Parameters
 
 ```js
-const result = querystringParser.parse(
-  "filter=or(any(age,'10','20'),equals(name,'mike'))"
-);
+const result = querystringParser.parse("filter=or(any(age,'10','20'),equals(name,'mike'))");
 console.log(result);
 // {
 //   orm: "objection",
@@ -160,9 +158,7 @@ console.log(result);
 ```
 
 ```js
-const result = querystringParser.parse(
-  "filter=not(lessOrEqual(age,'10'),equals(name,null))"
-);
+const result = querystringParser.parse("filter=not(lessOrEqual(age,'10'),equals(name,null))");
 console.log(result);
 // {
 //   orm: "objection",
