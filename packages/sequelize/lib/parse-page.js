@@ -7,28 +7,25 @@ const {
 function parsePagination(page, pageErrors) {
   const parsedResult = {};
   let errors = [];
-  if (containsNoErrorFromParser(pageErrors)) {
-    if (isObject(page)) {
-      let { number, size } = page;
-      if (number != null) {
-        //default size to 10 if undefined
-        size = size ?? 10;
-        if (isNotValidInteger(number) || isNotValidInteger(size)) {
-          errors.push(
-            "page[number] and page[size] should be positive integers"
-          );
-        } else {
-          const offset = getOffsetByPageNumber(number, size);
-          parsedResult.offset = offset;
-          parsedResult.limit = size;
-        }
-      }
-    } else {
-      errors.push("Page field should be an Object");
-    }
-  } else {
+  if (!containsNoErrorFromParser(pageErrors)) {
     errors = pageErrors;
+  } else if (!isObject(page)) {
+    errors.push("Page field should be an Object");
+  } else {
+    let { number, size } = page;
+    if (number != null) {
+      //default size to 10 if undefined
+      size = size ?? 10;
+      if (isNotValidInteger(number) || isNotValidInteger(size)) {
+        errors.push("page[number] and page[size] should be positive integers");
+      } else {
+        const offset = getOffsetByPageNumber(number, size);
+        parsedResult.offset = offset;
+        parsedResult.limit = size;
+      }
+    }
   }
+
   return {
     results: parsedResult,
     errors,

@@ -14,10 +14,18 @@ const isNumberString = require("./is-number-string");
  */
 function areMongoTypesTheSame(values) {
   const types = values.map((val) => {
-    if (isBooleanString(val)) return MongoValueType.BOOLEAN;
-    if (isNumberString(val)) return MongoValueType.NUMBER;
-    if (isDateString(val)) return MongoValueType.DATE;
-    if (isNullString(val)) return MongoValueType.NULL;
+    if (isBooleanString(val)) {
+      return MongoValueType.BOOLEAN;
+    }
+    if (isNumberString(val)) {
+      return MongoValueType.NUMBER;
+    }
+    if (isDateString(val)) {
+      return MongoValueType.DATE;
+    }
+    if (isNullString(val)) {
+      return MongoValueType.NULL;
+    }
     return MongoValueType.STRING;
   });
 

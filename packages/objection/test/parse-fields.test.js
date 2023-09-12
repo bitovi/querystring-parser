@@ -63,6 +63,6 @@ describe("parseFields", () => {
     ({ parameters, expectedResults }) => {
       const results = parseFields(...parameters);
       expect(results).toEqual(expectedResults);
-    }
+    },
   );
 });

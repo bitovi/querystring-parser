@@ -14,7 +14,7 @@ function parseMongoFilter(querystring) {
   const qsParams = qs.parse(querystring, { depth: 0, comma: true });
 
   const filterParams = Object.entries(qsParams).filter(([key]) =>
-    key.startsWith("filter")
+    key.startsWith("filter"),
   );
 
   const fieldResults = [];
@@ -58,10 +58,15 @@ function parseMongoFilter(querystring) {
 
     // coerce values
     values = values.map((value) => {
-      if (isNullString(value)) return null;
-      if (valueType === MongoValueType.BOOLEAN)
+      if (isNullString(value)) {
+        return null;
+      }
+      if (valueType === MongoValueType.BOOLEAN) {
         return value.toLowerCase() === "true";
-      if (valueType === MongoValueType.NUMBER) return Number(value);
+      }
+      if (valueType === MongoValueType.NUMBER) {
+        return Number(value);
+      }
       return value;
     });
 
@@ -102,8 +107,8 @@ function parseMongoFilter(querystring) {
     ) {
       errors.push(
         createError(
-          `"${operator}" operator should not be used with array value`
-        )
+          `"${operator}" operator should not be used with array value`,
+        ),
       );
       return { results, errors }; // short circuit
     }
@@ -121,7 +126,9 @@ function parseMongoFilter(querystring) {
       ].includes(operator)
     ) {
       errors.push(
-        createError(`"${operator}" operator should not be used with null value`)
+        createError(
+          `"${operator}" operator should not be used with null value`,
+        ),
       );
       return { results, errors }; // short circuit
     }
@@ -133,8 +140,8 @@ function parseMongoFilter(querystring) {
     ) {
       errors.push(
         createError(
-          `"${operator}" operator should not be used with boolean values`
-        )
+          `"${operator}" operator should not be used with boolean values`,
+        ),
       );
       return { results, errors }; // short circuit
     }
@@ -146,8 +153,8 @@ function parseMongoFilter(querystring) {
     ) {
       errors.push(
         createError(
-          `"${operator}" operator should not be used with number values`
-        )
+          `"${operator}" operator should not be used with number values`,
+        ),
       );
       return { results, errors }; // short circuit
     }
@@ -159,8 +166,8 @@ function parseMongoFilter(querystring) {
     ) {
       errors.push(
         createError(
-          `"${operator}" operator should not be used with date values`
-        )
+          `"${operator}" operator should not be used with date values`,
+        ),
       );
       return { results, errors }; // short circuit
     }

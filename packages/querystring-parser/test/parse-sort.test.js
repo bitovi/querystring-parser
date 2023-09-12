@@ -8,7 +8,7 @@ function testEachCase(testCases) {
       const { results, errors } = parseSort(querystring);
       expect(results).toEqual(expectedResults || []);
       expectErrorsToMatch(errors, expectedErrors || []);
-    }
+    },
   );
 }
 

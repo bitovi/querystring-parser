@@ -9,7 +9,7 @@ function testEachCase(testCases) {
       const { results, errors } = parseMongoFilter(querystring);
       expect(results).toEqual(expectedResults || undefined);
       expectErrorsToMatch(errors, expectedErrors || []);
-    }
+    },
   );
 }
 

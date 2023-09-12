@@ -7,17 +7,14 @@ const { splitArray, mergeAlliance } = require("../helpers");
 function parseInclude(include, includeErrors, includeAttributes = []) {
   const parsedArray = {};
   let errors = [];
-  if (containsNoErrorFromParser(includeErrors)) {
-    if (isAnArray(include)) {
-      if (include.length > 0) {
-        parsedArray.include = constructIncludes(include, includeAttributes);
-      }
-    } else {
-      errors.push("Include field should be an array");
-    }
-  } else {
+  if (!containsNoErrorFromParser(includeErrors)) {
     errors = includeErrors;
+  } else if (!isAnArray(include)) {
+    errors.push("Include field should be an array");
+  } else if (include.length > 0) {
+    parsedArray.include = constructIncludes(include, includeAttributes);
   }
+
   return {
     results: parsedArray,
     errors,
@@ -80,7 +77,7 @@ function constructIncludes(include) {
     if (key.split(".").length === 1) {
       const { value } = mergeAlliance(
         includeWithAlias,
-        key
+        key,
         // includedAttributes
       );
       updatedincludes.push(value);

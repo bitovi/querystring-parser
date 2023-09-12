@@ -46,7 +46,7 @@ function parseParametersForSequelize(operator, value) {
   const specialOperators = [Operator.IN, Operator.NOT_IN, Operator.NOT];
   const isArray = Array.isArray(value);
   const isSpecialOperator = specialOperators.some(
-    (op) => op.toLocaleLowerCase() === operator.toLocaleLowerCase()
+    (op) => op.toLocaleLowerCase() === operator.toLocaleLowerCase(),
   );
   //ALL NON-ARRAYS ARE FOR NULL HANDLERS
   if (isArray) {
@@ -70,73 +70,72 @@ function parseParametersForSequelize(operator, value) {
 }
 
 function sortArrayFilters(filters) {
-  let parsedArray = [];
-  let errors = [];
-
   // wrap NOT sub-expressions (which are singular objects) in an array
-  filters = Array.isArray(filters) ? filters : [filters];
+  const { parsedArray } = (Array.isArray(filters) ? filters : [filters]).reduce(
+    (acc, filter) => {
+      const { results, errors } = parseFilters(filter, [], false);
 
-  for (let filter of filters) {
-    const parsedFiltersResult = parseFilters(filter, [], false);
-    parsedArray.push(parsedFiltersResult.results);
-    errors.push(parsedFiltersResult.errors);
-  }
+      return {
+        acc,
+        parsedArray: [...acc.parsedArray, results],
+        errors: [...acc.errors, errors],
+      };
+    },
+    { parsedArray: [], errors: [] },
+  );
   return parsedArray;
 }
 
 function parseFilters(filters, filtersError, isDefault = true) {
   let parsedResult = {};
   let errors = [];
-  let isValidFilters = false; //check if any processing is done to filter data
+  let isValidFilters; // check if any processing is done to filter data
   if (filters) {
-    if (containsNoErrorFromParser(filtersError)) {
-      if (isObject(filters)) {
-        const keys = Object.keys(filters);
-        if (keys.length > 0) isValidFilters = true;
-        for (let key of keys) {
-          // Handle operators with sub-expressions recursively
-          if (
-            key === Operator.AND ||
-            key === Operator.OR ||
-            key === Operator.NOT
-          ) {
-            parsedResult[SequelizeSymbols[key]] = sortArrayFilters(
-              filters[key]
-            );
-          }
-          // Handle like/ilike for array of strings
-          // filters[key] should have the name of the column + at least 2 query strings
-          // thus, the filters[key].length > 2.. example: [ '#name', 'John', 'Jane' ]
-          else if (
-            (key === Operator.LIKE || key === Operator.ILIKE) &&
-            filters[key].length > 2
-          ) {
-            const [parameter, ...arrayOfStrings] = filters[key];
-            parsedResult = {
-              [removeHashFromString(parameter)]: {
-                [SequelizeSymbols[key]]: { [Op.any]: arrayOfStrings },
-              },
-            };
-          } else {
-            const parsedKey = parseParametersForSequelize(key, filters[key]);
-            parsedResult = { ...parsedResult, ...parsedKey };
-          }
-        }
-      } else {
-        errors.push("Filter field must be an object");
-      }
-    } else {
+    if (!containsNoErrorFromParser(filtersError)) {
       errors = filtersError;
+    } else if (!isObject(filters)) {
+      errors.push("Filter field must be an object");
+    } else {
+      const keys = Object.keys(filters);
+
+      isValidFilters = keys.length > 0;
+
+      for (let key of keys) {
+        // Handle operators with sub-expressions recursively
+        if (
+          key === Operator.AND ||
+          key === Operator.OR ||
+          key === Operator.NOT
+        ) {
+          parsedResult[SequelizeSymbols[key]] = sortArrayFilters(filters[key]);
+        }
+        // Handle like/ilike for array of strings
+        // filters[key] should have the name of the column + at least 2 query strings
+        // thus, the filters[key].length > 2.. example: [ '#name', 'John', 'Jane' ]
+        else if (
+          (key === Operator.LIKE || key === Operator.ILIKE) &&
+          filters[key].length > 2
+        ) {
+          const [parameter, ...arrayOfStrings] = filters[key];
+          parsedResult = {
+            [removeHashFromString(parameter)]: {
+              [SequelizeSymbols[key]]: { [Op.any]: arrayOfStrings },
+            },
+          };
+        } else {
+          parsedResult = parseParametersForSequelize(key, filters[key]);
+        }
+      }
     }
   }
-  const results =
-    isValidFilters && isDefault
-      ? {
-          where: parsedResult,
-        }
-      : parsedResult;
+
   return {
-    results,
+    results:
+      isValidFilters && isDefault
+        ? {
+            where: parsedResult,
+          }
+        : parsedResult,
     errors,
   };
 }

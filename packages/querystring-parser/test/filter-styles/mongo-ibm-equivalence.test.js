@@ -8,7 +8,7 @@ function testEachCase(testCases) {
       const { results: mongoResults } = parseMongoFilter(mongoQueryString);
       const { results: ibmResults } = parseIbmFilter(ibmQueryString);
       expect(mongoResults).toEqual(ibmResults);
-    }
+    },
   );
 }
 

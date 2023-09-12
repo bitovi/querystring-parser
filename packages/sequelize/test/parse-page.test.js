@@ -111,6 +111,6 @@ describe("parsePage", () => {
     ({ parameters, expectedResults }) => {
       const results = parsePage(...parameters);
       expect(results).toEqual(expectedResults);
-    }
+    },
   );
 });

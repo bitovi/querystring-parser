@@ -30,7 +30,7 @@ function parseIbmFilter(querystring) {
           querystring,
           paramKey: "filter",
           paramValue: expression,
-        })
+        }),
       );
       // break? all or nothing results?
     }
@@ -109,7 +109,7 @@ function tokenizeExpression(expression) {
   const delimiters = ["(", ")", ","];
   delimiters.forEach((delim) => {
     tokens = tokens.flatMap((token) =>
-      token.split(delim).map((tok) => tok.trim())
+      token.split(delim).map((tok) => tok.trim()),
     );
   });
   return tokens.filter((token) => !!token); // no empty/white-space strings
@@ -122,9 +122,15 @@ function coerceValue(value, parentOperator) {
   } else if (value.startsWith("'") && value.endsWith("'")) {
     // constant value
     value = value.slice(1, value.length - 1);
-    if (isBooleanString(value)) return value.toLowerCase() === "true";
-    if (isNumberString(value)) return Number(value);
-    if (isDateString(value)) return value;
+    if (isBooleanString(value)) {
+      return value.toLowerCase() === "true";
+    }
+    if (isNumberString(value)) {
+      return Number(value);
+    }
+    if (isDateString(value)) {
+      return value;
+    }
     return wildCardString(value, parentOperator); // string
   } else {
     // attribute reference
@@ -198,7 +204,7 @@ function errorCheck(operator, operands) {
       operands.forEach((operand) => {
         if (typeOfValue(operand) === valueType) {
           throw new Error(
-            `"${operator}" operator should not be used with ${valueType.description} value`
+            `"${operator}" operator should not be used with ${valueType.description} value`,
           );
         }
       });
@@ -214,7 +220,7 @@ function errorCheck(operator, operands) {
       valueTypes.length && !valueTypes.every((vt) => vt === valueTypes[0]);
     if (hasMultipleTypes) {
       throw new Error(
-        `"any" operator should not be used with multiple value types`
+        `"any" operator should not be used with multiple value types`,
       );
     }
   }
