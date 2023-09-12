@@ -97,7 +97,9 @@ function parseFilters(filters, filterErrors, isOr = false) {
   if (filters) {
     if (!containsNoErrorFromParser(filterErrors)) {
       errors = filterErrors;
-    } else if (isObject(filters)) {
+    } else if (!isObject(filters)) {
+      errors.push("Filter field must be an object");
+    } else {
       const keys = Object.keys(filters);
       if (keys.length > 0) {
         for (let key of keys) {
