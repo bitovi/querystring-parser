@@ -9,8 +9,21 @@
     "@bitovi/eslint-config/rules/jest",
     "prettier"
   ],
+  "plugins": ["prettier"],
   "parserOptions": {
     "ecmaVersion": "latest"
   },
-  "rules": {}
+  "rules": {
+    "curly": "error",
+    "prettier/prettier": [
+      "error",
+      {
+        "semi": true,
+        "singleQuote": false,
+        "tabWidth": 2,
+        "trailingComma": "all",
+        "useTabs": false
+      }
+    ]
+  }
 }

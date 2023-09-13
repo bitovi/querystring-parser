@@ -31,7 +31,7 @@ function parseFields(querystring) {
           querystring,
           paramKey: key,
           paramValue: values,
-        })
+        }),
       );
       continue;
     }

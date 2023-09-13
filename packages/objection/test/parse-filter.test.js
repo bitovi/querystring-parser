@@ -184,6 +184,6 @@ describe("parseFilter", () => {
     ({ parameters, expectedResults }) => {
       const results = parseFilter(...parameters);
       expect(results).toEqual(expectedResults);
-    }
+    },
   );
 });

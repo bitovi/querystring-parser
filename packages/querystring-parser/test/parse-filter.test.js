@@ -9,7 +9,7 @@ function testEachCase(testCases) {
       const { results, errors } = parseFilter(querystring);
       expect(results).toEqual(expectedResults);
       expectErrorsToMatch(errors, expectedErrors || []);
-    }
+    },
   );
 }
 
@@ -93,7 +93,7 @@ describe("parseFilter", () => {
         title:
           "should parse an array of strings correctly with the $like operator (Mongo)",
         querystring: `filter[name][$like]=${encodeURIComponent(
-          "john"
+          "john",
         )},${encodeURIComponent("jane")}`,
         expectedResults: {
           LIKE: ["#name", "john", "jane"],

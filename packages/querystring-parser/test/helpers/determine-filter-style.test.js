@@ -8,23 +8,23 @@ describe("determineFilterStyle", () => {
     expect(determineFilterStyle(null)).toBe(undefined);
     expect(determineFilterStyle("")).toBe(undefined);
     expect(determineFilterStyle("<querystring without filters>")).toBe(
-      undefined
+      undefined,
     );
   });
 
   test("should return MONGO_DB", () => {
     expect(determineFilterStyle("filter[name][$eq]=michael")).toBe(
-      FilterStyle.MONGO_DB
+      FilterStyle.MONGO_DB,
     );
     expect(determineFilterStyle("filter[age]=25")).toBe(FilterStyle.MONGO_DB);
   });
 
   test("should return IBM", () => {
     expect(determineFilterStyle("filter=equals(name,'michael')")).toBe(
-      FilterStyle.IBM
+      FilterStyle.IBM,
     );
     expect(determineFilterStyle("filter=contains(name,'ch')")).toBe(
-      FilterStyle.IBM
+      FilterStyle.IBM,
     );
   });
 
@@ -41,8 +41,8 @@ describe("determineFilterStyle", () => {
   test("should throw error if multiple styles are detected", () => {
     expect(() => {
       determineFilterStyle(
-        "filter[name][$eq]=michael&filter=equals(name,'michael')"
+        "filter[name][$eq]=michael&filter=equals(name,'michael')",
       );
-    }).toThrowError("querystring should not include multiple filter styles");
+    }).toThrow("querystring should not include multiple filter styles");
   });
 });

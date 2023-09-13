@@ -68,6 +68,6 @@ describe("parseInclude", () => {
     ({ parameters, expectedResults }) => {
       const results = parseInclude(...parameters);
       expect(results).toEqual(expectedResults);
-    }
+    },
   );
 });

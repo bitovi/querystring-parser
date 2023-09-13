@@ -212,7 +212,7 @@ describe("parseFilter", () => {
     ({ parameters, expectedResults }) => {
       const results = parseFilter(...parameters);
       expect(results).toEqual(expectedResults);
-    }
+    },
   );
 });
 
@@ -622,6 +622,6 @@ describe("parseFilter operations tests", () => {
     ({ parameters, expectedResults }) => {
       const results = parseFilter(...parameters);
       expect(results).toEqual(expectedResults);
-    }
+    },
   );
 });

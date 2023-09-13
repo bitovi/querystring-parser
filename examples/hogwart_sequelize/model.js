@@ -41,7 +41,7 @@ const Students = sequelize.define(
   {
     // Other model options go here
     timestamps: false,
-  }
+  },
 );
 
 const Spells = sequelize.define(
@@ -69,7 +69,7 @@ const Spells = sequelize.define(
   },
   {
     timestamps: false,
-  }
+  },
 );
 
 (async () => {

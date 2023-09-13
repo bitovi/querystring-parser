@@ -9,7 +9,7 @@ function testEachCase(testCases) {
       const { results, errors } = parseFields(querystring);
       expect(results).toEqual(expectedResults || {});
       expectErrorsToMatch(errors, expectedErrors || []);
-    }
+    },
   );
 }
 

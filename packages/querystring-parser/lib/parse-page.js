@@ -27,7 +27,7 @@ function parsePage(querystring) {
             querystring,
             paramKey: "page[number]",
             paramValue: number,
-          })
+          }),
         );
       }
 
@@ -38,7 +38,7 @@ function parsePage(querystring) {
             querystring,
             paramKey: "page[size]",
             paramValue: "",
-          })
+          }),
         );
       }
     }
@@ -54,7 +54,7 @@ function parsePage(querystring) {
             querystring,
             paramKey: "page[number]",
             paramValue: "",
-          })
+          }),
         );
       }
 
@@ -65,7 +65,7 @@ function parsePage(querystring) {
             querystring,
             paramKey: "page[size]",
             paramValue: size,
-          })
+          }),
         );
       }
     }

@@ -4,7 +4,7 @@ function mergeAlliance(includeWithAlias, key) {
     includeWithAlias[key].alias.forEach((alias) => {
       const { value, updatedAlias } = mergeAlliance(
         updatedIncludeWithAlias,
-        alias
+        alias,
       );
       updatedAlias[key].include = [...updatedAlias[key].include, value];
       updatedIncludeWithAlias = updatedAlias;

@@ -47,7 +47,7 @@ function parseParametersForObjection(operator, value, isOr) {
   ];
   const isArray = Array.isArray(value);
   const isSpecialOperator = specialOperators.some(
-    (op) => op.toLocaleLowerCase() === operator.toLocaleLowerCase()
+    (op) => op.toLocaleLowerCase() === operator.toLocaleLowerCase(),
   );
   sequelizeOperator = operator;
   if (isArray) {
@@ -95,51 +95,49 @@ function parseFilters(filters, filterErrors, isOr = false) {
   let parsedArray = [];
   let errors = [];
   if (filters) {
-    if (containsNoErrorFromParser(filterErrors)) {
-      if (isObject(filters)) {
-        const keys = Object.keys(filters);
-        if (keys.length > 0) {
-          for (let key of keys) {
-            if (
-              key === Operator.AND ||
-              key === Operator.OR ||
+    if (!containsNoErrorFromParser(filterErrors)) {
+      errors = filterErrors;
+    } else if (!isObject(filters)) {
+      errors.push("Filter field must be an object");
+    } else {
+      const keys = Object.keys(filters);
+      if (keys.length > 0) {
+        for (let key of keys) {
+          if (
+            key === Operator.AND ||
+            key === Operator.OR ||
+            key === Operator.NOT
+          ) {
+            const parameters = sortNestedFilters(
+              filters[key],
+              key === Operator.OR,
+            );
+            const fx =
               key === Operator.NOT
-            ) {
-              const parameters = sortNestedFilters(
-                filters[key],
-                key === Operator.OR
-              );
-              const fx =
-                key === Operator.NOT
-                  ? objectionFunctions[Operator.NOT]
-                  : objectionFunctions.default;
-              parsedArray = [
-                ...parsedArray,
-                {
-                  fx: isOr ? convertToOrFormat(fx) : fx,
-                  isNested: true,
-                  parameters,
-                },
-              ];
-            } else {
-              const { fx, parameters } = parseParametersForObjection(
-                key,
-                filters[key],
-                isOr
-              );
-              parsedArray.push({
-                fx,
-                isNested: false,
+                ? objectionFunctions[Operator.NOT]
+                : objectionFunctions.default;
+            parsedArray = [
+              ...parsedArray,
+              {
+                fx: isOr ? convertToOrFormat(fx) : fx,
+                isNested: true,
                 parameters,
-              });
-            }
+              },
+            ];
+          } else {
+            const { fx, parameters } = parseParametersForObjection(
+              key,
+              filters[key],
+              isOr,
+            );
+            parsedArray.push({
+              fx,
+              isNested: false,
+              parameters,
+            });
           }
         }
-      } else {
-        errors.push("Filter field must be an object");
       }
-    } else {
-      errors = filterErrors;
     }
   }
   return {

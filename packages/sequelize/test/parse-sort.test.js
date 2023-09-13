@@ -59,6 +59,6 @@ describe("parseSort", () => {
     ({ parameters, expectedResults }) => {
       const results = parseSort(...parameters);
       expect(results).toEqual(expectedResults);
-    }
+    },
   );
 });

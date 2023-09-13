@@ -10,7 +10,7 @@ function parseFilter(querystring) {
   const errors = [];
 
   const hasFilterParam = Object.keys(qs.parse(querystring)).some((paramKey) =>
-    paramKey.includes("filter")
+    paramKey.includes("filter"),
   );
 
   if (hasFilterParam) {

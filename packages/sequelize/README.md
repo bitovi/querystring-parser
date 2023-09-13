@@ -96,9 +96,7 @@ console.log(result);
 ### Filter Parameters
 
 ```js
-const result = querystringParser.parse(
-  "filter=and(any('age','10','20'),equals('name','mike'))"
-);
+const result = querystringParser.parse("filter=and(any('age','10','20'),equals('name','mike'))");
 console.log(result);
 // {
 //   orm: "sequelize",
