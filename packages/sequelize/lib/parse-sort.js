@@ -11,7 +11,7 @@ function parseSort(sort, sortError) {
   } else if (!isAnArray(sort)) {
     errors.push("Sort field should be an array");
   } else if (sort.length > 0) {
-    const newSortFields = sort.map((field) => [field.field, field.direction]);
+    const newSortFields = sort.map((field) => [...field.field.split("."), field.direction]);
     parsedResult.order = newSortFields;
   }
 
