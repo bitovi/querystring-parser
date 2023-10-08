@@ -52,6 +52,21 @@ describe("parseSort", () => {
         errors: [],
       },
     },
+
+    {
+      title:
+        "should expand dotted paths into multiple entries in the returned array",
+      parameters: [
+        [{ field: "relationship1.relationship2.test", direction: "ASC" }],
+        [],
+      ],
+      expectedResults: {
+        results: {
+          order: [["relationship1", "relationship2", "test", "ASC"]],
+        },
+        errors: [],
+      },
+    },
   ];
 
   test.concurrent.each(testCases)(
