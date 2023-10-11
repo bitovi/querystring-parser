@@ -5,6 +5,9 @@ describe("isNullString", () => {
     // null string
     expect(isNullString("null")).toBe(true);
 
+    // null ASCII value
+    expect(isNullString("\x00")).toBe(true);
+
     // not null string
     expect(isNullString()).toBe(false);
     expect(isNullString(null)).toBe(false);
