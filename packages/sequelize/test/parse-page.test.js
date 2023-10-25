@@ -87,6 +87,7 @@ describe("parsePage", () => {
         results: {
           offset: 10,
           limit: 5,
+          subQuery: false,
         },
         errors: [],
       },
@@ -100,6 +101,7 @@ describe("parsePage", () => {
         results: {
           offset: 10,
           limit: 10,
+          subQuery: false,
         },
         errors: [],
       },

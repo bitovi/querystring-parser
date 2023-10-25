@@ -22,6 +22,7 @@ function parsePagination(page, pageErrors) {
         const offset = getOffsetByPageNumber(number, size);
         parsedResult.offset = offset;
         parsedResult.limit = size;
+        parsedResult.subQuery = false;
       }
     }
   }
