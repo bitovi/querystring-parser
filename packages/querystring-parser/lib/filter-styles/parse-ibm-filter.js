@@ -123,7 +123,7 @@ function coerceValue(value, parentOperator) {
   } else if (value.startsWith("'") && value.endsWith("'")) {
     // constant value
     value = value.slice(1, value.length - 1);
-    if (isNumberString(value)) {
+    if (isNumberString(value) && parentOperator && parentOperator != IbmOperator.CONTAINS) {
       // number
       return Number(value);
     } else if (isDateString(value)) {
@@ -179,8 +179,8 @@ function errorCheck(operator, operands) {
     [IbmOperator.LESS_THAN]: [IbmValueType.NULL],
     [IbmOperator.LESS_OR_EQUAL]: [IbmValueType.NULL],
     [IbmOperator.CONTAINS]: [
-      IbmValueType.NUMBER,
-      IbmValueType.DATE,
+      // IbmValueType.NUMBER,
+      // IbmValueType.DATE,
       IbmValueType.ATTRIBUTE_REF,
       IbmValueType.NULL,
     ],
