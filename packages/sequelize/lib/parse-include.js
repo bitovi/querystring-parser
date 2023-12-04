@@ -3,7 +3,7 @@ function parseAttributes(attributes) {
     return undefined;
   }
 
-  if (!attributes.some((attribute) => attribute.startsWith("-"))) {
+  if (!attributes?.some((attribute) => attribute.startsWith("-"))) {
     return attributes;
   }
 
@@ -25,17 +25,14 @@ function parseInclude(includes, includeErrors, includeAttributes = {}) {
     return { errors: ["Include field should be an array"], results: {} };
   }
 
-  if (!includes.length) {
-    return { errors: [], results: {} };
-  }
-
   const attributes = parseAttributes(includeAttributes[""]);
+  const include = constructIncludes(includes, includeAttributes);
 
   return {
     errors: [],
     results: {
       ...(attributes && { attributes }),
-      include: constructIncludes(includes, includeAttributes),
+      ...(include?.length && { include }),
     },
   };
 }
