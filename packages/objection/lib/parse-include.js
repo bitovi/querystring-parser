@@ -1,14 +1,9 @@
-const {
-  isAnArray,
-  containsNoErrorFromParser,
-} = require("../helpers/validation");
-
 function parseInclude(include, includeErrors) {
   const parsedArray = [];
   let errors = [];
-  if (!containsNoErrorFromParser(includeErrors)) {
+  if (includeErrors.length) {
     errors = includeErrors;
-  } else if (!isAnArray(include)) {
+  } else if (!Array.isArray(include)) {
     errors.push("Include field should be an array");
   } else if (include.length > 0) {
     for (let param of include) {

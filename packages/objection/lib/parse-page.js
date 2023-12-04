@@ -1,13 +1,9 @@
-const {
-  containsNoErrorFromParser,
-  isNotValidInteger,
-  isObject,
-} = require("../helpers/validation");
+const { isNotValidInteger, isObject } = require("../helpers/validation");
 
 function parsePagination(page, pageErrors) {
   const parsedArray = [];
   let errors = [];
-  if (!containsNoErrorFromParser(pageErrors)) {
+  if (pageErrors.length) {
     errors = pageErrors;
   } else if (!isObject(page)) {
     errors.push("Page field should be an Object");

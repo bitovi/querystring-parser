@@ -1,5 +1,5 @@
 function mergeAlliance(includeWithAlias, key) {
-  if (includeWithAlias[key].alias.length > 0) {
+  if (includeWithAlias[key].alias.length) {
     let updatedIncludeWithAlias = includeWithAlias;
     includeWithAlias[key].alias.forEach((alias) => {
       const { value, updatedAlias } = mergeAlliance(
@@ -24,12 +24,6 @@ function mergeAlliance(includeWithAlias, key) {
   }
 }
 
-function splitArray(arr) {
-  const splittedArray = arr.split(".");
-  return splittedArray;
-}
-
 module.exports = {
-  splitArray,
   mergeAlliance,
 };

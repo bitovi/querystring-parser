@@ -4,42 +4,52 @@ const isNonEmptyString = require("./helpers/is-non-empty-string");
 const QuerystringParsingError = require("./errors/querystring-parsing-error");
 
 function parseFields(querystring) {
-  const results = {};
-  const errors = [];
+  const params = qs.parse(querystring, { depth: 0, comma: true });
 
-  let params = qs.parse(querystring, { depth: 0, comma: true });
-  params = Object.entries(params).filter(([key]) => key.startsWith("fields"));
+  return Object.entries(params).reduce(
+    (acc, [key, value]) => {
+      if (!key.startsWith("fields")) {
+        return acc;
+      }
 
-  for (const [key, value] of params) {
-    // force array of values for simple logic
-    let values = Array.isArray(value) ? value : [value];
+      // force array of values for simple logic
+      let values = Array.isArray(value) ? value : [value];
 
-    // remove duplicates
-    values = values.reduce(removeDuplicatesReducer, []);
+      if (!key.match(/^fields\[(.*?)\]$/)) {
+        return {
+          ...acc,
+          errors: [
+            ...acc.errors,
+            new QuerystringParsingError({
+              message: "Incorrect format was provided for fields.",
+              querystring,
+              paramKey: key,
+              paramValue: values,
+            }),
+          ],
+        };
+      }
 
-    // skip empty string values
-    values = values.filter(isNonEmptyString);
-    if (values.length === 0) {
-      continue;
-    }
+      // remove duplicates
+      values = [...new Set(values)];
 
-    const type = getType(key);
-    if (!isNonEmptyString(type)) {
-      errors.push(
-        new QuerystringParsingError({
-          message: "Incorrect format was provided for fields.",
-          querystring,
-          paramKey: key,
-          paramValue: values,
-        }),
-      );
-      continue;
-    }
+      // skip empty string values
+      values = values.filter(isNonEmptyString);
 
-    results[type] = values;
-  }
+      if (!values.length) {
+        return acc;
+      }
 
-  return { results, errors };
+      return {
+        ...acc,
+        results: {
+          ...acc.results,
+          [getType(key)]: values,
+        },
+      };
+    },
+    { results: {}, errors: [] },
+  );
 }
 
 /** Extracts the type from a fields query parameter. E.g. "cat" from "fields[cat]" */
@@ -49,13 +59,6 @@ function getType(param) {
   if (lBracket !== -1 && rBracket !== -1) {
     return param.slice(lBracket + 1, rBracket);
   }
-}
-
-function removeDuplicatesReducer(accumulator, currentValue) {
-  if (!accumulator.includes(currentValue)) {
-    accumulator.push(currentValue);
-  }
-  return accumulator;
 }
 
 module.exports = parseFields;

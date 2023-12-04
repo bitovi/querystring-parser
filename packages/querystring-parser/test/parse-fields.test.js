@@ -17,16 +17,6 @@ describe("parseFields", () => {
   describe("parseFields happy paths", () => {
     testEachCase([
       {
-        title: "should skip empty string values (fields)",
-        querystring: "fields",
-        expectedResults: {},
-      },
-      {
-        title: "should skip empty string values (fields=)",
-        querystring: "fields=",
-        expectedResults: {},
-      },
-      {
         title: "should skip empty string values (fields[]=)",
         querystring: "fields[]=",
         expectedResults: {},
@@ -100,11 +90,42 @@ describe("parseFields", () => {
           snakes: ["name"],
         },
       },
+      {
+        title: "should support attributes for main table",
+        querystring: "fields[]=title",
+        expectedResults: {
+          "": ["title"],
+        },
+      },
     ]);
   });
 
   describe("parseFields error paths", () => {
     testEachCase([
+      {
+        title: "should skip empty string values (fields)",
+        querystring: "fields",
+        expectedErrors: [
+          new QuerystringParsingError({
+            message: "Incorrect format was provided for fields.",
+            querystring: "fields",
+            paramKey: "fields",
+            paramValue: [""],
+          }),
+        ],
+      },
+      {
+        title: "should skip empty string values (fields=)",
+        querystring: "fields=",
+        expectedErrors: [
+          new QuerystringParsingError({
+            message: "Incorrect format was provided for fields.",
+            querystring: "fields=",
+            paramKey: "fields",
+            paramValue: [""],
+          }),
+        ],
+      },
       {
         title:
           "should return return error when the type could not be parsed (fields=title)",
@@ -114,19 +135,6 @@ describe("parseFields", () => {
             message: "Incorrect format was provided for fields.",
             querystring: "fields=title",
             paramKey: "fields",
-            paramValue: ["title"],
-          }),
-        ],
-      },
-      {
-        title:
-          "should return return error when the type could not be parsed (fields[]=title)",
-        querystring: "fields[]=title",
-        expectedErrors: [
-          new QuerystringParsingError({
-            message: "Incorrect format was provided for fields.",
-            querystring: "fields[]=title",
-            paramKey: "fields[]",
             paramValue: ["title"],
           }),
         ],
