@@ -57,6 +57,46 @@ describe("parseInclude", () => {
               include: [
                 {
                   association: "test",
+                  include: [],
+                },
+              ],
+            },
+          ],
+        },
+        errors: [],
+      },
+    },
+
+    {
+      title: "should return valid results for include/exclude attributes",
+      parameters: [
+        ["include1", "include2.test"],
+        [],
+        {
+          "": ["id"],
+          include1: ["title", "body", "-abstract"],
+          "include2.test": ["name"],
+        },
+      ],
+      expectedResults: {
+        results: {
+          attributes: ["id"],
+          include: [
+            {
+              association: "include1",
+              attributes: {
+                include: ["title", "body"],
+                exclude: ["abstract"],
+              },
+              include: [],
+            },
+            {
+              association: "include2",
+              include: [
+                {
+                  association: "test",
+                  attributes: ["name"],
+                  include: [],
                 },
               ],
             },

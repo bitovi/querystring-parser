@@ -1,9 +1,5 @@
 const { Op } = require("sequelize");
-const {
-  containsNoErrorFromParser,
-  isObject,
-  removeHashFromString,
-} = require("../helpers/validation");
+const { isObject, removeHashFromString } = require("../helpers/validation");
 
 const Operator = Object.freeze({
   EQUALS: "=",
@@ -91,7 +87,7 @@ function parseFilters(filters, filtersError, isDefault = true) {
   let errors = [];
   let isValidFilters; // check if any processing is done to filter data
   if (filters) {
-    if (!containsNoErrorFromParser(filtersError)) {
+    if (filtersError.length) {
       errors = filtersError;
     } else if (!isObject(filters)) {
       errors.push("Filter field must be an object");

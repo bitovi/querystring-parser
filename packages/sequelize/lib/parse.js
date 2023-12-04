@@ -17,8 +17,11 @@ function parse(query) {
   } = parsedQuery;
 
   const filterResult = parseFilters(filter, queryErrors?.filter);
-  const includeResult = parseInclude(include, queryErrors?.filter);
-  const fieldsResult = parseField(fields, queryErrors?.fields);
+  const includeResult = parseInclude(
+    include,
+    [...(queryErrors?.include ?? []), ...(queryErrors?.fields ?? [])],
+    fields,
+  );
   const sortResult = parseSort(sort, queryErrors?.sort);
   const pageResult = parsePagination(page, queryErrors?.page);
 
@@ -26,7 +29,6 @@ function parse(query) {
     ...sortResult.results,
     ...filterResult.results,
     ...includeResult.results,
-    ...fieldsResult.results,
     ...pageResult.results,
   };
 
@@ -34,7 +36,6 @@ function parse(query) {
     ...sortResult.errors,
     ...filterResult.errors,
     ...includeResult.errors,
-    ...fieldsResult.errors,
     ...pageResult.errors,
   ];
 

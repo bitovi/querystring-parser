@@ -1,12 +1,9 @@
-const {
-  containsNoErrorFromParser,
-  isObject,
-} = require("../helpers/validation");
+const { isObject } = require("../helpers/validation");
 
 function parseField(field, fieldErrors) {
   const parsedArray = [];
   let errors = [];
-  if (!containsNoErrorFromParser(fieldErrors)) {
+  if (fieldErrors.length) {
     errors = fieldErrors;
   } else if (!isObject(field)) {
     errors.push("Fields field should be an object");

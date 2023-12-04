@@ -2,11 +2,7 @@ const {
   convertToOrFormat,
   removeHashFromString,
 } = require("../helpers/helperfunctions");
-const {
-  isAnArray,
-  containsNoErrorFromParser,
-  isObject,
-} = require("../helpers/validation");
+const { isObject } = require("../helpers/validation");
 
 const Operator = Object.freeze({
   EQUALS: "=",
@@ -79,7 +75,7 @@ function sortNestedFilters(filters, isOr = false) {
   let i = 0;
   let parsedArray = [];
   let errors = [];
-  filters = isAnArray(filters) ? filters : [filters];
+  filters = Array.isArray(filters) ? filters : [filters];
   for (let filter of filters) {
     //use the orWhere only from the second iteration.
     let useOr = isOr && i > 0;
@@ -95,7 +91,7 @@ function parseFilters(filters, filterErrors, isOr = false) {
   let parsedArray = [];
   let errors = [];
   if (filters) {
-    if (!containsNoErrorFromParser(filterErrors)) {
+    if (filterErrors.length) {
       errors = filterErrors;
     } else if (!isObject(filters)) {
       errors.push("Filter field must be an object");

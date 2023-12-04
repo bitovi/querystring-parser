@@ -1,90 +1,73 @@
-const {
-  isAnArray,
-  containsNoErrorFromParser,
-} = require("../helpers/validation");
-const { splitArray, mergeAlliance } = require("../helpers");
-
-function parseInclude(include, includeErrors, includeAttributes = []) {
-  const parsedArray = {};
-  let errors = [];
-  if (!containsNoErrorFromParser(includeErrors)) {
-    errors = includeErrors;
-  } else if (!isAnArray(include)) {
-    errors.push("Include field should be an array");
-  } else if (include.length > 0) {
-    parsedArray.include = constructIncludes(include, includeAttributes);
+function parseAttributes(attributes) {
+  if (!attributes?.length) {
+    return undefined;
   }
 
+  if (!attributes.some((attribute) => attribute.startsWith("-"))) {
+    return attributes;
+  }
+
+  return attributes.reduce(
+    (acc, curr) =>
+      curr.startsWith("-")
+        ? { ...acc, exclude: [...(acc.exclude ?? []), curr.substr(1)] }
+        : { ...acc, include: [...(acc.include ?? []), curr] },
+    {},
+  );
+}
+
+function parseInclude(includes, includeErrors, includeAttributes = {}) {
+  if (includeErrors.length) {
+    return { errors: includeErrors, results: {} };
+  }
+
+  if (!Array.isArray(includes)) {
+    return { errors: ["Include field should be an array"], results: {} };
+  }
+
+  if (!includes.length) {
+    return { errors: [], results: {} };
+  }
+
+  const attributes = parseAttributes(includeAttributes[""]);
+
   return {
-    results: parsedArray,
-    errors,
+    errors: [],
+    results: {
+      ...(attributes && { attributes }),
+      include: constructIncludes(includes, includeAttributes),
+    },
   };
 }
 
-function constructIncludes(include) {
-  const updatedincludes = [];
-  const includeWithAlias = {};
+function constructIncludes(includes, includeAttributes, excludeAttributes) {
+  const result = [];
 
-  include.forEach((i) => {
-    const splittedArray = splitArray(i);
-    if (splittedArray.length === 1) {
-      includeWithAlias[splittedArray[0]] = {
-        association: splittedArray[0],
-        alias: [],
-        include: [],
-      };
-    } else {
-      for (let index = 0; index < splittedArray.length - 1; index++) {
-        const key = `${splittedArray.slice(0, index + 1).join(".")}`;
-        const alias = `${splittedArray.slice(0, index + 2).join(".")}`;
-        if (includeWithAlias[key]) {
-          includeWithAlias[key].include =
-            index + 1 === splittedArray.length - 1
-              ? [
-                  ...includeWithAlias[key].include,
-                  { association: splittedArray[index + 1] },
-                ]
-              : includeWithAlias[key].include;
-          includeWithAlias[key].alias =
-            index + 1 === splittedArray.length - 1
-              ? includeWithAlias[key].alias
-              : Array.from(new Set([...includeWithAlias[key].alias, alias]));
-        } else {
-          includeWithAlias[key] = {
-            association: splittedArray[index],
-            ...(index + 1 === splittedArray.length - 1
-              ? {
-                  include: [
-                    {
-                      association: splittedArray[index + 1],
-                    },
-                  ],
-                  alias: [],
-                }
-              : {
-                  alias: [alias],
-                  include: [],
-                }),
-          };
-        }
+  for (let i = 0; i < includes.length; i++) {
+    const include = includes[i].split(".");
+    let current = result;
+
+    for (let j = 0; j < include.length; j++) {
+      const part = include[j];
+      const existing = current.find((item) => item.association === part);
+
+      if (existing) {
+        current = existing.include;
+      } else {
+        const fullPath = include.slice(0, j + 1).join(".");
+        const attributes = parseAttributes(includeAttributes[fullPath]);
+        const newPart = {
+          association: part,
+          include: [],
+          ...(attributes && { attributes }),
+        };
+        current.push(newPart);
+        current = newPart.include;
       }
     }
-  });
+  }
 
-  const includeWithAliasKeys = Object.keys(includeWithAlias);
-
-  includeWithAliasKeys.forEach((key) => {
-    if (key.split(".").length === 1) {
-      const { value } = mergeAlliance(
-        includeWithAlias,
-        key,
-        // includedAttributes
-      );
-      updatedincludes.push(value);
-    }
-  });
-
-  return updatedincludes;
+  return result;
 }
 
 module.exports = parseInclude;
