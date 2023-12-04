@@ -8,7 +8,9 @@ function parseFields(querystring) {
 
   return Object.entries(params).reduce(
     (acc, [key, value]) => {
-      if (!key.startsWith("fields")) return acc;
+      if (!key.startsWith("fields")) {
+        return acc;
+      }
 
       // force array of values for simple logic
       let values = Array.isArray(value) ? value : [value];
@@ -34,7 +36,9 @@ function parseFields(querystring) {
       // skip empty string values
       values = values.filter(isNonEmptyString);
 
-      if (!values.length) return acc;
+      if (!values.length) {
+        return acc;
+      }
 
       return {
         ...acc,

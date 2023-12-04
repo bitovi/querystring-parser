@@ -40,7 +40,7 @@ function parseInclude(includes, includeErrors, includeAttributes = {}) {
   };
 }
 
-function constructIncludes(includes, includeAttributes, excludeAttributes) {
+function constructIncludes(includes, includeAttributes) {
   const result = [];
 
   for (let i = 0; i < includes.length; i++) {
