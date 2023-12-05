@@ -1,7 +1,14 @@
 const qs = require("qs");
-const isNonEmptyString = require("./helpers/is-non-empty-string");
 
 const QuerystringParsingError = require("./errors/querystring-parsing-error");
+
+function toArray(value) {
+  if (Array.isArray(value)) {
+    return value;
+  }
+
+  return value ? [value] : [];
+}
 
 function parseFields(querystring) {
   const params = qs.parse(querystring, { depth: 0, comma: true });
@@ -13,7 +20,7 @@ function parseFields(querystring) {
       }
 
       // force array of values for simple logic
-      let values = Array.isArray(value) ? value : [value];
+      let values = toArray(value);
 
       if (!key.match(/^fields\[(.*?)\]$/)) {
         return {
@@ -30,15 +37,12 @@ function parseFields(querystring) {
         };
       }
 
-      // remove duplicates
-      values = [...new Set(values)];
-
-      // skip empty string values
-      values = values.filter(isNonEmptyString);
-
       if (!values.length) {
         return acc;
       }
+
+      // remove duplicates
+      values = [...new Set(values)];
 
       return {
         ...acc,
