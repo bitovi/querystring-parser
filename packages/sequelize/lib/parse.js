@@ -19,7 +19,7 @@ function parse(query) {
   const includeResult = parseInclude(
     include,
     [...(queryErrors?.include ?? []), ...(queryErrors?.fields ?? [])],
-    { ...fields, "": fields[""][0] },
+    fields,
   );
   const sortResult = parseSort(sort, queryErrors?.sort);
   const pageResult = parsePagination(page, queryErrors?.page);
