@@ -1,5 +1,5 @@
 function parseAttributes(attributes) {
-  if (!attributes?.length) {
+  if (!attributes || !attributes.length) {
     return undefined;
   }
 

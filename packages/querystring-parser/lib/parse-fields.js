@@ -4,7 +4,7 @@ const QuerystringParsingError = require("./errors/querystring-parsing-error");
 
 function toArray(value) {
   if (Array.isArray(value)) {
-    return value;
+    return Array.isArray(value[0]) ? value[0] : value;
   }
 
   return value ? [value] : [];
