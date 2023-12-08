@@ -37,7 +37,7 @@ describe("parseMongoFilter() tests", () => {
       {
         title:
           'the "$eq" mongo operator should map to the "IS NULL" sql operator for null values',
-        querystring: "filter[age][$eq]=null",
+        querystring: "filter[age][$eq]=%00",
         expectedResults: { "IS NULL": "#age" },
       },
       {
@@ -78,7 +78,7 @@ describe("parseMongoFilter() tests", () => {
       {
         title:
           'the "$ne" mongo operator should map to the "IS NOT NULL" sql operator for null values',
-        querystring: "filter[age][$ne]=null",
+        querystring: "filter[age][$ne]=%00",
         expectedResults: { "IS NOT NULL": "#age" },
       },
       {
@@ -118,13 +118,13 @@ describe("parseMongoFilter() tests", () => {
       },
       {
         title: 'the "$gt" mongo operator should not allow null values',
-        querystring: "filter[age][$gt]=null",
+        querystring: "filter[age][$gt]=\x00",
         expectedErrors: [
           new QuerystringParsingError({
             message: '"$gt" operator should not be used with null value',
-            querystring: "filter[age][$gt]=null",
+            querystring: "filter[age][$gt]=\x00",
             paramKey: "filter[age][$gt]",
-            paramValue: "null",
+            paramValue: "\x00",
           }),
         ],
       },
@@ -165,13 +165,13 @@ describe("parseMongoFilter() tests", () => {
       },
       {
         title: 'the "$gte" mongo operator should not allow null values',
-        querystring: "filter[age][$gte]=null",
+        querystring: "filter[age][$gte]=\x00",
         expectedErrors: [
           new QuerystringParsingError({
             message: '"$gte" operator should not be used with null value',
-            querystring: "filter[age][$gte]=null",
+            querystring: "filter[age][$gte]=\x00",
             paramKey: "filter[age][$gte]",
-            paramValue: "null",
+            paramValue: "\x00",
           }),
         ],
       },
@@ -212,13 +212,13 @@ describe("parseMongoFilter() tests", () => {
       },
       {
         title: 'the "$lt" mongo operator should not allow null values',
-        querystring: "filter[age][$lt]=null",
+        querystring: "filter[age][$lt]=\x00",
         expectedErrors: [
           new QuerystringParsingError({
             message: '"$lt" operator should not be used with null value',
-            querystring: "filter[age][$lt]=null",
+            querystring: "filter[age][$lt]=\x00",
             paramKey: "filter[age][$lt]",
-            paramValue: "null",
+            paramValue: "\x00",
           }),
         ],
       },
@@ -259,13 +259,13 @@ describe("parseMongoFilter() tests", () => {
       },
       {
         title: 'the "$lte" mongo operator should not allow null values',
-        querystring: "filter[age][$lte]=null",
+        querystring: "filter[age][$lte]=\x00",
         expectedErrors: [
           new QuerystringParsingError({
             message: '"$lte" operator should not be used with null value',
-            querystring: "filter[age][$lte]=null",
+            querystring: "filter[age][$lte]=\x00",
             paramKey: "filter[age][$lte]",
-            paramValue: "null",
+            paramValue: "\x00",
           }),
         ],
       },
@@ -318,13 +318,13 @@ describe("parseMongoFilter() tests", () => {
       },
       {
         title: 'the "$ilike" mongo operator should not allow null values',
-        querystring: "filter[name][$ilike]=null",
+        querystring: "filter[name][$ilike]=\x00",
         expectedErrors: [
           new QuerystringParsingError({
             message: '"$ilike" operator should not be used with null value',
-            querystring: "filter[name][$ilike]=null",
+            querystring: "filter[name][$ilike]=\x00",
             paramKey: "filter[name][$ilike]",
-            paramValue: "null",
+            paramValue: "\x00",
           }),
         ],
       },
@@ -372,7 +372,7 @@ describe("parseMongoFilter() tests", () => {
       {
         title:
           'the "$in" mongo operator should map to the "IN" sql operator for singular null value (auto-wrapping)',
-        querystring: "filter[age][$in]=null",
+        querystring: "filter[age][$in]=%00",
         expectedResults: { IN: ["#age", null] },
       },
     ]);
@@ -419,7 +419,7 @@ describe("parseMongoFilter() tests", () => {
       {
         title:
           'the "$nin" mongo operator should map to the "NOT IN" sql operator for singular null value (auto-wrapping)',
-        querystring: "filter[age][$nin]=null",
+        querystring: "filter[age][$nin]=%00",
         expectedResults: { "NOT IN": ["#age", null] },
       },
     ]);
@@ -446,7 +446,7 @@ describe("parseMongoFilter() tests", () => {
       {
         title:
           'the "IS NULL" sql operator should be the default for null values',
-        querystring: "filter[age]=null",
+        querystring: "filter[age]=%00",
         expectedResults: { "IS NULL": "#age" },
       },
 
@@ -460,7 +460,7 @@ describe("parseMongoFilter() tests", () => {
       {
         title:
           'the "IN" sql operator should be the default for string[] (string array) values (null included)',
-        querystring: "filter[name]=michael,null",
+        querystring: "filter[name]=michael,%00",
         expectedResults: { IN: ["#name", "michael", null] },
       },
       {
@@ -472,7 +472,7 @@ describe("parseMongoFilter() tests", () => {
       {
         title:
           'the "IN" sql operator should be the default for number[] (number array) values (null included)',
-        querystring: "filter[age]=24,null",
+        querystring: "filter[age]=24,%00",
         expectedResults: { IN: ["#age", 24, null] },
       },
       {
@@ -484,7 +484,7 @@ describe("parseMongoFilter() tests", () => {
       {
         title:
           'the "IN" sql operator should be the default for date[] (date array) values (null included)',
-        querystring: "filter[born]=2020-01-01,null",
+        querystring: "filter[born]=2020-01-01,%00",
         expectedResults: { IN: ["#born", "2020-01-01", null] },
       },
     ]);
