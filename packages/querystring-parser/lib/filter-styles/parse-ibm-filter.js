@@ -1,7 +1,6 @@
 const qs = require("qs");
 const SqlOperator = require("../enums/sql-operator");
 const IbmOperator = require("../enums/ibm-operator");
-const isNullString = require("../helpers/is-null-string");
 const isNumberString = require("../helpers/is-number-string");
 const isDateString = require("../helpers/is-date-string");
 const isString = require("../helpers/is-string");
@@ -70,7 +69,7 @@ function parseExpression(expression) {
       }
 
       // IS NULL - (unary operator)
-      else if (token === IbmOperator.EQUALS && isNullString(peek(stack, 2))) {
+      else if (token === IbmOperator.EQUALS && peek(stack, 2) === "null") {
         const attributeRef = coerceValue(stack.pop(), token);
         stack.pop(); // null - not included in output
         stack.push({ [mapOperator(token, true)]: attributeRef });
@@ -116,7 +115,7 @@ function tokenizeExpression(expression) {
 }
 
 function coerceValue(value, parentOperator) {
-  if (isNullString(value)) {
+  if (value === "null") {
     // null
     return null;
   } else if (value.startsWith("'") && value.endsWith("'")) {

@@ -10,35 +10,35 @@ describe("areMongoTypesTheSame", () => {
     // booleans
     [MongoValueType.BOOLEAN, ["true"]],
     [MongoValueType.BOOLEAN, ["true", "false"]],
-    [MongoValueType.BOOLEAN, ["true", "false", "null"]],
-    [MongoValueType.BOOLEAN, ["null", "true"]],
+    [MongoValueType.BOOLEAN, ["true", "false", "\x00"]],
+    [MongoValueType.BOOLEAN, ["\x00", "true"]],
 
     // strings
     [MongoValueType.STRING, ["michael"]],
     [MongoValueType.STRING, ["michael", "brad"]],
-    [MongoValueType.STRING, ["michael", "brad", "null"]],
-    [MongoValueType.STRING, ["null", "michael"]],
+    [MongoValueType.STRING, ["michael", "brad", "\x00"]],
+    [MongoValueType.STRING, ["\x00", "michael"]],
 
     // numbers
     [MongoValueType.NUMBER, ["24"]],
     [MongoValueType.NUMBER, ["24", "25"]],
-    [MongoValueType.NUMBER, ["24", "25", "null"]],
-    [MongoValueType.NUMBER, ["null", "25"]],
+    [MongoValueType.NUMBER, ["24", "25", "\x00"]],
+    [MongoValueType.NUMBER, ["\x00", "25"]],
 
     // dates
     [MongoValueType.DATE, ["2020-01-01"]],
     [MongoValueType.DATE, ["2020-01-01", "2021-01-01"]],
-    [MongoValueType.DATE, ["2020-01-01", "2021-01-01", "null"]],
-    [MongoValueType.DATE, ["null", "2021-01-01"]],
+    [MongoValueType.DATE, ["2020-01-01", "2021-01-01", "\x00"]],
+    [MongoValueType.DATE, ["\x00", "2021-01-01"]],
 
     // null
-    [MongoValueType.NULL, ["null"]],
+    [MongoValueType.NULL, ["\x00"]],
 
     // false
     [false, ["true", "2020-01-02"]],
     [false, ["michael", "2020-01-02"]],
     [false, ["25", "2020-01-02"]],
-    [false, ["michael", "25", "null"]],
+    [false, ["michael", "25", "\x00"]],
   ].map(([expected, input]) => {
     const prettyInput = JSON.stringify(input);
     const prettyExpected = expected ? expected.toString() : expected;

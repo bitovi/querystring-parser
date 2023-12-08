@@ -1,7 +1,6 @@
 const MongoValueType = require("../enums/mongo-value-type");
 const isBooleanString = require("./is-boolean-string");
 const isDateString = require("./is-date-string");
-const isNullString = require("./is-null-string");
 const isNumberString = require("./is-number-string");
 
 /**
@@ -23,7 +22,7 @@ function areMongoTypesTheSame(values) {
     if (isDateString(val)) {
       return MongoValueType.DATE;
     }
-    if (isNullString(val)) {
+    if (val === "\x00") {
       return MongoValueType.NULL;
     }
     return MongoValueType.STRING;

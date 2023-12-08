@@ -126,7 +126,7 @@ The MongoDB-Style is based off of the [MongoDB comparison query operators](https
 | filter[name][$eq]=mike         | `{ '=': [ '#name', 'mike' ] }`           |
 | filter[age][$gt]=21            | `{ '>': [ '#age', 21 ] }`                |
 | filter[born][$lte]=2020-01-01  | `{ '<=': [ '#born', '2020-01-01' ] }`    |
-| filter[score][$eq]=null        | `{ 'IS NULL': '#score' }`                |
+| filter[score][$eq]=%00         | `{ 'IS NULL': '#score' }`                |
 | filter[name][$in]=michael,brad | `{ IN: [ '#name', 'michael', 'brad' ] }` |
 
 #### MongoDB-Style Operators
@@ -154,7 +154,7 @@ MongoDB-Style filters do not require explicit operators. In many cases, the valu
 | string     | filter[name]=lisa       | `{ LIKE: [ '#name', '%lisa%' ] }`     |
 | number     | filter[age]=25          | `{ '=': [ '#age', 25 ] }`             |
 | date       | filter[born]=2020-01-01 | `{ '=': [ '#born', '2020-01-01' ] }`  |
-| null       | filter[score]=null      | `{ 'IS NULL': '#score' }`             |
+| null       | filter[score]=%00       | `{ 'IS NULL': '#score' }`             |
 | array      | filter[name]=mike,brad  | `{ IN: [ '#name', 'mike', 'brad' ] }` |
 
 #### Arrays

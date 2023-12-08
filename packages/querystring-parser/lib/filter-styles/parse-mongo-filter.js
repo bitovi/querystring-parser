@@ -1,6 +1,5 @@
 const qs = require("qs");
 const areMongoTypesTheSame = require("../helpers/are-mongo-types-the-same");
-const isNullString = require("../helpers/is-null-string");
 const MongoOperator = require("../enums/mongo-operator");
 const SqlOperator = require("../enums/sql-operator");
 const MongoValueType = require("../enums/mongo-value-type");
@@ -58,7 +57,7 @@ function parseMongoFilter(querystring) {
 
     // coerce values
     values = values.map((value) => {
-      if (isNullString(value)) {
+      if (value === "\x00") {
         return null;
       }
       if (valueType === MongoValueType.BOOLEAN) {

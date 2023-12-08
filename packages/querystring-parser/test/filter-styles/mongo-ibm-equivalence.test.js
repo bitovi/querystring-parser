@@ -32,7 +32,7 @@ describe("MongoDB-style filtering vs IBM-style filtering Equivalence Tests", () 
       },
       {
         title: "both styles should output null values the same way",
-        mongoQueryString: "filter[born][$eq]=null",
+        mongoQueryString: "filter[born][$eq]=%00",
         ibmQueryString: "filter=equals(born,null)",
       },
     ]);

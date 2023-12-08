@@ -4,7 +4,7 @@
  *           filter[name]=michael     -> string value
  *           filter[age]=25           -> number value
  *           filter[born]=2020-01-01  -> date value
- *           filter[age]=null         -> null value
+ *           filter[age]=%00          -> null value
  *           filter[age][$in]=24,25   -> array of number values
  */
 const MongoValueType = Object.freeze({
