@@ -139,6 +139,17 @@ describe("parseFilter", () => {
           ILIKE: ["#name", "jOhN", "jAnE"],
         },
       },
+      {
+        title:
+          "should parse NULL ASCII value correctly with the $eq operator (Mongo)",
+        querystring: "filter[name][$eq]=\x00",
+        expectedResults: { "IS NULL": "#name" },
+      },
+      {
+        title: "should parse NULL ASCII value correctly $ne operator (Mongo)",
+        querystring: "filter[name][$ne]=\x00",
+        expectedResults: { "IS NOT NULL": "#name" },
+      },
       // numbers
       {
         title: "should parse numbers correctly with the $eq operator (Mongo)",
@@ -180,6 +191,18 @@ describe("parseFilter", () => {
         querystring: "filter[age][$nin]=25&filter[age][$nin]=35",
         expectedResults: { "NOT IN": ["#age", 25, 35] },
       },
+      {
+        title:
+          "should parse numbers NULL ASCII correctly with the $eq operator (Mongo)",
+        querystring: "filter[age][$eq]=\x00",
+        expectedResults: { "IS NULL": "#age" },
+      },
+      {
+        title:
+          "should parse numbers NULL ASCII correctly with the $ne operator (Mongo)",
+        querystring: "filter[age][$ne]=\x00",
+        expectedResults: { "IS NOT NULL": "#age" },
+      },
       //arrays
       {
         title: "should parse arrays correctly with the $in operator (Mongo)",
@@ -190,6 +213,20 @@ describe("parseFilter", () => {
         title: "should parse arrays correctly with the $nin operator (Mongo)",
         querystring: "filter[name][$nin]=John&filter[name][$nin]=Jane",
         expectedResults: { "NOT IN": ["#name", "John", "Jane"] },
+      },
+      {
+        title:
+          "should parse NULL ASCII arrays correctly with the $in operator (Mongo)",
+        querystring:
+          "filter[name][$in]=John&filter[name][$in]=Jane&filter[name][$in]=\x00",
+        expectedResults: { IN: ["#name", "John", "Jane", null] },
+      },
+      {
+        title:
+          "should parse NULL ASCII arrays correctly with the $nin operator (Mongo)",
+        querystring:
+          "filter[name][$nin]=John&filter[name][$nin]=Jane&filter[name][$nin]=\x00",
+        expectedResults: { "NOT IN": ["#name", "John", "Jane", null] },
       },
       //date
       {
@@ -246,6 +283,18 @@ describe("parseFilter", () => {
           ],
         },
       },
+      {
+        title:
+          "should parse dates NULL ASCII correctly with the $eq operator (Mongo)",
+        querystring: "filter[startDate][$eq]=\x00",
+        expectedResults: { "IS NULL": "#startDate" },
+      },
+      {
+        title:
+          "should parse dates NULL ASCII correctly with the $ne operator (Mongo)",
+        querystring: "filter[startDate][$ne]=\x00",
+        expectedResults: { "IS NOT NULL": "#startDate" },
+      },
       //boolean
       {
         title: "should parse booleans correctly with the $eq operator (Mongo)",
@@ -269,6 +318,12 @@ describe("parseFilter", () => {
           ],
         },
       },
+      {
+        title:
+          "should parse booleans NULL ASCII correctly with the $eq operator (Mongo)",
+        querystring: "filter[onSite][$eq]=\x00",
+        expectedResults: { "IS NULL": "#onSite" },
+      },
       // no operators
       {
         title: "should parse strings correctly (Mongo)",
@@ -284,6 +339,22 @@ describe("parseFilter", () => {
         title: "should parse booleans correctly (Mongo)",
         querystring: "filter[active]=true",
         expectedResults: { "=": ["#active", true] },
+      },
+
+      {
+        title: "should parse NULL ASCII strings correctly (Mongo)",
+        querystring: "filter[name]=\x00",
+        expectedResults: { "IS NULL": "#name" },
+      },
+      {
+        title: "should parse NULL ASCII numbers correctly (Mongo)",
+        querystring: "filter[age]=\x00",
+        expectedResults: { "IS NULL": "#age" },
+      },
+      {
+        title: "should parse NULL ASCII booleans correctly (Mongo)",
+        querystring: "filter[active]=\x00",
+        expectedResults: { "IS NULL": "#active" },
       },
       // remaining / IBM
       {
