@@ -1,5 +1,4 @@
 const qs = require("qs");
-const isNonEmptyString = require("./helpers/is-non-empty-string");
 const QuerystringParsingError = require("./errors/querystring-parsing-error");
 
 function parsePage(querystring) {
@@ -8,71 +7,148 @@ function parsePage(querystring) {
   const errors = [];
 
   if (qsPage) {
-    const { number, size } = qsPage;
-    const numberWasProvided = isNonEmptyString(number);
-    const sizeWasProvided = isNonEmptyString(size);
-    let parsedNumber;
-    let numberIsValid;
-    let parsedSize;
-    let sizeIsValid;
+    const { number, size, limit, offset, ...unsupported } = qsPage;
 
-    if (numberWasProvided) {
-      parsedNumber = +number;
-      numberIsValid = Number.isInteger(parsedNumber) && parsedNumber > 0;
+    if (Object.keys(unsupported).length) {
+      errors.push(
+        ...Object.entries(unsupported).map(
+          ([paramKey, paramValue]) =>
+            new QuerystringParsingError({
+              message: `Page ${paramKey} is not supported.`,
+              querystring,
+              paramKey: `page[${paramKey}]`,
+              paramValue,
+            }),
+        ),
+      );
+    }
 
-      if (!numberIsValid) {
-        errors.push(
-          new QuerystringParsingError({
-            message: "Page number should be a positive integer.",
-            querystring,
-            paramKey: "page[number]",
-            paramValue: number,
-          }),
-        );
+    if (number || size) {
+      let parsedNumber;
+      let numberIsValid;
+      let parsedSize;
+      let sizeIsValid;
+
+      if (number) {
+        parsedNumber = +number;
+        numberIsValid = Number.isInteger(parsedNumber) && parsedNumber > 0;
+
+        if (!numberIsValid) {
+          errors.push(
+            new QuerystringParsingError({
+              message: "Page number should be a positive integer.",
+              querystring,
+              paramKey: "page[number]",
+              paramValue: number,
+            }),
+          );
+        }
+
+        if (!size) {
+          errors.push(
+            new QuerystringParsingError({
+              message:
+                "Page number was provided but page size was not provided.",
+              querystring,
+              paramKey: "page[size]",
+              paramValue: "",
+            }),
+          );
+        }
       }
 
-      if (!sizeWasProvided) {
-        errors.push(
-          new QuerystringParsingError({
-            message: "Page number was provided but page size was not provided.",
-            querystring,
-            paramKey: "page[size]",
-            paramValue: "",
-          }),
-        );
+      if (size) {
+        parsedSize = +size;
+        sizeIsValid = Number.isInteger(parsedSize) && parsedSize > 0;
+
+        if (!number) {
+          errors.push(
+            new QuerystringParsingError({
+              message:
+                "Page size was provided but page number was not provided.",
+              querystring,
+              paramKey: "page[number]",
+              paramValue: "",
+            }),
+          );
+        }
+
+        if (!sizeIsValid) {
+          errors.push(
+            new QuerystringParsingError({
+              message: "Page size should be a positive integer.",
+              querystring,
+              paramKey: "page[size]",
+              paramValue: size,
+            }),
+          );
+        }
+      }
+
+      if (numberIsValid && sizeIsValid) {
+        results.number = parsedNumber;
+        results.size = parsedSize;
       }
     }
 
-    if (sizeWasProvided) {
-      parsedSize = +size;
-      sizeIsValid = Number.isInteger(parsedSize) && parsedSize > 0;
+    if (offset || limit) {
+      let parsedOffset;
+      let offsetIsValid;
+      let parsedLimit;
+      let limitIsValid;
 
-      if (!numberWasProvided) {
-        errors.push(
-          new QuerystringParsingError({
-            message: "Page size was provided but page number was not provided.",
-            querystring,
-            paramKey: "page[number]",
-            paramValue: "",
-          }),
-        );
+      if (offset) {
+        parsedOffset = +offset;
+        offsetIsValid = Number.isInteger(parsedOffset) && parsedOffset >= 0;
+
+        if (!offsetIsValid) {
+          errors.push(
+            new QuerystringParsingError({
+              message: "Page offset should be a non-negative integer.",
+              querystring,
+              paramKey: "page[offset]",
+              paramValue: offset,
+            }),
+          );
+        }
+
+        if (!limit) {
+          errors.push(
+            new QuerystringParsingError({
+              message:
+                "Page offset was provided but page limit was not provided.",
+              querystring,
+              paramKey: "page[limit]",
+              paramValue: "",
+            }),
+          );
+        }
       }
 
-      if (!sizeIsValid) {
-        errors.push(
-          new QuerystringParsingError({
-            message: "Page size should be a positive integer.",
-            querystring,
-            paramKey: "page[size]",
-            paramValue: size,
-          }),
-        );
-      }
-    }
+      if (limit) {
+        parsedLimit = +limit;
+        limitIsValid = Number.isInteger(parsedLimit) && parsedLimit > 0;
 
-    if (numberIsValid && sizeIsValid) {
-      results.number = parsedNumber;
-      results.size = parsedSize;
+        if (!offset) {
+          parsedOffset = 0;
+        }
+
+        if (!limitIsValid) {
+          errors.push(
+            new QuerystringParsingError({
+              message: "Page limit should be a positive integer.",
+              querystring,
+              paramKey: "page[limit]",
+              paramValue: limit,
+            }),
+          );
+        }
+      }
+
+      if (offsetIsValid && limitIsValid) {
+        results.offset = parsedOffset;
+        results.limit = parsedLimit;
+      }
     }
   }
 

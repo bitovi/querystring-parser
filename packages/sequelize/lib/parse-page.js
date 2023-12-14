@@ -8,9 +8,22 @@ function parsePagination(page, pageErrors) {
   } else if (!isObject(page)) {
     errors.push("Page field should be an Object");
   } else {
-    let { number, size } = page;
-    if (number != null) {
-      //default size to 10 if undefined
+    let { number, size, limit, offset } = page;
+
+    if (limit != null || offset != null) {
+      // default limit to 10 if undefined
+      limit = limit ?? 10;
+      if (isNotValidInteger(offset) || isNotValidInteger(limit)) {
+        errors.push(
+          "page[offset] should be non-negative integer and page[limit] should be positive integer",
+        );
+      } else {
+        parsedResult.offset = offset;
+        parsedResult.limit = limit;
+        parsedResult.subQuery = false;
+      }
+    } else if (number != null) {
+      // default size to 10 if undefined
       size = size ?? 10;
       if (isNotValidInteger(number) || isNotValidInteger(size)) {
         errors.push("page[number] and page[size] should be positive integers");
