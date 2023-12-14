@@ -139,7 +139,9 @@ describe("parsePage", () => {
       parameters: [{ offset: "notAOffset" }, []],
       expectedResults: {
         results: {},
-        errors: ["page[offset] and page[limit] should be positive integers"],
+        errors: [
+          "page[offset] should be non-negative integer and page[limit] should be positive integer",
+        ],
       },
     },
     {
@@ -148,7 +150,9 @@ describe("parsePage", () => {
       parameters: [{ offset: 10, limit: "notAOffset" }, []],
       expectedResults: {
         results: {},
-        errors: ["page[offset] and page[limit] should be positive integers"],
+        errors: [
+          "page[offset] should be non-negative integer and page[limit] should be positive integer",
+        ],
       },
     },
     {
@@ -156,7 +160,9 @@ describe("parsePage", () => {
       parameters: [{ offset: 0, limit: 0 }, []],
       expectedResults: {
         results: {},
-        errors: ["page[offset] and page[limit] should be positive integers"],
+        errors: [
+          "page[offset] should be non-negative integer and page[limit] should be positive integer",
+        ],
       },
     },
     {
@@ -164,7 +170,9 @@ describe("parsePage", () => {
       parameters: [{ offset: 1.1, limit: 1.2 }, []],
       expectedResults: {
         results: {},
-        errors: ["page[offset] and page[limit] should be positive integers"],
+        errors: [
+          "page[offset] should be non-negative integer and page[limit] should be positive integer",
+        ],
       },
     },
     {

@@ -14,7 +14,9 @@ function parsePagination(page, pageErrors) {
       // default limit to 10 if undefined
       limit = limit ?? 10;
       if (isNotValidInteger(offset) || isNotValidInteger(limit)) {
-        errors.push("page[offset] and page[limit] should be positive integers");
+        errors.push(
+          "page[offset] should be non-negative integer and page[limit] should be positive integer",
+        );
       } else {
         parsedResult.offset = offset;
         parsedResult.limit = limit;
