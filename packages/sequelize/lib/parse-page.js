@@ -9,18 +9,7 @@ function parsePagination(page, pageErrors) {
     errors.push("Page field should be an Object");
   } else {
     let { number, size, limit, offset } = page;
-    if (number != null) {
-      // default size to 10 if undefined
-      size = size ?? 10;
-      if (isNotValidInteger(number) || isNotValidInteger(size)) {
-        errors.push("page[number] and page[size] should be positive integers");
-      } else {
-        const offset = getOffsetByPageNumber(number, size);
-        parsedResult.offset = offset;
-        parsedResult.limit = size;
-        parsedResult.subQuery = false;
-      }
-    }
+
     if (limit != null || offset != null) {
       // default limit to 10 if undefined
       limit = limit ?? 10;
@@ -29,6 +18,17 @@ function parsePagination(page, pageErrors) {
       } else {
         parsedResult.offset = offset;
         parsedResult.limit = limit;
+        parsedResult.subQuery = false;
+      }
+    } else if (number != null) {
+      // default size to 10 if undefined
+      size = size ?? 10;
+      if (isNotValidInteger(number) || isNotValidInteger(size)) {
+        errors.push("page[number] and page[size] should be positive integers");
+      } else {
+        const offset = getOffsetByPageNumber(number, size);
+        parsedResult.offset = offset;
+        parsedResult.limit = size;
         parsedResult.subQuery = false;
       }
     }
