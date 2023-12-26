@@ -177,10 +177,10 @@ describe("parsePage", () => {
     },
     {
       title: "should return valid results for valid parameters",
-      parameters: [{ offset: 3, limit: 5 }, []],
+      parameters: [{ offset: 0, limit: 5 }, []],
       expectedResults: {
         results: {
-          offset: 3,
+          offset: 0,
           limit: 5,
           subQuery: false,
         },

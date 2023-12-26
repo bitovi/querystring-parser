@@ -1,4 +1,4 @@
-const { isNotValidInteger, isObject } = require("../helpers/validation");
+const { isValidInteger, isObject } = require("../helpers/validation");
 
 function parsePagination(page, pageErrors) {
   const parsedResult = {};
@@ -13,7 +13,7 @@ function parsePagination(page, pageErrors) {
     if (limit != null || offset != null) {
       // default limit to 10 if undefined
       limit = limit ?? 10;
-      if (isNotValidInteger(offset) || isNotValidInteger(limit)) {
+      if (!isValidInteger(offset, 0) || !isValidInteger(limit, 1)) {
         errors.push(
           "page[offset] should be non-negative integer and page[limit] should be positive integer",
         );
@@ -25,7 +25,7 @@ function parsePagination(page, pageErrors) {
     } else if (number != null) {
       // default size to 10 if undefined
       size = size ?? 10;
-      if (isNotValidInteger(number) || isNotValidInteger(size)) {
+      if (!isValidInteger(number, 1) || !isValidInteger(size, 1)) {
         errors.push("page[number] and page[size] should be positive integers");
       } else {
         const offset = getOffsetByPageNumber(number, size);
