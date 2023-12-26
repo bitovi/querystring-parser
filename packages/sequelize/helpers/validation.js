@@ -1,5 +1,5 @@
-function isNotValidInteger(number) {
-  return !Number.isInteger(number) || number < 1;
+function isValidInteger(number, min) {
+  return Number.isInteger(number) && number >= min;
 }
 
 function isObject(val) {
@@ -14,7 +14,7 @@ function removeHashFromString(str) {
 }
 
 module.exports = {
-  isNotValidInteger,
+  isValidInteger,
   isObject,
   removeHashFromString,
 };

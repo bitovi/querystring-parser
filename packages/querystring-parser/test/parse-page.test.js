@@ -47,9 +47,9 @@ describe("parsePage", () => {
       },
       {
         title: "should return page offset and limit as integers in result",
-        querystring: "page[offset]=1&page[limit]=5",
+        querystring: "page[offset]=0&page[limit]=5",
         expectedResults: {
-          offset: 1,
+          offset: 0,
           limit: 5,
         },
       },
