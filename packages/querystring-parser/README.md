@@ -89,7 +89,9 @@ The parsed results of the `include` query parameter is stored in the `include` p
 Reference: [JSON:API - Inclusion of Related Resources](https://jsonapi.org/format/#fetching-includes)
 
 ```js
-const { include } = querystringParser.parse("include=children.movies.actors.children,children.movies.actors.pets,children.pets,pets");
+const { include } = querystringParser.parse(
+  "include=children.movies.actors.children,children.movies.actors.pets,children.pets,pets",
+);
 console.log(include[0]); // --> 'children.movies.actors.children'
 console.log(include[1]); // --> 'children.movies.actors.pets'
 console.log(include[2]); // --> 'children.pets'
@@ -103,7 +105,9 @@ The parsed results of the `fields[TYPE]` query parameters are stored in the `fie
 Reference: [JSON:API - Sparse Fieldsets](https://jsonapi.org/format/#fetching-sparse-fieldsets)
 
 ```js
-const { fields } = querystringParser.parse("fields[articles]=title,body&fields[people]=name");
+const { fields } = querystringParser.parse(
+  "fields[articles]=title,body&fields[people]=name",
+);
 console.log(fields.articles); // --> [ 'title', 'body' ]
 console.log(fields.people); // --> [ 'name' ]
 ```
@@ -175,7 +179,7 @@ MongoDB-style does not support attribute references at the moment. 🛑
 
 #### Compound Filters
 
-MongoDB-Style filters do not directly support higher-order operators (`AND` / `OR` / `NOT`). However, if multiple filters are present in the query string then they will be joined together in an `AND` fashion.
+MongoDB-Style filters do not directly support higher-order operators (`AND` / `OR` / `NOT`) 🛑. However, if multiple filters are present in the query string then they will be joined together in an `AND` fashion.
 
 <!-- prettier-ignore -->
 ```js
