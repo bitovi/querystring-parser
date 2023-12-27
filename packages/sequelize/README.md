@@ -27,7 +27,10 @@ const querystringParser = require("@bitovi/sequelize-querystring-parser");
 
 ### Sort Parameters
 
-Reference: [JSON:API - Sorting](https://jsonapi.org/format/#fetching-sorting)
+References:
+
+- [Querystring Parser - Sort](https://github.com/bitovi/querystring-parser/tree/main/packages/querystring-parser#sort-parameters)
+- [JSON:API - Sorting](https://jsonapi.org/format/#fetching-sorting)
 
 ```js
 const result = querystringParser.parse("sort=-date,name");
@@ -43,7 +46,10 @@ console.log(result);
 
 ### Pagination Parameters
 
-Reference: [JSON:API - Pagination](https://jsonapi.org/format/#fetching-pagination)
+References:
+
+- [Querystring Parser - Pagination](https://github.com/bitovi/querystring-parser/tree/main/packages/querystring-parser#pagination-parameters)
+- [JSON:API - Pagination](https://jsonapi.org/format/#fetching-pagination)
 
 ```js
 const result = querystringParser.parse("page[number]=1&page[size]=10");
@@ -60,10 +66,13 @@ console.log(result);
 
 ### Fields Parameters
 
-Reference: [JSON:API - Inclusion of Related Resources](https://jsonapi.org/format/#fetching-sparse-fieldsets)
+References:
+
+- [Querystring Parser - Fields](https://github.com/bitovi/querystring-parser/tree/main/packages/querystring-parser#fields-parameters)
+- [JSON:API - Sparse Fieldsets](https://jsonapi.org/format/#fetching-sparse-fieldsets)
 
 ```js
-const result = querystringParser.parse("fields[people]=id,name");
+const result = querystringParser.parse("fields[]=id,name");
 console.log(result);
 // {
 //   orm: "sequelize",
@@ -76,7 +85,10 @@ console.log(result);
 
 ### Include Parameters
 
-Reference: [JSON:API - Inclusion of Related Resources](https://jsonapi.org/format/#fetching-includes)
+References:
+
+- [Querystring Parser - Include](https://github.com/bitovi/querystring-parser/tree/main/packages/querystring-parser#include-parameters)
+- [JSON:API - Inclusion of Related Resources](https://jsonapi.org/format/#fetching-includes)
 
 ```js
 const result = querystringParser.parse("include=pets,dogs");
@@ -95,8 +107,15 @@ console.log(result);
 
 ### Filter Parameters
 
+References:
+
+- [Querystring Parser - Filter](https://github.com/bitovi/querystring-parser/tree/main/packages/querystring-parser#filter-parameters)
+- [JSON:API - Filtering](https://jsonapi.org/format/#fetching-filtering)
+
 ```js
-const result = querystringParser.parse("filter=and(any('age','10','20'),equals('name','mike'))");
+const result = querystringParser.parse(
+  "filter=and(any('age','10','20'),equals('name','mike'))",
+);
 console.log(result);
 // {
 //   orm: "sequelize",

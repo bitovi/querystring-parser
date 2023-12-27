@@ -1,7 +1,6 @@
 # querystring-parser
 
 ![Tests Workflow Status](https://github.com/bitovi/querystring-parser/actions/workflows/tests.yml/badge.svg?branch=main)
-[![Join our Slack](https://img.shields.io/badge/slack-join%20chat-611f69.svg)](https://www.bitovi.com/community/slack?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
 - [Why querystring-parser?](#why-querystring-parser)
 - [Installation](#installation)
@@ -16,11 +15,12 @@
     - [MongoDB-Style Operators](#mongodb-style-operators)
     - [Omitted Operators](#omitted-operators)
     - [Arrays](#arrays)
+    - [Attribute References](#attribute-references)
     - [Compound Filters](#compound-filters)
   - [IBM-Style Filter Parameters](#ibm-style-filter-parameters)
     - [Quick Examples](#quick-examples-1)
     - [IBM-Style Operators](#ibm-style-operators)
-    - [Attribute References](#attribute-references)
+    - [Attribute References](#attribute-references-1)
     - [Compound Filters](#compound-filters-1)
 - [Development / Contributing](#development--contributing)
 - [Home](https://github.com/bitovi/querystring-parser#readme)
@@ -89,7 +89,9 @@ The parsed results of the `include` query parameter is stored in the `include` p
 Reference: [JSON:API - Inclusion of Related Resources](https://jsonapi.org/format/#fetching-includes)
 
 ```js
-const { include } = querystringParser.parse("include=children.movies.actors.children,children.movies.actors.pets,children.pets,pets");
+const { include } = querystringParser.parse(
+  "include=children.movies.actors.children,children.movies.actors.pets,children.pets,pets",
+);
 console.log(include[0]); // --> 'children.movies.actors.children'
 console.log(include[1]); // --> 'children.movies.actors.pets'
 console.log(include[2]); // --> 'children.pets'
@@ -103,7 +105,9 @@ The parsed results of the `fields[TYPE]` query parameters are stored in the `fie
 Reference: [JSON:API - Sparse Fieldsets](https://jsonapi.org/format/#fetching-sparse-fieldsets)
 
 ```js
-const { fields } = querystringParser.parse("fields[articles]=title,body&fields[people]=name");
+const { fields } = querystringParser.parse(
+  "fields[articles]=title,body&fields[people]=name",
+);
 console.log(fields.articles); // --> [ 'title', 'body' ]
 console.log(fields.people); // --> [ 'name' ]
 ```
@@ -120,14 +124,14 @@ The MongoDB-Style is based off of the [MongoDB comparison query operators](https
 
 #### Quick Examples
 
-| Querystring Filter             | Parsed Output                            |
-| ------------------------------ | ---------------------------------------- |
-| filter[name]=brad              | `{ LIKE: [ '#name', '%brad%' ] }`        |
-| filter[name][$eq]=mike         | `{ '=': [ '#name', 'mike' ] }`           |
-| filter[age][$gt]=21            | `{ '>': [ '#age', 21 ] }`                |
-| filter[born][$lte]=2020-01-01  | `{ '<=': [ '#born', '2020-01-01' ] }`    |
-| filter[score][$eq]=%00         | `{ 'IS NULL': '#score' }`                |
-| filter[name][$in]=michael,brad | `{ IN: [ '#name', 'michael', 'brad' ] }` |
+| Querystring Filter               | Parsed Output                            |
+| -------------------------------- | ---------------------------------------- |
+| `filter[name]=brad`              | `{ LIKE: [ '#name', '%brad%' ] }`        |
+| `filter[name][$eq]=mike`         | `{ '=': [ '#name', 'mike' ] }`           |
+| `filter[age][$gt]=21`            | `{ '>': [ '#age', 21 ] }`                |
+| `filter[born][$lte]=2020-01-01`  | `{ '<=': [ '#born', '2020-01-01' ] }`    |
+| `filter[score][$eq]=%00`         | `{ 'IS NULL': '#score' }`                |
+| `filter[name][$in]=michael,brad` | `{ IN: [ '#name', 'michael', 'brad' ] }` |
 
 #### MongoDB-Style Operators
 
@@ -135,27 +139,27 @@ Below is the full list of MongoDB-Style operators and their compatible value typ
 
 | Operator | strings | numbers | dates | nulls | arrays |
 | -------- | :-----: | :-----: | :---: | :---: | :----: |
-| $eq      |   ✅    |   ✅    |  ✅   |  ✅   |   ❌   |
-| $ne      |   ✅    |   ✅    |  ✅   |  ✅   |   ❌   |
-| $gt      |   ✅    |   ✅    |  ✅   |  ❌   |   ❌   |
-| $gte     |   ✅    |   ✅    |  ✅   |  ❌   |   ❌   |
-| $lt      |   ✅    |   ✅    |  ✅   |  ❌   |   ❌   |
-| $lte     |   ✅    |   ✅    |  ✅   |  ❌   |   ❌   |
-| ilike    |   ✅    |   ❌    |  ❌   |  ❌   |   ❌   |
-| $in      |   ✅    |   ✅    |  ✅   |  ✅   |   ✅   |
-| $nin     |   ✅    |   ✅    |  ✅   |  ✅   |   ✅   |
+| `$eq`    |   ✅    |   ✅    |  ✅   |  ✅   |   ❌   |
+| `$ne`    |   ✅    |   ✅    |  ✅   |  ✅   |   ❌   |
+| `$gt`    |   ✅    |   ✅    |  ✅   |  ❌   |   ❌   |
+| `$gte`   |   ✅    |   ✅    |  ✅   |  ❌   |   ❌   |
+| `$lt`    |   ✅    |   ✅    |  ✅   |  ❌   |   ❌   |
+| `$lte`   |   ✅    |   ✅    |  ✅   |  ❌   |   ❌   |
+| `$ilike` |   ✅    |   ❌    |  ❌   |  ❌   |   ❌   |
+| `$in`    |   ✅    |   ✅    |  ✅   |  ✅   |   ✅   |
+| `$nin`   |   ✅    |   ✅    |  ✅   |  ✅   |   ✅   |
 
 #### Omitted Operators
 
 MongoDB-Style filters do not require explicit operators. In many cases, the value type is enough for the parser to infer which operator to use. The examples below demonstrate operator inference for each value type.
 
-| Value Type | Example                 | Output                                |
-| ---------- | ----------------------- | ------------------------------------- |
-| string     | filter[name]=lisa       | `{ LIKE: [ '#name', '%lisa%' ] }`     |
-| number     | filter[age]=25          | `{ '=': [ '#age', 25 ] }`             |
-| date       | filter[born]=2020-01-01 | `{ '=': [ '#born', '2020-01-01' ] }`  |
-| null       | filter[score]=%00       | `{ 'IS NULL': '#score' }`             |
-| array      | filter[name]=mike,brad  | `{ IN: [ '#name', 'mike', 'brad' ] }` |
+| Value Type | Example                   | Output                                |
+| ---------- | ------------------------- | ------------------------------------- |
+| `string`   | `filter[name]=lisa`       | `{ LIKE: [ '#name', '%lisa%' ] }`     |
+| `number`   | `filter[age]=25`          | `{ '=': [ '#age', 25 ] }`             |
+| `date`     | `filter[born]=2020-01-01` | `{ '=': [ '#born', '2020-01-01' ] }`  |
+| `null`     | `filter[score]=%00`       | `{ 'IS NULL': '#score' }`             |
+| `array`    | `filter[name]=mike,brad`  | `{ IN: [ '#name', 'mike', 'brad' ] }` |
 
 #### Arrays
 
@@ -168,6 +172,10 @@ The following examples demonstrate how array values may be specified.
 
 Both styles will result in the same output:
 `{ IN: [ '#age', 24, 25, 26 ] }`
+
+#### Attribute References
+
+MongoDB-style does not support attribute references at the moment. 🛑
 
 #### Compound Filters
 
@@ -193,36 +201,36 @@ The IBM-Style is based off of the [jsonapi.net filtering specification](https://
 
 #### Quick Examples
 
-| Querystring Filter                                 | Parsed Output                                                     |
-| -------------------------------------------------- | ----------------------------------------------------------------- |
-| filter=contains(name,'brad')                       | `{ LIKE: [ '#name', '%brad%' ] }`                                 |
-| filter=equals(name,'mike')                         | `{ '=': [ '#name', 'mike' ] }`                                    |
-| filter=greaterThan(age,'25')                       | `{ '>': [ '#age', 25 ] }`                                         |
-| filter=lessOrEqual(born,'2020-01-01')              | `{ '<=': [ '#born', '2020-01-01' ] }`                             |
-| filter=any(name,'brad','mike')                     | `{ IN: [ '#name', 'brad', 'mike' ] }`                             |
-| filter=equals(score,null)                          | `{ 'IS NULL': '#score' }`                                         |
-| filter=not(equals(age,'25'))                       | `{ NOT: { "=": ["#age", 25] } }`                                  |
-| filter=and(any(age,'10','20'),equals(name,'mike')) | `{ AND: [{ IN: ["#age", 10, 20] }, { "=": ["#name", "mike"] }] }` |
-| filter=or(any(age,'10','20'),equals(name,'mike'))  | `{ OR: [{ IN: ["#age", 10, 20] }, { "=": ["#name", "mike"] }] }`  |
+| Querystring Filter                                   | Parsed Output                                                     |
+| ---------------------------------------------------- | ----------------------------------------------------------------- |
+| `filter=contains(name,'brad')`                       | `{ LIKE: [ '#name', '%brad%' ] }`                                 |
+| `filter=equals(name,'mike')`                         | `{ '=': [ '#name', 'mike' ] }`                                    |
+| `filter=greaterThan(age,'25')`                       | `{ '>': [ '#age', 25 ] }`                                         |
+| `filter=lessOrEqual(born,'2020-01-01')`              | `{ '<=': [ '#born', '2020-01-01' ] }`                             |
+| `filter=any(name,'brad','mike')`                     | `{ IN: [ '#name', 'brad', 'mike' ] }`                             |
+| `filter=equals(score,null)`                          | `{ 'IS NULL': '#score' }`                                         |
+| `filter=not(equals(age,'25'))`                       | `{ NOT: { "=": ["#age", 25] } }`                                  |
+| `filter=and(any(age,'10','20'),equals(name,'mike'))` | `{ AND: [{ IN: ["#age", 10, 20] }, { "=": ["#name", "mike"] }] }` |
+| `filter=or(any(age,'10','20'),equals(name,'mike'))`  | `{ OR: [{ IN: ["#age", 10, 20] }, { "=": ["#name", "mike"] }] }`  |
 
 #### IBM-Style Operators
 
-Below is the full list of IBM-Style operators and their compatible value types.
+Below is the full list of IBM-Style operators and their compatible value types. Pay attention they are all making case-sensitive comparisons. 🛑
 
-| Operator       | strings | numbers | dates | attribute refs | nulls | nested operators |
-| -------------- | :-----: | :-----: | :---: | :------------: | :---: | :--------------: |
-| equals         |   ✅    |   ✅    |  ✅   |       ✅       |  ✅   |        ❌        |
-| greaterThan    |   ✅    |   ✅    |  ✅   |       ✅       |  ❌   |        ❌        |
-| greaterOrEqual |   ✅    |   ✅    |  ✅   |       ✅       |  ❌   |        ❌        |
-| lessThan       |   ✅    |   ✅    |  ✅   |       ✅       |  ❌   |        ❌        |
-| lessOrEqual    |   ✅    |   ✅    |  ✅   |       ✅       |  ❌   |        ❌        |
-| contains       |   ✅    |   ❌    |  ❌   |       ❌       |  ❌   |        ❌        |
-| startsWith     |   ✅    |   ❌    |  ❌   |       ❌       |  ❌   |        ❌        |
-| endsWith       |   ✅    |   ❌    |  ❌   |       ❌       |  ❌   |        ❌        |
-| any            |   ✅    |   ✅    |  ✅   |       ❌       |  ✅   |        ❌        |
-| not            |   ❌    |   ❌    |  ❌   |       ❌       |  ❌   |        ✅        |
-| and            |   ❌    |   ❌    |  ❌   |       ❌       |  ❌   |        ✅        |
-| or             |   ❌    |   ❌    |  ❌   |       ❌       |  ❌   |        ✅        |
+| Operator         | strings | numbers | dates | attribute refs | nulls | nested operators |
+| ---------------- | :-----: | :-----: | :---: | :------------: | :---: | :--------------: |
+| `equals`         |   ✅    |   ✅    |  ✅   |       ✅       |  ✅   |        ❌        |
+| `greaterThan`    |   ✅    |   ✅    |  ✅   |       ✅       |  ❌   |        ❌        |
+| `greaterOrEqual` |   ✅    |   ✅    |  ✅   |       ✅       |  ❌   |        ❌        |
+| `lessThan`       |   ✅    |   ✅    |  ✅   |       ✅       |  ❌   |        ❌        |
+| `lessOrEqual`    |   ✅    |   ✅    |  ✅   |       ✅       |  ❌   |        ❌        |
+| `contains`       |   ✅    |   ❌    |  ❌   |       ❌       |  ❌   |        ❌        |
+| `startsWith`     |   ✅    |   ❌    |  ❌   |       ❌       |  ❌   |        ❌        |
+| `endsWith`       |   ✅    |   ❌    |  ❌   |       ❌       |  ❌   |        ❌        |
+| `any`            |   ✅    |   ✅    |  ✅   |       ❌       |  ✅   |        ❌        |
+| `not`            |   ❌    |   ❌    |  ❌   |       ❌       |  ❌   |        ✅        |
+| `and`            |   ❌    |   ❌    |  ❌   |       ❌       |  ❌   |        ✅        |
+| `or`             |   ❌    |   ❌    |  ❌   |       ❌       |  ❌   |        ✅        |
 
 #### Attribute References
 
@@ -255,4 +263,4 @@ expect(filter).toEqual({
 
 ## Development / Contributing
 
-See [CONTRIBUTING.md](CONTRIBUTING.md)
+See [CONTRIBUTING.md](../../CONTRIBUTING.md)
