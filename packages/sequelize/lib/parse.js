@@ -4,8 +4,7 @@ const parsePagination = require("./parse-page");
 const parseSort = require("./parse-sort");
 const parseInclude = require("./parse-include");
 
-function parse(query) {
-  const parsedQuery = lib.parse(query);
+function getSequelizeFindOptions(parsedQuery) {
   const {
     fields,
     filter,
@@ -45,4 +44,8 @@ function parse(query) {
   };
 }
 
-module.exports = parse;
+function parse(query) {
+  return getSequelizeFindOptions(lib.parse(query));
+}
+
+module.exports = { getSequelizeFindOptions, parse };

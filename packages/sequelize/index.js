@@ -1,5 +1,6 @@
-const parse = require("./lib/parse");
+const { getSequelizeFindOptions, parse } = require("./lib/parse");
 
 module.exports = {
+  getSequelizeFindOptions,
   parse,
 };
