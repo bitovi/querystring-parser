@@ -21,6 +21,7 @@ describe("parse", () => {
             attributes: ["name"],
           },
         ],
+        distinct: true,
         offset: 10,
         limit: 5,
         subQuery: false,

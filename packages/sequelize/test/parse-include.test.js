@@ -47,6 +47,7 @@ describe("parseInclude", () => {
       parameters: [["include1", "include2.test"], []],
       expectedResults: {
         results: {
+          distinct: true,
           include: [
             {
               association: "include1",
@@ -81,6 +82,7 @@ describe("parseInclude", () => {
       expectedResults: {
         results: {
           attributes: ["id"],
+          distinct: true,
           include: [
             {
               association: "include1",

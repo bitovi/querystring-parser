@@ -32,7 +32,7 @@ function parseInclude(includes, includeErrors, includeAttributes = {}) {
     errors: [],
     results: {
       ...(attributes && { attributes }),
-      ...(include?.length && { include }),
+      ...(include?.length && { include, distinct: true }),
     },
   };
 }

@@ -2,7 +2,7 @@
   // dbaeumer.vscode-eslint extension configuration
   "eslint.format.enable": true,
   "editor.codeActionsOnSave": {
-    "source.fixAll.eslint": true
+    "source.fixAll.eslint": "explicit"
   },
   // esbenp.prettier-vscode extension configuration
   "editor.defaultFormatter": "esbenp.prettier-vscode",
