@@ -86,10 +86,10 @@ function parseFilters(filters, filtersError, isDefault = true) {
   let parsedResult = {};
   let errors = [];
   let isValidFilters; // check if any processing is done to filter data
-  if (filters) {
-    if (filtersError.length) {
-      errors = filtersError;
-    } else if (!isObject(filters)) {
+  if (filtersError.length) {
+    errors = filtersError;
+  } else if (filters) {
+    if (!isObject(filters)) {
       errors.push("Filter field must be an object");
     } else {
       const keys = Object.keys(filters);
